@@ -1,0 +1,18 @@
+.home-center {
+    text-align: center;
+}
+.home-today-job{
+    min-height: 300px;
+}
+.home-today-table-job
+{
+    max-height:260px;
+}
+.icheckbox_square-blue
+{
+    padding: 2px;
+    margin: 2px;    
+}
+.login-err{
+    color:red;
+}
