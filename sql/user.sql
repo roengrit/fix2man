@@ -1,0 +1,1 @@
+INSERT INTO "users"("i_d", "username", "password", "email", "active", "created_at", "updated_at") VALUES (1, 'admin@localhost', '$2a$10$Jqbwj.w2g2vAkU0.cIdHoO73IAM/Cq27L/HdySlBgLG0LM7mTrcNi', 'admin@localhost', 't', '2017-12-25 19:52:29+07', '2017-12-25 19:52:31+07');
