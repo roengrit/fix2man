@@ -63,7 +63,7 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="/static/image/avatar5.png" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                <span id="name-r" class="hidden-xs">Alexander Pierce</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -73,10 +73,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="#" class="btn btn-default btn-flat">ข้อมูลผู้ใช้</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="/logout" class="btn btn-default btn-flat">ออกจากระบบ</a>
                                     </div>
                                 </li>
                             </ul>
@@ -99,7 +99,7 @@
                         <img src="/static/image/avatar5.png" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>Alexander Pierce</p>
+                        <p id="name-l">Alexander Pierce</p>
                         <a href="#">
                             <i class="fa fa-circle text-success"></i> Online</a>
                     </div>
@@ -141,7 +141,7 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-cube"></i>
-                            <span>อะไหล่</span>
+                            <span>อะไหล่/เครื่องมือ</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -219,6 +219,10 @@
                             <li>
                                 <a href="../forms/advanced.html">
                                     <i class="fa fa-circle-o"></i> รายชื่อสมาชิก</a>
+                            </li>
+                            <li>
+                                <a href="../forms/advanced.html">
+                                    <i class="fa fa-circle-o"></i>สิทธิ์</a>
                             </li>
                         </ul>
                     </li>
