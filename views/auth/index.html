@@ -33,6 +33,7 @@
       {{end}}
     
     <form action="/auth" method="post">
+        {{ .xsrfdata }}
         {{if .error}}
         <div class="form-group has-error">
         {{else}}

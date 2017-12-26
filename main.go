@@ -24,6 +24,9 @@ func main() {
 		fmt.Println(err)
 	}
 
+	beego.BConfig.WebConfig.EnableXSRF = true
+	beego.BConfig.WebConfig.XSRFKey = "61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o"
+	beego.BConfig.WebConfig.XSRFExpire = 3600
 	beego.Router("/", &c.AppController{})
 	beego.Router("/auth", &c.AuthController{})
 	beego.Run()

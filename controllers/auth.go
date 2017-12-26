@@ -1,8 +1,9 @@
 package controllers
 
 import (
+	h "fix2man/helps"
 	"fix2man/models"
-	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/astaxie/beego"
@@ -17,6 +18,7 @@ type AuthController struct {
 
 //Get to view login
 func (c *AuthController) Get() {
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["username"] = ""
 	c.Data["title"] = "เข้าสู่ระบบเพื่อเริ่มการทำงาน"
 	c.TplName = "auth/index.html"
@@ -35,16 +37,18 @@ func (c *AuthController) Post() {
 	o := orm.NewOrm()
 	user := models.Users{Username: usernameForm}
 	err := o.Read(&user, "Username")
+
 	if err == orm.ErrNoRows {
 		c.Data["error"] = "รหัสผู้ใช้/รหัสผ่านไม่ถูกต้อง"
 	} else {
 		if errCript := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(passwordForm)); errCript != nil {
 			c.Data["error"] = "รหัสผู้ใช้/รหัสผ่านไม่ถูกต้อง"
 		} else {
-			secret := beego.AppConfig.String("secret")
-			fmt.Println(secret)
-			c.Ctx.SetSecureCookie(secret, "fixman", usernameForm)
-			c.Ctx.Redirect(http.StatusFound, "/")
+			if ok, errLogin := h.KeepLogin(c.Ctx.ResponseWriter, usernameForm, ""); ok == true {
+				c.Ctx.Redirect(http.StatusFound, "/")
+			} else {
+				c.Data["error"] = errLogin
+			}
 		}
 	}
 	c.TplName = "auth/index.html"
