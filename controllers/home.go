@@ -7,6 +7,7 @@ type AppController struct {
 
 //Get Home page
 func (c *AppController) Get() {
+	c.Data["title"] = "หน้าหลัก"
 	c.Layout = "layout.html"
 	c.TplName = "main/index.html"
 	c.Render()
