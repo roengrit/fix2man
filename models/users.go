@@ -1,6 +1,7 @@
 package models
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -56,4 +57,52 @@ func Login(username, password string) (ok bool, errRet string) {
 		}
 	}
 	return ok, errRet
+}
+
+//GetUser _
+func GetUser(username string) (ok bool, errRet string) {
+	o := orm.NewOrm()
+	user := Users{Username: username}
+	err := o.Read(&user, "Username")
+	if err == orm.ErrNoRows {
+		errRet = "ไม่พบ email นี้ในระบบ"
+	} else {
+		ok = true
+	}
+	return ok, errRet
+}
+
+//ForgetPass _
+func ForgetPass(username, newPass string) (ok bool, errRet string) {
+	o := orm.NewOrm()
+	user := Users{Username: username}
+	err := o.Read(&user, "Username")
+	if err == orm.ErrNoRows {
+		errRet = "ไม่พบ email นี้ในระบบ"
+	} else {
+
+		if hash, err := bcrypt.GenerateFromPassword([]byte(newPass), bcrypt.DefaultCost); err != nil {
+			errRet = err.Error()
+		} else {
+			user.Password = string(hash)
+			if num, errUpdate := o.Update(&user); errUpdate != nil {
+				errRet = errUpdate.Error()
+				_ = num
+			} else {
+				ok = true
+			}
+		}
+	}
+	return ok, errRet
+}
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+//RandStringRunes password _
+func RandStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
 }
