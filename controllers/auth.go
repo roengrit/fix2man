@@ -16,6 +16,11 @@ type AuthController struct {
 	beego.Controller
 }
 
+//LogoutController _
+type LogoutController struct {
+	beego.Controller
+}
+
 //Get to view login
 func (c *AuthController) Get() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
@@ -53,4 +58,10 @@ func (c *AuthController) Post() {
 	}
 	c.TplName = "auth/index.html"
 	c.Render()
+}
+
+//Get to logout
+func (c *LogoutController) Get() {
+	h.LogOut(c.Ctx.ResponseWriter)
+	c.Ctx.Redirect(http.StatusFound, "/auth")
 }

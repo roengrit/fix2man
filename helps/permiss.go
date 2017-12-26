@@ -36,6 +36,19 @@ func KeepLogin(w *c.Response, username string, role string) (ok bool, err string
 	return ok, err
 }
 
+//LogOut login
+func LogOut(w *c.Response) {
+
+	cookie := http.Cookie{
+		Name:     "fixman",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		MaxAge:   -1,
+	}
+	http.SetCookie(w.ResponseWriter, &cookie)
+}
+
 //GetUser get user from cookie
 func GetUser(r *http.Request) string {
 	if cookie, err := r.Cookie("fixman"); err == nil {
