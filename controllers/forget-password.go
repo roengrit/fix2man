@@ -19,7 +19,7 @@ func (c *ForgetController) Get() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["username"] = ""
 	c.Data["title"] = "กรอก email เพื่อรับรหัสผ่าน"
-	c.TplName = "forget-password/index.html"
+	c.TplName = "forget-password/forget.html"
 	c.Render()
 }
 
@@ -44,6 +44,6 @@ func (c *ForgetController) Post() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["username"] = c.GetString("username")
 
-	c.TplName = "forget-password/index.html"
+	c.TplName = "forget-password/forget.html"
 	c.Render()
 }

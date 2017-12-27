@@ -19,3 +19,13 @@
 .login-success{
     color:green;
 }
+.search-top{
+     margin-bottom:10px; 
+}
+.label-action{
+    cursor: pointer;
+}
+.load-text {
+    background:url('/static/image/wait.png') 
+    no-repeat right center;
+}

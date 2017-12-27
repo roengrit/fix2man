@@ -22,9 +22,9 @@ type LogoutController struct {
 //Get to view login
 func (c *AuthController) Get() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.Data["username"] = ""
+	c.Data["username"] = "logon.firstclass@gmail.com"
 	c.Data["title"] = "เข้าสู่ระบบเพื่อเริ่มการทำงาน"
-	c.TplName = "auth/index.html"
+	c.TplName = "auth/login.html"
 	c.Render()
 }
 
@@ -46,7 +46,7 @@ func (c *AuthController) Post() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["username"] = c.GetString("username")
 	c.Data["title"] = "เข้าสู่ระบบเพื่อเริ่มการทำงาน"
-	c.TplName = "auth/index.html"
+	c.TplName = "auth/login.html"
 	c.Render()
 }
 

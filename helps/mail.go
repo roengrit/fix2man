@@ -4,7 +4,7 @@ import (
 	"net/smtp"
 )
 
-//SendMail
+//SendMail _
 func SendMail(email, body string) string {
 
 	from := "badcode.th@gmail.com"

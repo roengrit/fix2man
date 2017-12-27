@@ -7,19 +7,19 @@
     <title>{{.title}}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link rel="shortcut icon" type="image/png" href="static/image/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/static/image/favicon.png" />
 
-    <link rel="stylesheet" href="static/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap/bootstrap.min.css">
 
-    <link rel="stylesheet" href="static/css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="static/css/ionicon/css/ionicons.min.css">
+    <link rel="stylesheet" href="/static/css/ionicon/css/ionicons.min.css">
 
-    <link rel="stylesheet" href="static/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
 
-    <link rel="stylesheet" href="static/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
 
-    <link rel="stylesheet" href="static/css/fixman.css"> {{.HtmlHead}}
+    <link rel="stylesheet" href="/static/css/fixman.css"> {{.HtmlHead}}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -221,9 +221,9 @@
                                     <i class="fa fa-circle-o"></i> รายชื่อสมาชิก</a>
                             </li>
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="/normal/?entity=roles">
                                     <i class="fa fa-circle-o"></i>สิทธิ์</a>
-                            </li>
+                            </li>                           
                         </ul>
                     </li>
                     <li class="treeview">
@@ -236,23 +236,19 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="../forms/general.html">
-                                    <i class="fa fa-circle-o"></i> สถานะสมาชิก</a>
-                            </li>
-                            <li>
                                 <a href="../forms/advanced.html">
                                     <i class="fa fa-circle-o"></i> รายละเอียดบริษัท</a>
                             </li>
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="/normal/?entity=status">
                                     <i class="fa fa-circle-o"></i> สถานะการซ่อม</a>
                             </li>
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="/normal/?entity=units">
                                     <i class="fa fa-circle-o"></i> หน่วย</a>
                             </li>
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="/normal/?entity=branchs">
                                     <i class="fa fa-circle-o"></i> สาขา/ไซต์</a>
                             </li>
                             <li>
@@ -489,17 +485,18 @@
         <!-- /.control-sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
-    <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-    <script src="static/js/jquery.slimscroll.min.js"></script>
-    <script src="static/js/fastclick.js"></script>
-    <script src="static/js/adminlte.min.js"></script>
-    <script src="static/js/fixman.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.slimscroll.min.js"></script>
+    <script src="/static/js/fastclick.js"></script>
+    <script src="/static/js/adminlte.min.js"></script>
+    <script src="/static/js/fixman.js"></script>
     <script>
         $(document).ready(function () {
             $('.sidebar-menu').tree()
         })
-    </script> {{.Scripts}}
+    </script>
+     {{.Scripts}}
 </body>
 
 </html>

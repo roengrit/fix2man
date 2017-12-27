@@ -2,6 +2,7 @@ package main
 
 import (
 	c "fix2man/controllers"
+
 	"fmt"
 
 	"github.com/astaxie/beego"
@@ -29,5 +30,8 @@ func main() {
 	beego.Router("/logout", &c.LogoutController{})
 	beego.Router("/prof-name", &c.GetNameController{})
 	beego.Router("/forget-password", &c.ForgetController{})
+	beego.Router("/normal", &c.EntitryController{})
+	beego.Router("/normal/list", &c.EntitryController{}, "post:ListEntity")
+	beego.Router("/normal/:id:int", &c.EntitryController{}, "get:GetEntity;put:UpdateEntity")
 	beego.Run()
 }
