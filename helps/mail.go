@@ -4,11 +4,11 @@ import (
 	"net/smtp"
 )
 
-//Send Mail
+//SendMail
 func SendMail(email, body string) string {
 
 	from := "badcode.th@gmail.com"
-	pwd := "MuchP@ssw0rd"
+	pwd := ""
 	to := "logon.firstclass@hotmail.com"
 
 	msg := "From: " + from + "\n" +
