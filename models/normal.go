@@ -91,7 +91,7 @@ func GetListEntity(entity, top, term string) (num int64, err error, entityList [
 func GetMaxEntity(entity string) (code string) {
 
 	var lists []orm.ParamsList
-	var sql = "SELECT COALESCE(MAX(code),'0001') AS code FROM " + entity + " WHERE code NOT LIKE '%[^0-9]%' AND code != '' AND LENGTH(code) = 4"
+	var sql = "SELECT COALESCE(MAX(code),'0000') AS code FROM " + entity + " WHERE code NOT LIKE '%[^0-9]%' AND code != '' AND LENGTH(code) = 4"
 	o := orm.NewOrm()
 	num, err := o.Raw(sql).ValuesList(&lists)
 	if err == nil && num > 0 {
