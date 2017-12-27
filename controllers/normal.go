@@ -2,12 +2,9 @@ package controllers
 
 import (
 	"bytes"
+	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
-	"strconv"
-	"strings"
-
-	"github.com/astaxie/beego/orm"
 )
 
 //EntitryController _
@@ -18,19 +15,8 @@ type EntitryController struct {
 //Get _
 func (c *EntitryController) Get() {
 	entity := c.Ctx.Request.URL.Query().Get("entity")
-	switch entity {
-	case "roles":
-		c.Data["title"] = "จัดการสิทธิ์"
-	case "units":
-		c.Data["title"] = "จัดการหน่วย"
-	case "status":
-		c.Data["title"] = "สถานะการซ่อม"
-	case "branchs":
-		c.Data["title"] = "สาขา/ไซต์"
-	default:
-		return
-	}
-
+	title := h.GetEntityTitle(entity)
+	c.Data["title"] = title
 	c.Data["retCount"] = "0"
 	c.Data["entity"] = entity
 	c.Layout = "layout.html"
@@ -41,48 +27,21 @@ func (c *EntitryController) Get() {
 	c.Render()
 }
 
-//ListRole _
+//ListEntity  _
 func (c *EntitryController) ListEntity() {
+
 	term := c.GetString("txt-search")
 	top := c.GetString("top")
 	entity := c.GetString("entity")
-	var sql = "SELECT i_d,code, name FROM " + entity + " WHERE name like ? or code like ? limit {0}"
-	if top == "0" {
-		sql = strings.Replace(sql, "limit {0}", "", -1)
-	} else {
-		sql = strings.Replace(sql, "{0}", top, -1)
-	}
 
-	o := orm.NewOrm()
-	var roles []m.Roles
-	num, err := o.Raw(sql, "%"+term+"%", "%"+term+"%").QueryRows(&roles)
+	num, err, lists := m.GetListEntity(entity, top, term)
 
 	ret := m.NormalModel{}
 
-	var hmtlBuffer bytes.Buffer
-	var htmlTemplate = `<tr>
-								<td>
-									{code} 
-								</td>
-								<td>{name}</td>
-								<td>
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-primary" onclick='editNormal({id})'>แก้ไข</button>
-											<button type="button" class="btn btn-sm btn-danger" onclick='deleteNormal({id})'>ลบ</button>
-										</div>
-								</td>                             
-							</tr>`
-
 	if err == nil {
 		ret.RetOK = true
-		for _, val := range roles {
-			temp := strings.Replace(htmlTemplate, "{code}", val.Code, -1)
-			temp = strings.Replace(temp, "{name}", val.Name, -1)
-			temp = strings.Replace(temp, "{id}", strconv.Itoa(val.ID), -1)
-			hmtlBuffer.WriteString(temp)
-		}
 		ret.RetCount = num
-		ret.RetData = hmtlBuffer.String()
+		ret.RetData = h.GenEntityHtml(lists)
 		if num == 0 {
 			ret.RetData = `<tr><td></td><td>*** ไม่พบข้อมูล ***</td><td></td></tr>`
 		}
@@ -96,27 +55,44 @@ func (c *EntitryController) ListEntity() {
 	c.ServeJSON()
 }
 
-//NewRole _
+//NewEntity _
 func (c *EntitryController) NewEntity() {
+	entity := c.Ctx.Request.URL.Query().Get("entity")
+	title := h.GetEntityTitle(entity)
+	ret := m.NormalModel{}
+	t, err := template.ParseFiles("views/normal/normal-add.html")
+	max := m.GetMaxEntity(entity)
+	var tpl bytes.Buffer
+	if err = t.Execute(&tpl, map[string]string{"entity": entity, "title": title, "code": max, "id": ""}); err != nil {
+		ret.RetOK = err != nil
+		ret.RetData = err.Error()
+	} else {
+		ret.RetOK = true
+		ret.RetData = tpl.String()
+	}
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
 
+//MaxEntity _
+func (c *EntitryController) MaxEntity() {
+	entity := c.Ctx.Request.URL.Query().Get("entity")
+	ret := m.NormalModel{}
+	max := m.GetMaxEntity(entity)
+	ret.RetOK = true
+	ret.RetData = max
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//GetEntity _
+func (c *EntitryController) GetEntity() {
 	c.Data["json"] = ""
 	c.ServeJSON()
 }
 
-func (c *EntitryController) GetEntity() {
-	c.Data["title"] = "จัดการสิทธิ์"
-	c.Data["retCount"] = "0"
-	c.Layout = "layout.html"
-	c.TplName = "role-member/role/role.html"
-	c.LayoutSections["Scripts"] = "role-member/role/role.tpjs"
-	c.Render()
-}
-
+//UpdateEntity _
 func (c *EntitryController) UpdateEntity() {
-	c.Data["title"] = "จัดการสิทธิ์"
-	c.Data["retCount"] = "0"
-	c.Layout = "layout.html"
-	c.TplName = "role-member/role/role.html"
-	c.LayoutSections["Scripts"] = "role-member/role/role.tpjs"
-	c.Render()
+	c.Data["json"] = ""
+	c.ServeJSON()
 }

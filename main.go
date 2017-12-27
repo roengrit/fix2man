@@ -30,8 +30,12 @@ func main() {
 	beego.Router("/logout", &c.LogoutController{})
 	beego.Router("/prof-name", &c.GetNameController{})
 	beego.Router("/forget-password", &c.ForgetController{})
+
 	beego.Router("/normal", &c.EntitryController{})
 	beego.Router("/normal/list", &c.EntitryController{}, "post:ListEntity")
+	beego.Router("/normal/add", &c.EntitryController{}, "get:NewEntity")
+	beego.Router("/normal/max", &c.EntitryController{}, "get:MaxEntity")
 	beego.Router("/normal/:id:int", &c.EntitryController{}, "get:GetEntity;put:UpdateEntity")
+
 	beego.Run()
 }

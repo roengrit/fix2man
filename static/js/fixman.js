@@ -34,4 +34,11 @@ $(function () {
             return false;
         }
       })
+      $('#normal-add').click(function(){
+         $.get( "/normal/add/?entity="+ $(this).attr("entity") , function( data ) {
+            $('#small-global-modal-content').html(data.RetData);
+            $('#small-global-modal').modal("show");
+          });
+      })
+     
 });
