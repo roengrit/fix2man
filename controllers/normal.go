@@ -12,8 +12,9 @@ type EntitryController struct {
 	BaseController
 }
 
-func (a *EntitryController) Prepare() {
-	a.EnableXSRF = false
+//Prepare  _
+func (c *EntitryController) Prepare() {
+	c.EnableXSRF = false
 }
 
 //Get _
@@ -106,28 +107,6 @@ func (c *EntitryController) MaxEntity() {
 	max := m.GetMaxEntity(entity)
 	ret.RetOK = true
 	ret.RetData = max
-	c.Data["json"] = ret
-	c.ServeJSON()
-}
-
-//GetEntity _
-func (c *EntitryController) GetEntity() {
-	entity := c.Ctx.Request.URL.Query().Get("entity")
-	id := c.GetString("narmal-id")
-	title := h.GetEntityTitle(entity)
-	ret := m.NormalModel{}
-	if title != "" {
-		err, retVal := m.GetEntity(entity, id)
-		if err != nil {
-			ret.RetOK = true
-			ret.ID = int64(retVal.ID)
-			ret.Name = retVal.Name
-		} else {
-			ret.RetData = err.Error()
-		}
-	} else {
-		ret.RetData = "ไม่อนุญาติ ใน entity อื่น"
-	}
 	c.Data["json"] = ret
 	c.ServeJSON()
 }

@@ -35,9 +35,7 @@ func main() {
 	beego.Router("/normal/list", &c.EntitryController{}, "post:ListEntity")
 	beego.Router("/normal/add", &c.EntitryController{}, "get:NewEntity")
 	beego.Router("/normal/max", &c.EntitryController{}, "get:MaxEntity")
-	beego.Router("/normal/get", &c.EntitryController{}, "post:GetEntity")
 	beego.Router("/normal/update", &c.EntitryController{}, "post:UpdateEntity")
-	//beego.Router("/normal/delete", &c.EntitryController{}, "post:DeleteEntity")
 
 	beego.Run()
 }

@@ -17,4 +17,8 @@ func (b *BaseController) Prepare() {
 	if val == "" {
 		b.Ctx.Redirect(302, "/auth")
 	}
+
+	//Todo กำหนด รหัส Menu แล้วใส่ เป็น Data
+	b.Data["active_p_001"] = "active menu-open"
+	b.Data["active_c_001"] = "active"
 }
