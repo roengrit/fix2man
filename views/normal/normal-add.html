@@ -1,18 +1,36 @@
-<form class="form-horizontal" id="normal-add-form" action="/entity/{{.entity}}" method="post">
-    <div class="alert alert-danger fade in no-margin" style="display:none" id="normal-alert"></div>
-    <div class="modal-header">
+<form class="form-horizontal" id="normal-add-form" action="/normal/update" method="post">
+    <div class="modal-header 
+    {{if.del}}
+    alert-danger
+    {{else}}
+    {{end}}">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
         <h4 class="modal-title">{{.title}}</h4>
     </div>
     <div class="modal-body">
-        <input type="hidden" id="narmal-id" value="{{.id}}">
+       <div class="alert alert-danger fade in no-margin" 
+            {{if.alert}}
+            
+            {{else}}
+               style="display:none"
+            {{end}}
+            id="normal-alert">{{.alert}}
+        </div>
+        <input type="hidden" id="narmal-id" name="narmal-id" value="{{.id}}">
+        <input type="hidden" id="entity" name="entity" value="{{.entity}}">
+        <input type="hidden" id="del-flag" name="del-flag" value="{{.del}}">
         <div class="box-body">
             <div class="form-group">
                 <label   class="col-sm-2 control-label">รหัส</label>
                 <div class="col-sm-8 input-group input-group-sm">
-                    <input type="text" class="form-control" name="normal-code" id="normal-code" required maxlength="20" value="{{.code}}" >
+                    <input type="text" class="form-control" name="normal-code"
+                    {{if.del}}
+                      readonly
+                    {{else}}
+                    {{end}}
+                    id="normal-code" required maxlength="20" value="{{.code}}" >
                     <div class="input-group-btn">
                         <button type="button" id="btn-gen-code"  class="btn btn-default " entity={{.entity}} ><i class="fa fa-legal"></i>  </button>
                     </div>
@@ -22,24 +40,61 @@
             <div class="form-group">
                 <label   class="col-sm-2 control-label">ชื่อ</label>
                 <div class="col-sm-8 input-group input-group-sm">
-                    <input type="text" class="form-control" required maxlength="255" name="normal-name" id="normal-name"  >
+                    <input type="text" class="form-control" required maxlength="255" name="normal-name" id="normal-name" 
+                    {{if.del}}
+                        readonly
+                    {{else}}
+                    {{end}}
+                    value="{{.name}}" >
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal"> ปิด </button>
-        <button type="button" class="btn btn-primary">
-            <i class="fa fa-save"></i> บันทึกข้อมูล</button>
+        {{if.del}}
+            <button type="button" onclick="Save()" class="btn btn-warning">
+                <i class="fa fa-trash-o"></i> ลบข้อมูล
+            </button>
+        {{else}}
+        <button type="button" onclick="Save()" class="btn btn-primary">
+                <i class="fa fa-save"></i> บันทึกข้อมูล
+            </button>
+        {{end}}
     </div>
 </form>
 <script>
+
    $('#btn-gen-code').click(function(){
       $('#normal-code').addClass('load-text');
         $.get( "/normal/max/?entity="+ $(this).attr("entity") , function( data ) {
            $('#normal-code').val(data.RetData);
            $('#normal-code').removeClass('load-text');
          });
-   
      })
+     $('#normal-add-form').keyup(function(e){
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            Save();
+            return false;
+        }
+      })
+      function Save()
+      {
+        $("#normal-alert").hide();
+            $('#normal-code').addClass('load-text');
+            url = $('#normal-add-form').attr('action');
+            $.post(url,$('#normal-add-form').serialize(), function( data ) {
+                $('#normal-code').removeClass('load-text');
+                if(data.RetOK){
+                   loadNormalTable();               
+                   hideGlobalSmalModal();
+                   showTopAlert(data.RetData)
+                }else{
+                    $("#normal-alert").html(data.RetData);
+                    $("#normal-alert").show(); 
+                }
+            });
+      }
+
 </script>

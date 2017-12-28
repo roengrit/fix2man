@@ -26,9 +26,9 @@ const HtmlActionDisable = `<button type="button" class="btn btn-sm btn-primary d
 func GetEntityTitle(entity string) string {
 	switch entity {
 	case "roles":
-		return "จัดการสิทธิ์"
+		return "สิทธิ์"
 	case "units":
-		return "จัดการหน่วย"
+		return "หน่วย"
 	case "status":
 		return "สถานะการซ่อม"
 	case "branchs":

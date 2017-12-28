@@ -9,6 +9,61 @@ function loadNormalTable()
     });
 }
 
+function editNormal(id) {
+    hideTopAlert();
+    $.get("/normal/add/?entity="+ $("#entity").val() + "&id=" + id , function (data) {
+        if (data.RetOK) {
+            showGlobalSmallModal();
+            $('#small-global-modal-content').html(data.RetData);
+            
+        } else {
+            showGlobalSmallModal();
+            $('#small-global-modal-content').html(data.RetData);
+        }
+    });
+} 
+
+function deleteNormal(id) {
+    hideTopAlert();
+    $.get("/normal/add/?entity="+ $("#entity").val() + "&del=1&id=" + id , function (data) {
+        if (data.RetOK) {
+            showGlobalSmallModal();
+            $('#small-global-modal-content').html(data.RetData);
+            
+        } else {
+            showGlobalSmallModal();
+            $('#small-global-modal-content').html(data.RetData);
+        }
+    });
+} 
+
+function hideGlobalSmalModal()
+{
+    $('#small-global-modal').modal("hide");
+}
+function showGlobalSmallModal()
+{
+    $('#small-global-modal').modal("show");
+}
+
+function showTopAlert(alert)
+{
+    var html = `<div class="alert alert-success alert-dismissible"  >
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    `+ alert + `
+    </div>`;
+    $("#top-alert").html(html)
+    $("#top-alert").fadeIn(500, function () {
+
+    });
+}
+
+function hideTopAlert()
+{
+    $("#top-alert").fadeOut(500, function () {
+
+    });
+}
 
 $(function () {
     $.get( "/prof-name", function( data ) {
@@ -35,9 +90,10 @@ $(function () {
         }
       })
       $('#normal-add').click(function(){
+        hideTopAlert();
          $.get( "/normal/add/?entity="+ $(this).attr("entity") , function( data ) {
             $('#small-global-modal-content').html(data.RetData);
-            $('#small-global-modal').modal("show");
+            showGlobalSmallModal();
           });
       })
      
