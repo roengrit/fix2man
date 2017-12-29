@@ -1,4 +1,3 @@
-<!-- Content Header (Page header) -->
 <section class="content-header">
       <div id="top-alert" style="display:none">
          
@@ -7,8 +6,6 @@
           {{.title}}
         </h1>
       </section>
-      
-      <!-- Main content -->
     <section class="content">
         <form action="/normal/list" id="search-form" onsubmit="return false;" method="post">
             {{ .xsrfdata }}
@@ -17,7 +14,6 @@
                      <input type="hidden" id="entity" value="{{.entity}}" name="entity" />
                      <input type="hidden" id="top" value="10" name="top" />
                     <div class="input-group-btn">
-                             
                                     <button type="button" id="btn-search-submit"  class="btn btn-primary "><i class="fa fa-search"></i>  </button>
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                       <span class="caret"></span>
@@ -30,7 +26,6 @@
                                         <li><a class="change-top" href="#" top="100">100 รายการ</a></li>    
                                         <li><a class="change-top" href="#" top="0" > ทั้งหมด</a></li>    
                                     </ul>
-                         
                     </div>                 
             </div>
         </form>
@@ -60,5 +55,4 @@
             </div>         
         </div>
     </section>
-    
-      <!-- /.content -->
+ 

@@ -26,6 +26,8 @@ func (c *EntitryController) Get() {
 		c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 		c.Layout = "layout.html"
 		c.TplName = "normal/normal.html"
+		c.LayoutSections = make(map[string]string)
+		c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
 		c.Render()
 	}
 }
