@@ -5,6 +5,7 @@ import (
 	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
+	"strings"
 )
 
 //EntitryController _
@@ -16,14 +17,16 @@ type EntitryController struct {
 func (c *EntitryController) Get() {
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	title := h.GetEntityTitle(entity)
-	c.Data["title"] = title
+	if title == "" {
+		c.Data["title"] = "*** ไม่อนุญาติ ใน entity อื่น ***"
+	} else {
+		c.Data["title"] = title
+	}
 	c.Data["retCount"] = "0"
 	c.Data["entity"] = entity
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
 	c.TplName = "normal/normal.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
 	c.Render()
 }
 
@@ -36,21 +39,20 @@ func (c *EntitryController) ListEntity() {
 	title := h.GetEntityTitle(entity)
 	ret := m.NormalModel{}
 	if title != "" {
-		num, err, lists := m.GetListEntity(entity, top, term)
+		rowCount, err, lists := m.GetListEntity(entity, top, term)
 		if err == nil {
 			ret.RetOK = true
-			ret.RetCount = num
+			ret.RetCount = rowCount
 			ret.RetData = h.GenEntityHtml(lists)
-			if num == 0 {
-				ret.RetData = `<tr><td></td><td>*** ไม่พบข้อมูล ***</td><td></td></tr>`
+			if rowCount == 0 {
+				ret.RetData = h.HtmlNotFoundRows
 			}
-
 		} else {
 			ret.RetOK = false
-			ret.RetData = `<tr><td></td><td>` + err.Error() + `</td><td></td></tr>`
+			ret.RetData = strings.Replace(h.HtmlError, "{err}", err.Error(), -1)
 		}
 	} else {
-		ret.RetData = `<tr><td></td><td>*** ไม่อนุญาติ ใน entity อื่น ***</td><td></td></tr>`
+		ret.RetData = h.HtmlPermissionDenie
 	}
 	c.Data["json"] = ret
 	c.ServeJSON()

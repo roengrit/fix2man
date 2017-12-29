@@ -22,6 +22,11 @@ const HtmlActionEnable = `<button type="button" class="btn btn-sm btn-primary" o
 						<button type="button" class="btn btn-sm btn-danger" onclick='deleteNormal({id})'>ลบ</button>`
 const HtmlActionDisable = `<button type="button" class="btn btn-sm btn-primary disabled" >แก้ไข</button>
 						 <button type="button" class="btn btn-sm btn-danger disabled" >ลบ</button>`
+const HtmlNotFoundRows = `<tr><td></td><td>*** ไม่พบข้อมูล ***</td><td></td></tr>`
+
+const HtmlPermissionDenie = `<tr><td></td><td>*** ไม่อนุญาติ ใน entity อื่น ***</td><td></td></tr>`
+
+const HtmlError = `<tr><td></td><td>{err}</td><td></td></tr>`
 
 func GetEntityTitle(entity string) string {
 	switch entity {
