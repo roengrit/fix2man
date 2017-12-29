@@ -18,16 +18,16 @@ func (c *EntitryController) Get() {
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	title := h.GetEntityTitle(entity)
 	if title == "" {
-		c.Data["title"] = "*** ไม่อนุญาติ ใน entity อื่น ***"
+		c.Ctx.WriteString("*** ไม่อนุญาติ ใน entity อื่น ***")
 	} else {
 		c.Data["title"] = title
+		c.Data["retCount"] = "0"
+		c.Data["entity"] = entity
+		c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+		c.Layout = "layout.html"
+		c.TplName = "normal/normal.html"
+		c.Render()
 	}
-	c.Data["retCount"] = "0"
-	c.Data["entity"] = entity
-	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.Layout = "layout.html"
-	c.TplName = "normal/normal.html"
-	c.Render()
 }
 
 //ListEntity  _
