@@ -34,6 +34,8 @@ type Permiss struct {
 	UpdatedAt time.Time
 }
 
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
 func init() {
 	orm.RegisterModel(new(Users), new(Permiss)) // Need to register model in init
 }
@@ -91,8 +93,6 @@ func ForgetPass(username, newPass string) (ok bool, errRet string) {
 	}
 	return ok, errRet
 }
-
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
 //RandStringRunes password _
 func RandStringRunes(n int) string {

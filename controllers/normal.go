@@ -19,9 +19,9 @@ func (c *EntitryController) Get() {
 	c.Data["title"] = title
 	c.Data["retCount"] = "0"
 	c.Data["entity"] = entity
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
 	c.TplName = "normal/normal.html"
-	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
 	c.Render()
@@ -62,16 +62,21 @@ func (c *EntitryController) NewEntity() {
 	id := c.Ctx.Request.URL.Query().Get("id")
 	del := c.Ctx.Request.URL.Query().Get("del")
 	title := h.GetEntityTitle(entity)
+
+	ret := m.NormalModel{}
+	var code, name, alert string
+
 	if del != "" {
 		title = "คุณต้องการลบข้อมูล " + title + " ใช่หรือไม่"
 	}
-	ret := m.NormalModel{}
+
 	t, err := template.ParseFiles("views/normal/normal-add.html")
-	var code, name, alert string
+
 	if id == "" {
 		code = m.GetMaxEntity(entity)
 	} else {
 		errGet, retVal := m.GetEntity(entity, id)
+
 		if errGet == nil && (m.NormalEntity{}) != retVal {
 			code = retVal.Code
 			name = retVal.Name
@@ -79,8 +84,15 @@ func (c *EntitryController) NewEntity() {
 			alert = "ไม่พบข้อมูล"
 		}
 	}
+
 	var tpl bytes.Buffer
-	tplVal := map[string]string{"entity": entity, "title": title, "code": code, "id": id, "name": name, "alert": alert, "del": del, "xsrfdata": c.XSRFToken()}
+
+	tplVal := map[string]string{
+		"entity": entity, "title": title,
+		"code": code, "id": id, "name": name,
+		"alert": alert, "del": del,
+		"xsrfdata": c.XSRFToken()}
+
 	if err = t.Execute(&tpl, tplVal); err != nil {
 		ret.RetOK = err != nil
 		ret.RetData = err.Error()
@@ -88,6 +100,7 @@ func (c *EntitryController) NewEntity() {
 		ret.RetOK = true
 		ret.RetData = tpl.String()
 	}
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
@@ -114,8 +127,8 @@ func (c *EntitryController) UpdateEntity() {
 	title := h.GetEntityTitle(entity)
 
 	ret := m.NormalModel{}
-
 	ret.RetOK = true
+
 	if title == "" {
 		ret.RetData = "ไม่อนุญาติ ใน entity อื่น"
 		ret.RetOK = false

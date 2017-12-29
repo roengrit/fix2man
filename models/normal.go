@@ -118,7 +118,6 @@ func UpdateEntity(entity, id, code, name string) (err error) {
 	}
 	fmt.Println(err)
 	if err == nil {
-		fmt.Println("UP")
 		var sql = "UPDATE " + entity + " SET code = ? , name = ? WHERE i_d = ?"
 		o := orm.NewOrm()
 		_, err = o.Raw(sql, code, name, id).Exec()
