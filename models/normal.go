@@ -29,50 +29,6 @@ type NormalEntity struct {
 	UpdatedAt time.Time
 }
 
-//Roles _
-type Roles struct {
-	ID        int
-	Code      string `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
-	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-//Status _
-type Status struct {
-	ID        int
-	Code      string `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
-	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-//Units _
-type Units struct {
-	ID        int
-	Code      string `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
-	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-//Branchs _
-type Branchs struct {
-	ID        int
-	Code      string `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
-	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-func init() {
-	orm.RegisterModel(new(Roles), new(Status), new(Units), new(Branchs)) // Need to register model in init
-}
-
 //GetListEntity _
 func GetListEntity(entity, top, term string) (num int64, err error, entityList []NormalEntity) {
 	var sql = "SELECT i_d,code, name,lock FROM " + entity + " WHERE name like ? or code like ? order by code limit {0}"

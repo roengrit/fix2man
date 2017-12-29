@@ -13,8 +13,12 @@ type Users struct {
 	ID        int
 	Username  string
 	Password  string
-	Email     string
-	RoleID    int
+	Roles     *Roles     `orm:"rel(fk)"`
+	Branch    *Branchs   `orm:"rel(one)"`
+	Depart    *Departs   `orm:"rel(one)"`
+	Building  *Buildings `orm:"rel(one)"`
+	Rooms     *Rooms     `orm:"rel(one)"`
+	Class     *Class     `orm:"rel(one)"`
 	Active    bool
 	CreatedAt time.Time
 	UpdatedAt time.Time

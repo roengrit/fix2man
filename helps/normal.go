@@ -33,6 +33,8 @@ func GetEntityTitle(entity string) string {
 		return "สถานะการซ่อม"
 	case "branchs":
 		return "สาขา/ไซต์"
+	case "departs":
+		return "แผนก"
 	default:
 		return ""
 	}
