@@ -14,11 +14,11 @@ type Users struct {
 	Username  string
 	Password  string
 	Roles     *Roles     `orm:"rel(fk)"`
-	Branch    *Branchs   `orm:"rel(one)"`
-	Depart    *Departs   `orm:"rel(one)"`
-	Building  *Buildings `orm:"rel(one)"`
-	Rooms     *Rooms     `orm:"rel(one)"`
-	Class     *Class     `orm:"rel(one)"`
+	Branch    *Branchs   `orm:"null;rel(one)"`
+	Depart    *Departs   `orm:"null;rel(one)"`
+	Building  *Buildings `orm:"null;rel(one)"`
+	Rooms     *Rooms     `orm:"null;rel(one)"`
+	Class     *Class     `orm:"null;rel(one)"`
 	Active    bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
