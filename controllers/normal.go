@@ -12,17 +12,8 @@ type EntitryController struct {
 	BaseController
 }
 
-//Prepare  _
-func (c *EntitryController) Prepare() {
-	c.EnableXSRF = false
-}
-
 //Get _
 func (c *EntitryController) Get() {
-	val := h.GetUser(c.Ctx.Request)
-	if val == "" {
-		c.Ctx.Redirect(302, "/auth")
-	}
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	title := h.GetEntityTitle(entity)
 	c.Data["title"] = title
@@ -89,13 +80,15 @@ func (c *EntitryController) NewEntity() {
 		}
 	}
 	var tpl bytes.Buffer
-	if err = t.Execute(&tpl, map[string]string{"entity": entity, "title": title, "code": code, "id": id, "name": name, "alert": alert, "del": del}); err != nil {
+	tplVal := map[string]string{"entity": entity, "title": title, "code": code, "id": id, "name": name, "alert": alert, "del": del, "xsrfdata": c.XSRFToken()}
+	if err = t.Execute(&tpl, tplVal); err != nil {
 		ret.RetOK = err != nil
 		ret.RetData = err.Error()
 	} else {
 		ret.RetOK = true
 		ret.RetData = tpl.String()
 	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
 }
