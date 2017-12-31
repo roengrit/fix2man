@@ -45,16 +45,16 @@ func (c *EntitryController) ListEntity() {
 		if err == nil {
 			ret.RetOK = true
 			ret.RetCount = rowCount
-			ret.RetData = h.GenEntityHtml(lists)
+			ret.RetData = h.GenEntityHTML(lists)
 			if rowCount == 0 {
-				ret.RetData = h.HtmlNotFoundRows
+				ret.RetData = h.HTMLNotFoundRows
 			}
 		} else {
 			ret.RetOK = false
-			ret.RetData = strings.Replace(h.HtmlError, "{err}", err.Error(), -1)
+			ret.RetData = strings.Replace(h.HTMLError, "{err}", err.Error(), -1)
 		}
 	} else {
-		ret.RetData = h.HtmlPermissionDenie
+		ret.RetData = h.HTMLPermissionDenie
 	}
 	c.Data["json"] = ret
 	c.ServeJSON()
