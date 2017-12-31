@@ -2,6 +2,8 @@ package models
 
 import (
 	"math/rand"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -10,18 +12,21 @@ import (
 
 //Users เก็บข้อมูล User ใช้งาน
 type Users struct {
-	ID        int
-	Username  string
-	Password  string
-	Roles     *Roles     `orm:"rel(fk)"`
-	Branch    *Branchs   `orm:"null;rel(one)"`
-	Depart    *Departs   `orm:"null;rel(one)"`
-	Building  *Buildings `orm:"null;rel(one)"`
-	Rooms     *Rooms     `orm:"null;rel(one)"`
-	Class     *Class     `orm:"null;rel(one)"`
-	Active    bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID               int
+	Username         string `orm:"size(50)"`
+	Password         string `orm:"size(255)"`
+	Name             string `orm:"size(500)"`
+	Tel              string `orm:"size(255)"`
+	CostPerTechnical float64
+	Roles            *Roles     `orm:"rel(fk)"`
+	Branch           *Branchs   `orm:"null;rel(one)"`
+	Depart           *Departs   `orm:"null;rel(one)"`
+	Building         *Buildings `orm:"null;rel(one)"`
+	Rooms            *Rooms     `orm:"null;rel(one)"`
+	Class            *Class     `orm:"null;rel(one)"`
+	Active           bool
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
 }
 
 //Permiss เก็บข้อมูลสิทธิ์ใช้งาน
@@ -68,6 +73,33 @@ func GetUser(username string) (ok bool, errRet string) {
 		ok = true
 	}
 	return ok, errRet
+}
+
+//GetUserByID _
+func GetUserByID(ID string) (user *Users, errRet string) {
+	o := orm.NewOrm()
+	id, _ := strconv.Atoi(ID)
+	//user = Users{ID: id}
+	userGet := &Users{}
+	o.QueryTable("users").Filter("ID", id).RelatedSel().One(userGet)
+	if nil != userGet {
+		userGet.Password = ""
+		userGet.Roles = nil
+	}
+	return userGet, errRet
+}
+
+//GetUserList _
+func GetUserList(top, term string) (num int64, err error, userList []Users) {
+	var sql = "SELECT i_d,name FROM users WHERE lower(name) like lower(?) order by name limit {0}"
+	if top == "0" {
+		sql = strings.Replace(sql, "limit {0}", "", -1)
+	} else {
+		sql = strings.Replace(sql, "{0}", top, -1)
+	}
+	o := orm.NewOrm()
+	num, err = o.Raw(sql, "%"+term+"%").QueryRows(&userList)
+	return num, err, userList
 }
 
 //ForgetPass _

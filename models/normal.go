@@ -17,6 +17,7 @@ type NormalModel struct {
 	RetData  string
 	ID       int64
 	Name     string
+	ListData interface{}
 }
 
 // NormalEntity _
@@ -31,7 +32,7 @@ type NormalEntity struct {
 
 //GetListEntity _
 func GetListEntity(entity, top, term string) (num int64, err error, entityList []NormalEntity) {
-	var sql = "SELECT i_d,code, name,lock FROM " + entity + " WHERE name like ? or code like ? order by code limit {0}"
+	var sql = "SELECT i_d,code, name,lock FROM " + entity + " WHERE lower(name) like lower(?) or lower(code) like lower(?) order by code limit {0}"
 	if top == "0" {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {
@@ -39,6 +40,23 @@ func GetListEntity(entity, top, term string) (num int64, err error, entityList [
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, "%"+term+"%", "%"+term+"%").QueryRows(&entityList)
+	return num, err, entityList
+}
+
+//GetListEntityWithParent _
+func GetListEntityWithParent(entity, entityParent, top, parentID, term string) (num int64, err error, entityList []NormalEntity) {
+	var sql = "SELECT i_d, name FROM " + entity + " WHERE " + entityParent + "= ? and lower(name) like lower(?) order by name limit {0}"
+	fmt.Println(sql)
+	fmt.Println(term)
+	if top == "0" {
+		sql = strings.Replace(sql, "limit {0}", "", -1)
+	} else {
+		sql = strings.Replace(sql, "{0}", top, -1)
+	}
+	o := orm.NewOrm()
+	num, err = o.Raw(sql, parentID, "%"+term+"%").QueryRows(&entityList)
+	fmt.Println(err)
+	fmt.Println(entityList)
 	return num, err, entityList
 }
 

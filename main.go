@@ -37,5 +37,12 @@ func main() {
 	beego.Router("/normal/max", &c.EntitryController{}, "get:MaxEntity")
 	beego.Router("/normal/update", &c.EntitryController{}, "post:UpdateEntity")
 
+	beego.Router("/service/entitylist/json", &c.ServiceController{}, "get:ListEntityJson")
+	beego.Router("/service/userlist/json", &c.ServiceController{}, "get:GetUserListJson")
+	beego.Router("/service/user/json", &c.ServiceController{}, "get:GetUserJson")
+	beego.Router("/service/entitylist-p/json", &c.ServiceController{}, "get:ListEntityWithParentJson")
+
+	beego.Router("/create-request", &c.ReqController{})
+
 	beego.Run()
 }

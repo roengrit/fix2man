@@ -45,6 +45,29 @@ func GetEntityTitle(entity string) string {
 	}
 }
 
+func GetEntityParentField(entity string) string {
+	switch entity {
+	case "roles":
+		return ""
+	case "units":
+		return ""
+	case "status":
+		return ""
+	case "branchs":
+		return ""
+	case "departs":
+		return ""
+	case "buildings":
+		return "branch_id"
+	case "class":
+		return "building_id"
+	case "rooms":
+		return "class_id"
+	default:
+		return ""
+	}
+}
+
 func GenEntityHtml(lists []m.NormalEntity) string {
 	var hmtlBuffer bytes.Buffer
 	for _, val := range lists {
