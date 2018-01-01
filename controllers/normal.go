@@ -60,8 +60,8 @@ func (c *EntitryController) ListEntity() {
 	c.ServeJSON()
 }
 
-//ListEntityJson  _
-func (c *EntitryController) ListEntityJson() {
+//ListEntityJSON  _
+func (c *EntitryController) ListEntityJSON() {
 
 	term := c.GetString("query")
 	entity := c.Ctx.Request.URL.Query().Get("entity")

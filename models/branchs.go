@@ -23,3 +23,11 @@ func init() {
 		new(Branchs),
 	) // Need to register model in init
 }
+
+//GetAllBranch _
+func GetAllBranch() (req *[]Branchs) {
+	o := orm.NewOrm()
+	reqGet := &[]Branchs{}
+	o.QueryTable("branchs").RelatedSel().All(reqGet)
+	return reqGet
+}

@@ -1,6 +1,6 @@
-<script src="static/js/datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="static/js/datepicker/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
-<script src="static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
+<script src="/static/js/datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/js/datepicker/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
+<script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script >
  $(function () {
  $('#req-date-event').datepicker({
@@ -8,9 +8,10 @@
       language: 'th',
       todayBtn: true,
       orientation: "bottom auto",
-      todayHighlight: true        
-    });
-     $('#req-date-event').datepicker('setDate', new Date()) ;
+      todayHighlight: true  ,
+      format: 'dd-mm-yyyy',      
+ });
+     $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.currentDate}}"))) ;
      $('#req-name').typeahead({
         ajax: '/service/userlist/json/?entity=users',
         display: 'Name',
@@ -19,7 +20,14 @@
         val: 'ID',
         onSelect:function(data){
             $('#req-name').addClass('check-text');
-            $('#req-name-id').val(data.value);        
+            $('#req-name-id').val(data.value); 
+            if(data.value == 0){
+                return;
+            }       
+            if($('#req-doc-id').val()!=''){
+                return;
+            }
+
             $.get( "/service/user/json/?query="+ data.value , function( userData ) {
                     
                     $('#req-tel').val(userData.Tel);
@@ -56,14 +64,25 @@
         valueField: 'ID',
         val: 'ID',
         onSelect:function(data){
+
             $('#req-branch').addClass('check-text');
-            $('#req-branch-id').val(data.value);    
-            buildingGet(data.value);
+            $('#req-branch-id').val(data.value);
+
+            $('#req-building').val('');
+            $('#req-building-id').val('');
+            $('#req-building').removeClass('check-text');              
+
+            $('#req-class').val('');
+            $('#req-class-id').val('');
+            $('#req-class').removeClass('check-text');
+
+            $('#req-room').val('');
+            $('#req-room-id').val('');
+            $('#req-room').removeClass('check-text');  
         }
     });
 
-    function buildingGet(val){
-      $('#req-building').typeahead({
+    $('#req-building').typeahead({
                 ajax: '/service/entitylist-p/json/?entity=buildings'  ,
                 display: 'Name',
                 displayField: 'Name',
@@ -71,35 +90,43 @@
                 val: 'ID',
                 parent : $('#req-branch-id'), 
                 onSelect:function(data){
+
                     $('#req-building').addClass('check-text');
                     $('#req-building-id').val(data.value); 
-                    classGet(data.value);           
+
+                    $('#req-class').val('');
+                    $('#req-class-id').val('');
+                    $('#req-class').removeClass('check-text');
+
+                    $('#req-room').val('');
+                    $('#req-room-id').val('');
+                    $('#req-room').removeClass('check-text');
+
                 },
                 parent : 'req-branch-id',
                 fixurl : '/service/entitylist-p/json/?entity=buildings'
             });
-    }
-
-    function classGet(val){
-        $('#req-class').typeahead({
-            ajax: '/service/entitylist-p/json/?entity=class&parent'   ,
+    $('#req-class').typeahead({
+            ajax: '/service/entitylist-p/json/?entity=class'   ,
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
             val: 'ID',
             onSelect:function(data){
+                
                 $('#req-class').addClass('check-text');
                 $('#req-class-id').val(data.value);  
-                roomGet(data.value);      
+                
+                $('#req-room').val('');
+                $('#req-room-id').val('');
+                $('#req-room').removeClass('check-text');
             },
             parent : 'req-building-id',
             fixurl : '/service/entitylist-p/json/?entity=class'
         });
-    }
 
-    function roomGet(val){
-        $('#req-room').typeahead({
-            ajax: '/service/entitylist-p/json/?entity=rooms&parent='  + val   ,
+    $('#req-room').typeahead({
+            ajax: '/service/entitylist-p/json/?entity=rooms'   ,
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -111,7 +138,6 @@
             parent : 'req-class-id',
             fixurl : '/service/entitylist-p/json/?entity=rooms'
         });
-    }
 
     $('#req-depart').typeahead({
                 ajax: '/service/entitylist/json/?entity=departs'   ,
@@ -157,22 +183,63 @@
                     break
                 case 27: // escape
                     break
-                default:   $(this).removeClass("check-text");   break
+                default:  { 
+                    $(this).removeClass("check-text"); 
+                    var name = $(this).attr("name"); 
+                    $("#" + name+ "-id").val(''); 
+                }  break
             }
     });
   
  });
- function Save()
-      {
+ function Clear()
+ {
+                    $('#req-doc-id').val(''); 
+
+                    $('#req-name').val(''); 
+                    $('#req-name').removeClass('check-text');
+                    $('#req-name-id').val(''); 
+
+                    $('#req-tel').val('')
+                    $('#req-tel').val('');
+                    $('#req-tel').removeClass('check-text');
+
+                    $('#req-branch').val('');
+                    $('#req-branch').removeClass('check-text');
+                    $('#req-branch-id').val('');  
+
+                    $('#req-depart').val('');        
+                    $('#req-depart').removeClass('check-text');
+                    $('#req-depart-id').val('');  
+
+                    $('#req-building').val('');  
+                    $('#req-building').removeClass('check-text');      
+                    $('#req-building-id').val('');      
+
+                    $('#req-class').val('');     
+                    $('#req-class').removeClass('check-text');         
+                    $('#req-class-id').val('');   
+                          
+                    $('#req-room').val('');        
+                    $('#req-room').removeClass('check-text');         
+                    $('#req-room-id').val('');
+                                              
+                    $('#req-sn').val('');        
+                    $('#req-sn').removeClass('check-text');         
+                                              
+                    $('#remark').val('');        
+ }
+ function Save(){
           hideTopAlert();
             url = $('#req-form').attr('action');
             $.post(url,$('#req-form').serialize(), function( data ) {
                 $('#normal-code').removeClass('load-text');
                 if(data.RetOK){
                     showTopAlert(data.RetData,"success")
+                    setTimeout(function(){ window.location.href = '/request/list/?id='+data.ID  }, 1000);
                 }else{
                     showTopAlert(data.RetData,"danger")
                 }
             });
-      }
+ }
 </script>

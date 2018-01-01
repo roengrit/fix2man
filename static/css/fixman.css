@@ -35,7 +35,7 @@
     margin-right:2px; 
 }
 .check-text {
-    background:url('/static/image/check.png') 
+    background:url('/static/image/check-small.png') 
     no-repeat right center;
     margin-right:2px;
 }
@@ -48,5 +48,8 @@
 .drop-search {
     background-color: #f9fafc!important;
     color: black!important;
+}
+.xs-top-serch{
+    padding-left:0px!important;
 }
  

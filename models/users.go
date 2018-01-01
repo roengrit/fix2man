@@ -89,6 +89,18 @@ func GetUserByID(ID string) (user *Users, errRet string) {
 	return userGet, errRet
 }
 
+//GetUserByUserName _
+func GetUserByUserName(username string) (user *Users, errRet string) {
+	userGet := &Users{}
+	o := orm.NewOrm()
+	o.QueryTable("users").Filter("Username", username).RelatedSel().One(userGet)
+	if nil != userGet {
+		userGet.Password = ""
+		userGet.Roles = nil
+	}
+	return userGet, errRet
+}
+
 //GetUserList _
 func GetUserList(top, term string) (num int64, err error, userList []Users) {
 	var sql = "SELECT i_d,name FROM users WHERE lower(name) like lower(?) order by name limit {0}"

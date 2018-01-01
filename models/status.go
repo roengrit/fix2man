@@ -22,3 +22,11 @@ func init() {
 		new(Status),
 	) // Need to register model in init
 }
+
+//GetAllStatus _
+func GetAllStatus() (req *[]Status) {
+	o := orm.NewOrm()
+	reqGet := &[]Status{}
+	o.QueryTable("status").RelatedSel().All(reqGet)
+	return reqGet
+}

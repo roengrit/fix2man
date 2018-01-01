@@ -3,17 +3,16 @@ package controllers
 import (
 	h "fix2man/helps"
 	m "fix2man/models"
-	"fmt"
 	"strings"
 )
 
-//ReqController _
+//ServiceController _
 type ServiceController struct {
 	BaseController
 }
 
-//ListEntityJson  _
-func (c *ServiceController) ListEntityJson() {
+//ListEntityJSON  _
+func (c *ServiceController) ListEntityJSON() {
 
 	term := strings.TrimSpace(c.GetString("query"))
 	entity := c.Ctx.Request.URL.Query().Get("entity")
@@ -35,19 +34,15 @@ func (c *ServiceController) ListEntityJson() {
 	c.ServeJSON()
 }
 
-//ListEntityWithParentJson  _
-func (c *ServiceController) ListEntityWithParentJson() {
+//ListEntityWithParentJSON  _
+func (c *ServiceController) ListEntityWithParentJSON() {
 
 	term := strings.TrimSpace(c.GetString("query"))
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	parent := strings.TrimSpace(c.GetString("parent"))
 	parentEntity := h.GetEntityParentField(entity)
 	ret := m.NormalModel{}
-	fmt.Println(entity)
-	fmt.Println(parentEntity)
-	fmt.Println(parent)
 	rowCount, err, lists := m.GetListEntityWithParent(entity, parentEntity, "15", parent, term)
-	fmt.Println(lists)
 	if err == nil {
 		ret.RetOK = true
 		ret.RetCount = rowCount
@@ -64,8 +59,8 @@ func (c *ServiceController) ListEntityWithParentJson() {
 	c.ServeJSON()
 }
 
-//GetUserJson  _
-func (c *ServiceController) GetUserListJson() {
+//GetUserListJSON  _
+func (c *ServiceController) GetUserListJSON() {
 	term := strings.TrimSpace(c.GetString("query"))
 	rowCount, err, lists := m.GetUserList("15", term)
 	ret := m.NormalModel{}
@@ -85,30 +80,8 @@ func (c *ServiceController) GetUserListJson() {
 	c.ServeJSON()
 }
 
-//GetBuildingListJson  _
-// func (c *ServiceController) GetBuildingListJson() {
-// 	term := strings.TrimSpace(c.GetString("query"))
-// 	branch := strings.TrimSpace(c.GetString("branch"))
-// 	rowCount, err, lists := m.GetBuildingList("15", branch, term)
-// 	ret := m.NormalModel{}
-// 	if err == nil {
-// 		ret.RetOK = true
-// 		ret.RetCount = rowCount
-// 		ret.ListData = lists
-// 		if rowCount == 0 {
-// 			ret.RetOK = false
-// 			ret.RetData = "ไม่พบข้อมูล"
-// 		}
-// 	} else {
-// 		ret.RetOK = false
-// 		ret.RetData = "ไม่พบข้อมูล"
-// 	}
-// 	c.Data["json"] = ret
-// 	c.ServeJSON()
-// }
-
-//GetUserJson  _
-func (c *ServiceController) GetUserJson() {
+//GetUserJSON  _
+func (c *ServiceController) GetUserJSON() {
 	term := strings.TrimSpace(c.GetString("query"))
 	user, err := m.GetUserByID(term)
 	if err != "" {

@@ -12,12 +12,14 @@ import (
 
 //NormalModel _
 type NormalModel struct {
-	RetOK    bool
-	RetCount int64
-	RetData  string
-	ID       int64
-	Name     string
-	ListData interface{}
+	RetOK      bool
+	RetCount   int64
+	RetData    string
+	ID         int64
+	Name       string
+	XSRF       string
+	FlagAction string
+	ListData   interface{}
 }
 
 // NormalEntity _
@@ -46,8 +48,6 @@ func GetListEntity(entity, top, term string) (num int64, err error, entityList [
 //GetListEntityWithParent _
 func GetListEntityWithParent(entity, entityParent, top, parentID, term string) (num int64, err error, entityList []NormalEntity) {
 	var sql = "SELECT i_d, name FROM " + entity + " WHERE " + entityParent + "= ? and lower(name) like lower(?) order by name limit {0}"
-	fmt.Println(sql)
-	fmt.Println(term)
 	if top == "0" {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {
@@ -55,8 +55,6 @@ func GetListEntityWithParent(entity, entityParent, top, parentID, term string) (
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, parentID, "%"+term+"%").QueryRows(&entityList)
-	fmt.Println(err)
-	fmt.Println(entityList)
 	return num, err, entityList
 }
 
@@ -158,4 +156,35 @@ func GetMaxEntity(entity string) (code string) {
 		code = "0001"
 	}
 	return code
+}
+
+//GetMaxDoc
+func GetMaxDoc(entity, format string) (docno string) {
+
+	var lists []orm.ParamsList
+	var sql = `SELECT 
+				 concat( '` + format + `' , 
+					  date_part( 'year', CURRENT_DATE :: timestamp ) :: text ,
+					  case WHEN length( date_part( 'month', CURRENT_DATE :: timestamp ) :: text )  = 1 then  
+								concat('0', date_part( 'month', CURRENT_DATE :: timestamp ) :: text ) else 
+										  date_part( 'month', CURRENT_DATE :: timestamp ) :: text 
+					  end  , 
+					  '-',
+					  LPAD((COALESCE( MAX ( SUBSTRING ( doc_no FROM '[0-9]{5,}$' )), '0' ) :: NUMERIC + 1)  :: text, 5, '0')
+					  ) AS  doc_no 
+				 FROM
+					 ` + entity + `
+				 WHERE
+					 doc_no LIKE'` + format + `%' 	 
+					 AND doc_date BETWEEN date_trunc( 'month', CURRENT_DATE ) :: DATE  AND ( date_trunc( 'month', CURRENT_DATE ) + INTERVAL '1 month - 1 day' ) :: DATE`
+	o := orm.NewOrm()
+	num, err := o.Raw(sql).ValuesList(&lists)
+	if err == nil && num > 0 {
+		max := lists[0]
+		maxVal := max[0].(string)
+		docno = maxVal
+	} else {
+		docno = ""
+	}
+	return docno
 }
