@@ -43,6 +43,7 @@ func main() {
 	beego.Router("/service/entitylist-p/json", &c.ServiceController{}, "get:ListEntityWithParentJSON")
 
 	beego.Router("/create-request", &c.ReqController{})
+	beego.Router("/request/read", &c.ReqController{}, "get:Read")
 	beego.Router("/request/list", &c.ReqController{}, "get:ReqList;post:GetReqList")
 
 	beego.Run()

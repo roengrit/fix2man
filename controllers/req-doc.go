@@ -4,7 +4,6 @@ import (
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
-	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -24,10 +23,40 @@ func (c *ReqController) Get() {
 	c.Data["retCount"] = "0"
 	c.Data["currentDate"] = now.Format("2006-01-02")
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-
 	if id != "" {
 		ret, err := m.GetReqDocID(id)
-		fmt.Println(ret)
+		if err != nil {
+			c.Data["err"] = err.Error()
+		} else {
+			c.Data["data"] = ret
+			if nil != ret.User {
+				c.Data["userID"] = ret.User.ID
+			} else {
+				c.Data["userID"] = ""
+			}
+			c.Data["currentDate"] = ret.EventDate.Format("2006-01-02")
+		}
+	}
+
+	c.Layout = "layout.html"
+	c.TplName = "req/req-read.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
+	c.LayoutSections["Scripts"] = "req/req-script.tpl"
+	c.Render()
+}
+
+//Read _
+func (c *ReqController) Read() {
+	id := c.Ctx.Request.URL.Query().Get("id")
+	now := time.Now()
+	c.Data["title"] = "สร้างใบแจ้งงาน"
+	c.Data["retCount"] = "0"
+	c.Data["currentDate"] = now.Format("2006-01-02")
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["r"] = "readonly"
+	if id != "" {
+		ret, err := m.GetReqDocID(id)
 		if err != nil {
 			c.Data["err"] = err.Error()
 		} else {
@@ -45,7 +74,7 @@ func (c *ReqController) Get() {
 	c.TplName = "req/req.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
-	c.LayoutSections["Scripts"] = "req/req-script.tpl"
+	c.LayoutSections["Scripts"] = "req/req-read-script.tpl"
 	c.Render()
 }
 
@@ -136,7 +165,7 @@ func (c *ReqController) Post() {
 			newReq.DocNo = m.GetMaxDoc("request_document", "REQ")
 			newReq.CreateUser = actionUser
 			newReq.CreatedAt = time.Now()
-			ret.ID, errAction = m.CreateReq(newReq)
+			ret.ID, errAction = m.CreateReq(newReq, m.Users{ID: actionUser.ID})
 		} else {
 			newReq.ID = int(reqDocID)
 			newReq.UpdatedAt = time.Now()
@@ -165,7 +194,8 @@ func (c *ReqController) Post() {
 //ReqList _
 func (c *ReqController) ReqList() {
 	c.Data["title"] = "รายการใบแจ้งงาน"
-	c.Data["currentDate"] = time.Now().Format("2006-01-02")
+	c.Data["beginDate"] = time.Date(time.Now().Year(), 1, 1, 0, 0, 0, 0, time.Local).Format("2006-01-02")
+	c.Data["endDate"] = time.Date(time.Now().Year(), time.Now().Month()+1, 0, 0, 0, 0, 0, time.Local).Format("2006-01-02")
 	c.Data["retCount"] = "0"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["status"] = m.GetAllStatus()
@@ -187,8 +217,6 @@ func (c *ReqController) GetReqList() {
 	status := c.GetString("txt-status")
 	dateBegin := c.GetString("txt-date-begin")
 	dateEnd := c.GetString("txt-date-end")
-	fmt.Println(dateBegin)
-	fmt.Println(dateEnd)
 	if dateBegin != "" {
 		sp := strings.Split(dateBegin, "-")
 		dateBegin = sp[2] + "-" + sp[1] + "-" + sp[0]

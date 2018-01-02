@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -65,10 +64,16 @@ func init() {
 }
 
 //CreateReq _
-func CreateReq(req RequestDocument) (retID int64, errRet error) {
+func CreateReq(req RequestDocument, user Users) (retID int64, errRet error) {
 	o := orm.NewOrm()
+	var firstStatus = GetFirstStatus()
+	status := RequestStatus{RequestDocument: &req, DocRefNo: "", Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
+	o.Begin()
 	id, err := o.Insert(&req)
+	_, err = o.Insert(&status)
+	o.Commit()
 	if err == nil {
+
 		retID = id
 	}
 	return retID, err
@@ -119,16 +124,6 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 
 //GetReqDocList _
 func GetReqDocList(top, term, branch, status, dateBegin, dateEnd string) (num int64, err error, reqList []RequestList) {
-
-	// ID        int
-	// DocNo     string
-	// DocDate   time.Time
-	// ReqName   string
-	// Tel       string
-	// Branch    string
-	// Details   string
-	// EventDate time.Time
-	// Status    string
 
 	var sql = `SELECT  i_d,doc_no,doc_date,req_name,tel,
 						(
@@ -187,9 +182,5 @@ func GetReqDocList(top, term, branch, status, dateBegin, dateEnd string) (num in
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, "%"+term+"%", "%"+term+"%", "%"+term+"%").QueryRows(&reqList)
-	if err == nil {
-		fmt.Println("nums: ", num)
-		fmt.Println(reqList)
-	}
 	return num, err, reqList
 }

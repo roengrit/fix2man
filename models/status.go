@@ -20,13 +20,21 @@ type Status struct {
 func init() {
 	orm.RegisterModel(
 		new(Status),
-	) // Need to register model in init
+	)
 }
 
 //GetAllStatus _
 func GetAllStatus() (req *[]Status) {
 	o := orm.NewOrm()
 	reqGet := &[]Status{}
-	o.QueryTable("status").RelatedSel().All(reqGet)
+	o.QueryTable("status").RelatedSel().OrderBy("code").All(reqGet)
+	return reqGet
+}
+
+//GetFirstStatus _
+func GetFirstStatus() (req *Status) {
+	o := orm.NewOrm()
+	reqGet := &Status{}
+	o.QueryTable("status").RelatedSel().OrderBy("code").Filter("is_def", true).One(reqGet)
 	return reqGet
 }

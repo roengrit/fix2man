@@ -80,6 +80,7 @@ $(function () {
       })
       $('.change-top').click(function(){
            $('#top').val($(this).attr("top"));
+           $('#top-search-label').html($(this).html());
            loadNormalTable()
       })
       $('#search-form').keyup(function(e){

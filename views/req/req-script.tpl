@@ -3,15 +3,20 @@
 <script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script >
  $(function () {
- $('#req-date-event').datepicker({
-      autoclose: true,
-      language: 'th',
-      todayBtn: true,
-      orientation: "bottom auto",
-      todayHighlight: true  ,
-      format: 'dd-mm-yyyy',      
- });
-     $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.currentDate}}"))) ;
+     {{if .r}}
+
+    {{else}}
+    $('#req-date-event').datepicker({
+        autoclose: true,
+        language: 'th',
+        todayBtn: true,
+        orientation: "bottom auto",
+        todayHighlight: true  ,
+        format: 'dd-mm-yyyy',      
+    });
+    $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.currentDate}}"))) ;
+    {{end}}
+
      $('#req-name').typeahead({
         ajax: '/service/userlist/json/?entity=users',
         display: 'Name',
@@ -236,7 +241,7 @@
                 $('#normal-code').removeClass('load-text');
                 if(data.RetOK){
                     showTopAlert(data.RetData,"success")
-                    setTimeout(function(){ window.location.href = '/request/list/?id='+data.ID  }, 1000);
+                    setTimeout(function(){ window.location.href = '/request/list/' }, 2000);
                 }else{
                     showTopAlert(data.RetData,"danger")
                 }

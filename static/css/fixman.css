@@ -52,4 +52,14 @@
 .xs-top-serch{
     padding-left:0px!important;
 }
+.btn-print{
+    background-color: #795548
+}
+.btn-description{
+    background-color:#9C27B0
+}
+.dropdown-menu>li>a {
+    color: black;
+}
+
  

@@ -9,12 +9,15 @@
     <section class="content">
         <form action="/normal/list" id="search-form" onsubmit="return false;" method="post">
             {{ .xsrfdata }}
-            <div class="input-group input-group-sm col-xs-4 search-top">
+            <div class="input-group input-group-sm col-xs-6 search-top">
                      <input type="text" id="txt-search" name="txt-search" placeholder="ค้นหา" class="form-control">
                      <input type="hidden" id="entity" value="{{.entity}}" name="entity" />
                      <input type="hidden" id="top" value="10" name="top" />
                     <div class="input-group-btn">
                                     <button type="button" id="btn-search-submit"  class="btn btn-primary "><i class="fa fa-search"></i>  </button>
+                                    <label type="button" id="top-search-label" class="btn btn-default ">
+                                        5 รายการ
+                                    </label>
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                       <span class="caret"></span>
                                       <span class="sr-only">Toggle Dropdown</span>
