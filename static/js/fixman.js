@@ -46,9 +46,9 @@ function showGlobalSmallModal()
     $('#small-global-modal').modal("show");
 }
 
-function showTopAlert(alert)
+function showTopAlert(alert,type)
 {
-    var html = `<div class="alert alert-success alert-dismissible"  >
+    var html = `<div class="alert alert-`+type+` alert-dismissible"  >
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
     `+ alert + `
     </div>`;
@@ -80,6 +80,7 @@ $(function () {
       })
       $('.change-top').click(function(){
            $('#top').val($(this).attr("top"));
+           $('#top-search-label').html($(this).html());
            loadNormalTable()
       })
       $('#search-form').keyup(function(e){

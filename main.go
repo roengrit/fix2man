@@ -28,7 +28,7 @@ func main() {
 	beego.Router("/", &c.AppController{})
 	beego.Router("/auth", &c.AuthController{})
 	beego.Router("/logout", &c.LogoutController{})
-	beego.Router("/prof-name", &c.GetNameController{})
+	beego.Router("/prof-name", &c.GetNameController{}, "get:GetName")
 	beego.Router("/forget-password", &c.ForgetController{})
 
 	beego.Router("/normal", &c.EntitryController{})
@@ -36,6 +36,15 @@ func main() {
 	beego.Router("/normal/add", &c.EntitryController{}, "get:NewEntity")
 	beego.Router("/normal/max", &c.EntitryController{}, "get:MaxEntity")
 	beego.Router("/normal/update", &c.EntitryController{}, "post:UpdateEntity")
+
+	beego.Router("/service/entitylist/json", &c.ServiceController{}, "get:ListEntityJSON")
+	beego.Router("/service/userlist/json", &c.ServiceController{}, "get:GetUserListJSON")
+	beego.Router("/service/user/json", &c.ServiceController{}, "get:GetUserJSON")
+	beego.Router("/service/entitylist-p/json", &c.ServiceController{}, "get:ListEntityWithParentJSON")
+
+	beego.Router("/create-request", &c.ReqController{})
+	beego.Router("/request/read", &c.ReqController{}, "get:Read")
+	beego.Router("/request/list", &c.ReqController{}, "get:ReqList;post:GetReqList")
 
 	beego.Run()
 }

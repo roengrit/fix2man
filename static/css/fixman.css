@@ -29,3 +29,37 @@
     background:url('/static/image/wait.png') 
     no-repeat right center;
 }
+.close-text {
+    background:url('/static/image/close.png') 
+    no-repeat right center;
+    margin-right:2px; 
+}
+.check-text {
+    background:url('/static/image/check-small.png') 
+    no-repeat right center;
+    margin-right:2px;
+}
+.req-box-form{
+    padding-bottom:60px;
+}
+.req-box-title{
+    padding:15px;
+}
+.drop-search {
+    background-color: #f9fafc!important;
+    color: black!important;
+}
+.xs-top-serch{
+    padding-left:0px!important;
+}
+.btn-print{
+    background-color: #795548
+}
+.btn-description{
+    background-color:#9C27B0
+}
+.dropdown-menu>li>a {
+    color: black;
+}
+
+ 

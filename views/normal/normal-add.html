@@ -90,7 +90,7 @@
                 if(data.RetOK){
                    loadNormalTable();               
                    hideGlobalSmalModal();
-                   showTopAlert(data.RetData)
+                   showTopAlert(data.RetData,"success")
                 }else{
                     $("#normal-alert").html(data.RetData);
                     $("#normal-alert").show(); 

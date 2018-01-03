@@ -12,11 +12,14 @@ import (
 
 //NormalModel _
 type NormalModel struct {
-	RetOK    bool
-	RetCount int64
-	RetData  string
-	ID       int64
-	Name     string
+	RetOK      bool
+	RetCount   int64
+	RetData    string
+	ID         int64
+	Name       string
+	XSRF       string
+	FlagAction string
+	ListData   interface{}
 }
 
 // NormalEntity _
@@ -31,7 +34,7 @@ type NormalEntity struct {
 
 //GetListEntity _
 func GetListEntity(entity, top, term string) (num int64, err error, entityList []NormalEntity) {
-	var sql = "SELECT i_d,code, name,lock FROM " + entity + " WHERE name like ? or code like ? order by code limit {0}"
+	var sql = "SELECT i_d,code, name,lock FROM " + entity + " WHERE lower(name) like lower(?) or lower(code) like lower(?) order by code limit {0}"
 	if top == "0" {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {
@@ -39,6 +42,19 @@ func GetListEntity(entity, top, term string) (num int64, err error, entityList [
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, "%"+term+"%", "%"+term+"%").QueryRows(&entityList)
+	return num, err, entityList
+}
+
+//GetListEntityWithParent _
+func GetListEntityWithParent(entity, entityParent, top, parentID, term string) (num int64, err error, entityList []NormalEntity) {
+	var sql = "SELECT i_d, name FROM " + entity + " WHERE " + entityParent + "= ? and lower(name) like lower(?) order by name limit {0}"
+	if top == "0" {
+		sql = strings.Replace(sql, "limit {0}", "", -1)
+	} else {
+		sql = strings.Replace(sql, "{0}", top, -1)
+	}
+	o := orm.NewOrm()
+	num, err = o.Raw(sql, parentID, "%"+term+"%").QueryRows(&entityList)
 	return num, err, entityList
 }
 
@@ -118,7 +134,6 @@ func UpdateEntity(entity, id, code, name string) (err error) {
 	}
 	fmt.Println(err)
 	if err == nil {
-		fmt.Println("UP")
 		var sql = "UPDATE " + entity + " SET code = ? , name = ? WHERE i_d = ?"
 		o := orm.NewOrm()
 		_, err = o.Raw(sql, code, name, id).Exec()
@@ -141,4 +156,35 @@ func GetMaxEntity(entity string) (code string) {
 		code = "0001"
 	}
 	return code
+}
+
+//GetMaxDoc
+func GetMaxDoc(entity, format string) (docno string) {
+
+	var lists []orm.ParamsList
+	var sql = `SELECT 
+				 concat( '` + format + `' , 
+					  date_part( 'year', CURRENT_DATE :: timestamp ) :: text ,
+					  case WHEN length( date_part( 'month', CURRENT_DATE :: timestamp ) :: text )  = 1 then  
+								concat('0', date_part( 'month', CURRENT_DATE :: timestamp ) :: text ) else 
+										  date_part( 'month', CURRENT_DATE :: timestamp ) :: text 
+					  end  , 
+					  '-',
+					  LPAD((COALESCE( MAX ( SUBSTRING ( doc_no FROM '[0-9]{5,}$' )), '0' ) :: NUMERIC + 1)  :: text, 5, '0')
+					  ) AS  doc_no 
+				 FROM
+					 ` + entity + `
+				 WHERE
+					 doc_no LIKE'` + format + `%' 	 
+					 AND doc_date BETWEEN date_trunc( 'month', CURRENT_DATE ) :: DATE  AND ( date_trunc( 'month', CURRENT_DATE ) + INTERVAL '1 month - 1 day' ) :: DATE`
+	o := orm.NewOrm()
+	num, err := o.Raw(sql).ValuesList(&lists)
+	if err == nil && num > 0 {
+		max := lists[0]
+		maxVal := max[0].(string)
+		docno = maxVal
+	} else {
+		docno = ""
+	}
+	return docno
 }

@@ -1,0 +1,3 @@
+INSERT INTO "request_status"("i_d", "request_document_id", "doc_ref_no", "status_id", "remark", "create_user_id", "created_at", "update_user_id", "updated_at") VALUES (3, 10, '', 1, '', 2, '2018-01-02 18:47:48.007436+07', NULL, NULL);
+INSERT INTO "request_status"("i_d", "request_document_id", "doc_ref_no", "status_id", "remark", "create_user_id", "created_at", "update_user_id", "updated_at") VALUES (4, 11, '', 1, '', 2, '2018-01-02 21:27:17.662736+07', NULL, NULL);
+INSERT INTO "request_status"("i_d", "request_document_id", "doc_ref_no", "status_id", "remark", "create_user_id", "created_at", "update_user_id", "updated_at") VALUES (1, 5, '', 1, '', 1, '2018-01-01 19:41:39+07', NULL, NULL);

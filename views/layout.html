@@ -19,7 +19,9 @@
 
     <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
 
-    <link rel="stylesheet" href="/static/css/fixman.css"> {{.HtmlHead}}
+    {{.HtmlHead}}
+
+    <link rel="stylesheet" href="/static/css/fixman.css"> 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,7 +36,7 @@
 
 <body class="hold-transition skin-purple-light sidebar-mini">
     <!-- Site wrapper -->
-    <div class="wrapper">
+    <div class="wrapper"  >
 
         <header class="main-header">
             <!-- Logo -->
@@ -122,11 +124,11 @@
                         </a>
                         <ul class="treeview-menu">
                             <li class="{{.active_c_001}}">
-                                <a href="../forms/general.html">
+                                <a href="/create-request">
                                     <i class="fa fa-circle-o"></i> แจ้งงาน</a>
                             </li>
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="/request/list">
                                     <i class="fa fa-circle-o"></i> รายการแจ้งงาน</a>
                             </li>
 
@@ -267,12 +269,6 @@
                                 <a href="/normal/?entity=rooms">
                                     <i class="fa fa-circle-o"></i> ห้อง</a>
                             </li>
-                            <li>
-                                <a href="/normal/?entity=rooms">
-                                    <i class="fa fa-circle-o"></i> ตำแหน่ง</a>
-                            </li>
-                           
-                           
                         </ul>
                     </li>
                 </ul>
@@ -510,14 +506,13 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/jquery.slimscroll.min.js"></script>
     <script src="/static/js/fastclick.js"></script>
-    <script src="/static/js/adminlte.min.js"></script>
+    <script src="/static/js/adminlte.min.js"></script>   
     <script src="/static/js/fixman.js"></script>
+    {{.Scripts}}
     <script>
         $(document).ready(function () {
             $('.sidebar-menu').tree()
         })
     </script>
-     {{.Scripts}}
 </body>
-
 </html>

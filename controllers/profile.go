@@ -2,11 +2,13 @@ package controllers
 
 import h "fix2man/helps"
 
+//GetNameController _
 type GetNameController struct {
 	BaseController
 }
 
-func (c *GetNameController) Get() {
+//GetName -
+func (c *GetNameController) GetName() {
 
 	c.Data["json"] = h.GetUser(c.Ctx.Request)
 	c.ServeJSON()

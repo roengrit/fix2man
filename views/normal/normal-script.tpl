@@ -1,3 +1,3 @@
-<script>
-    loadNormalTable();
-</script>
+    <script>
+    loadNormalTable()
+    </script>

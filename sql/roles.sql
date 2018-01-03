@@ -1,0 +1,11 @@
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (6, '0005', 'PC', '2017-12-27 16:04:15+07', '2017-12-27 16:04:18+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (7, '0006', 'Dev', '2017-12-27 16:04:35+07', '2017-12-27 16:04:38+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (8, '0007', 'Sale', '2017-12-27 16:04:50+07', '2017-12-27 16:04:53+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (9, '0008', 'Drive', '2017-12-27 16:05:07+07', '2017-12-27 16:05:11+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (10, '0009', 'WH', '2017-12-27 16:05:23+07', '2017-12-27 16:05:26+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (1, '0001', 'ผู้ดูแลระบบ', '2017-12-27 15:43:16+07', '2017-12-27 15:43:20+07', 't');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (2, '0002', 'ช่าง/วิศวกร', '2017-12-27 15:43:39+07', '2017-12-27 15:43:43+07', 't');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (4, '0003', 'ผู้แจ้งงานทั่วไป', '2017-12-27 16:03:32+07', '2017-12-27 16:03:35+07', 't');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (5, '0004', 'IT', '2017-12-27 16:03:58+07', '2017-12-27 16:04:01+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (11, '0010', 'ISRV', '2017-12-27 16:05:37+07', '2017-12-27 16:05:40+07', 'f');
+INSERT INTO "roles"("i_d", "code", "name", "created_at", "updated_at", "lock") VALUES (14, '0011', '12855', '2017-12-31 20:10:03.962363+07', '2017-12-31 20:10:03.962363+07', 'f');

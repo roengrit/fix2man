@@ -5,6 +5,7 @@ import (
 	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
+	"strings"
 )
 
 //EntitryController _
@@ -16,15 +17,19 @@ type EntitryController struct {
 func (c *EntitryController) Get() {
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	title := h.GetEntityTitle(entity)
-	c.Data["title"] = title
-	c.Data["retCount"] = "0"
-	c.Data["entity"] = entity
-	c.Layout = "layout.html"
-	c.TplName = "normal/normal.html"
-	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
-	c.Render()
+	if title == "" {
+		c.Ctx.WriteString("*** ไม่อนุญาติ ใน entity อื่น ***")
+	} else {
+		c.Data["title"] = title
+		c.Data["retCount"] = "0"
+		c.Data["entity"] = entity
+		c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+		c.Layout = "layout.html"
+		c.TplName = "normal/normal.html"
+		c.LayoutSections = make(map[string]string)
+		c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
+		c.Render()
+	}
 }
 
 //ListEntity  _
@@ -36,21 +41,48 @@ func (c *EntitryController) ListEntity() {
 	title := h.GetEntityTitle(entity)
 	ret := m.NormalModel{}
 	if title != "" {
-		num, err, lists := m.GetListEntity(entity, top, term)
+		rowCount, err, lists := m.GetListEntity(entity, top, term)
 		if err == nil {
 			ret.RetOK = true
-			ret.RetCount = num
-			ret.RetData = h.GenEntityHtml(lists)
-			if num == 0 {
-				ret.RetData = `<tr><td></td><td>*** ไม่พบข้อมูล ***</td><td></td></tr>`
+			ret.RetCount = rowCount
+			ret.RetData = h.GenEntityHTML(lists)
+			if rowCount == 0 {
+				ret.RetData = h.HTMLNotFoundRows
 			}
-
 		} else {
 			ret.RetOK = false
-			ret.RetData = `<tr><td></td><td>` + err.Error() + `</td><td></td></tr>`
+			ret.RetData = strings.Replace(h.HTMLError, "{err}", err.Error(), -1)
 		}
 	} else {
-		ret.RetData = `<tr><td></td><td>*** ไม่อนุญาติ ใน entity อื่น ***</td><td></td></tr>`
+		ret.RetData = h.HTMLPermissionDenie
+	}
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//ListEntityJSON  _
+func (c *EntitryController) ListEntityJSON() {
+
+	term := c.GetString("query")
+	entity := c.Ctx.Request.URL.Query().Get("entity")
+	title := h.GetEntityTitle(entity)
+	ret := m.NormalModel{}
+	if title != "" {
+		rowCount, err, lists := m.GetListEntity(entity, "15", term)
+		if err == nil {
+			ret.RetOK = true
+			ret.RetCount = rowCount
+			ret.ListData = lists
+			if rowCount == 0 {
+				ret.RetOK = false
+				ret.RetData = "ไม่พบข้อมูล"
+			}
+		} else {
+			ret.RetOK = false
+			ret.RetData = "ไม่พบข้อมูล"
+		}
+	} else {
+		ret.RetData = "ไม่พบข้อมูล"
 	}
 	c.Data["json"] = ret
 	c.ServeJSON()
@@ -62,16 +94,21 @@ func (c *EntitryController) NewEntity() {
 	id := c.Ctx.Request.URL.Query().Get("id")
 	del := c.Ctx.Request.URL.Query().Get("del")
 	title := h.GetEntityTitle(entity)
+
+	ret := m.NormalModel{}
+	var code, name, alert string
+
 	if del != "" {
 		title = "คุณต้องการลบข้อมูล " + title + " ใช่หรือไม่"
 	}
-	ret := m.NormalModel{}
+
 	t, err := template.ParseFiles("views/normal/normal-add.html")
-	var code, name, alert string
+
 	if id == "" {
 		code = m.GetMaxEntity(entity)
 	} else {
 		errGet, retVal := m.GetEntity(entity, id)
+
 		if errGet == nil && (m.NormalEntity{}) != retVal {
 			code = retVal.Code
 			name = retVal.Name
@@ -79,8 +116,15 @@ func (c *EntitryController) NewEntity() {
 			alert = "ไม่พบข้อมูล"
 		}
 	}
+
 	var tpl bytes.Buffer
-	tplVal := map[string]string{"entity": entity, "title": title, "code": code, "id": id, "name": name, "alert": alert, "del": del, "xsrfdata": c.XSRFToken()}
+
+	tplVal := map[string]string{
+		"entity": entity, "title": title,
+		"code": code, "id": id, "name": name,
+		"alert": alert, "del": del,
+		"xsrfdata": c.XSRFToken()}
+
 	if err = t.Execute(&tpl, tplVal); err != nil {
 		ret.RetOK = err != nil
 		ret.RetData = err.Error()
@@ -88,6 +132,7 @@ func (c *EntitryController) NewEntity() {
 		ret.RetOK = true
 		ret.RetData = tpl.String()
 	}
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
@@ -114,8 +159,8 @@ func (c *EntitryController) UpdateEntity() {
 	title := h.GetEntityTitle(entity)
 
 	ret := m.NormalModel{}
-
 	ret.RetOK = true
+
 	if title == "" {
 		ret.RetData = "ไม่อนุญาติ ใน entity อื่น"
 		ret.RetOK = false
