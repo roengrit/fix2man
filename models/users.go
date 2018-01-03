@@ -96,7 +96,6 @@ func GetUserByUserName(username string) (user *Users, errRet string) {
 	o.QueryTable("users").Filter("Username", username).RelatedSel().One(userGet)
 	if nil != userGet {
 		userGet.Password = ""
-		userGet.Roles = nil
 	}
 	return userGet, errRet
 }

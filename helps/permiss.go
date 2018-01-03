@@ -3,6 +3,7 @@ package helps
 import (
 	"fix2man/models"
 	"net/http"
+	"strconv"
 
 	c "github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
@@ -14,10 +15,12 @@ var s = securecookie.New(
 	securecookie.GenerateRandomKey(32))
 
 //KeepLogin login
-func KeepLogin(w *c.Response, username string, role string) (ok bool, err string) {
+func KeepLogin(w *c.Response, username string, roleID int, branchID int) (ok bool, err string) {
 	value := map[string]string{
 		"username": username,
-		"role":     role,
+		"role":     strconv.Itoa(roleID),
+		"branch":   strconv.Itoa(branchID),
+		"req-only": "1",
 	}
 	if encoded, errs := s.Encode("fixman", value); errs != nil {
 		ok = false

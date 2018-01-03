@@ -6,6 +6,14 @@
      {{if .r}}
 
     {{else}}
+    $('#req-date').datepicker({
+        autoclose: true,
+        language: 'th',
+        todayBtn: true,
+        orientation: "bottom auto",
+        todayHighlight: true  ,
+        format: 'dd-mm-yyyy',      
+    });
     $('#req-date-event').datepicker({
         autoclose: true,
         language: 'th',
@@ -14,7 +22,8 @@
         todayHighlight: true  ,
         format: 'dd-mm-yyyy',      
     });
-    $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.currentDate}}"))) ;
+    $('#req-date').datepicker('setDate', new Date(Date.parse("{{.data.ReqDate}}"))) ;
+    $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.data.EventDate}}"))) ;
     {{end}}
 
      $('#req-name').typeahead({

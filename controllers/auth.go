@@ -34,7 +34,8 @@ func (c *AuthController) Post() {
 	passwordForm := c.GetString("password")
 
 	if ok, err := models.Login(usernameForm, passwordForm); ok {
-		if ok, err = h.KeepLogin(c.Ctx.ResponseWriter, usernameForm, ""); ok == true {
+		user, _ := models.GetUserByUserName(usernameForm)
+		if ok, err = h.KeepLogin(c.Ctx.ResponseWriter, usernameForm, user.Roles.ID, user.Branch.ID); ok == true {
 			c.Ctx.Redirect(http.StatusFound, "/")
 		} else {
 			c.Data["error"] = err

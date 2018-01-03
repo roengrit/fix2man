@@ -45,6 +45,11 @@ func main() {
 	beego.Router("/create-request", &c.ReqController{})
 	beego.Router("/request/read", &c.ReqController{}, "get:Read")
 	beego.Router("/request/list", &c.ReqController{}, "get:ReqList;post:GetReqList")
+	beego.Router("/request/change-status", &c.ReqController{}, "get:ChangeStatus;post:UpdateStatus")
+
+	beego.Router("/create-receive", &c.RecController{})
+	//beego.Router("/receive/read", &c.RecController{}, "get:Read")
+	beego.Router("/receive/list", &c.RecController{}, "get:RecList;post:GetRecList")
 
 	beego.Run()
 }

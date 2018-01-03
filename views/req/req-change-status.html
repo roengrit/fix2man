@@ -1,0 +1,85 @@
+<form class="form-horizontal" id="change-status-form" action="/request/change-status" method="post">
+    <input type="hidden" name="_xsrf" value="{{.XSRF}}" />
+    <div class="modal-header 
+    {{if.Del}}
+    alert-danger
+    {{else}}
+    {{end}}">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">{{.Title}}</h4>
+    </div>
+    <div class="modal-body">
+       <div class="alert alert-danger fade in no-margin" 
+            {{if.Alert}}
+            
+            {{else}}
+               style="display:none"
+            {{end}}
+            id="change-status-alert">{{.Alert}}
+        </div>
+        <input type="hidden" id="req-id" name="req-id" value="{{.ID}}">
+        <div class="box-body">
+            <div class="form-group">
+                        <label   class="col-sm-2 control-label">สถานะ</label>
+                        <div class="col-sm-8 input-group input-group-sm">
+                                <select id="txt-status" name="txt-status" class="form-control">
+                                        {{range $key, $val := .ListData}}
+                                          <option value="{{$val.ID}}">
+                                                {{$val.Name}}
+                                          </option>
+                                        {{end}}                                
+                                </select>
+                        </div>
+            </div>
+            <div class="form-group">
+                <label   class="col-sm-2 control-label">หมายเหตุ</label>
+                <div class="col-sm-8 input-group">
+                    <textarea class="form-control" required id="remark" name="remark" maxlength="300" rows="4" placeholder="หมายเหตุ">{{.Name}}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"> ปิด </button>
+        {{if.Del}}
+            <button type="button" onclick="SaveStatus()" class="btn btn-warning">
+                <i class="fa fa-trash-o"></i> ลบข้อมูล
+            </button>
+        {{else}}
+        <button type="button" onclick="SaveStatus()" class="btn btn-primary">
+                <i class="fa fa-save"></i> บันทึกข้อมูล
+            </button>
+        {{end}}
+    </div>
+</form>
+<script>
+
+     $('#change-status-form').keyup(function(e){
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            if($("#remark").val()!=''){
+               Save();
+            }
+            return false;
+        }
+      })
+      function SaveStatus()
+      {
+        $("#change-status-alert").hide();
+            url = $('#change-status-form').attr('action');
+            $.post(url,$('#change-status-form').serialize(), function( data ) {
+                $('#remark').removeClass('load-text');
+                if(data.RetOK){
+                   loadNormalTable();               
+                   hideGlobalSmalModal();
+                   showTopAlert(data.RetData,"success")
+                }else{
+                    $("#change-status-alert").html(data.RetData);
+                    $("#change-status-alert").show(); 
+                }
+            });
+      }
+
+</script>

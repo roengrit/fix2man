@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -28,6 +29,15 @@ func GetAllStatus() (req *[]Status) {
 	o := orm.NewOrm()
 	reqGet := &[]Status{}
 	o.QueryTable("status").RelatedSel().OrderBy("code").All(reqGet)
+	return reqGet
+}
+
+//GetAllStatusExcludeId _
+func GetAllStatusExcludeID(ID int) (req *[]Status) {
+	o := orm.NewOrm()
+	reqGet := &[]Status{}
+	o.QueryTable("status").RelatedSel().OrderBy("code").Exclude("ID__in", ID).All(reqGet)
+	fmt.Println(ID)
 	return reqGet
 }
 

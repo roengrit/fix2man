@@ -106,25 +106,47 @@
                 <h4 class="req-box-title">รายละเอียด</h4>
                 <div class="form-group req-box-form">
                         <div class="col-xs-6">
-                            <label for="req-date-event">วันที่เสีย</label>
+                            <label for="req-date-event">วันที่แจ้ง</label>
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="fa fa-calculator"></i>
                                 </span>
-                                <input type="text" id="req-date-event" data-date-language="th" name="req-date-event" class="form-control" 
-                                value="{{.currentDate}}" {{.r}} placeholder="....">
+                                <input type="text" id="req-date" data-date-language="th" name="req-date" class="form-control" value="{{.data.ReqDate}}" {{.r}}
+                                    placeholder="....">
                             </div>
                         </div>
                         <div class="col-xs-6">
-                            <label for="req-sn">เลขทะเบียน/SN</label>
+                            <label for="req-sn">เอกสารอ้างอิง</label>
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <i class="fa  fa-location-arrow"></i>
+                                    <i class="fa fa-file-o"></i>
                                 </span>
-                                <input type="text" id="req-sn" name="req-sn" class="form-control has-query" autocomplete="off"
-                                value="{{.data.SerailNumber}}" {{.r}} placeholder="หมายเลขเครื่อง/เลขทะเบียน/Serial Number" >
+                                <input type="text" id="req-doc-ref" name="req-doc-ref" class="form-control has-query" autocomplete="off" value="{{.data.DocRefNo}}"
+                                    {{.r}} placeholder="เอกสารอ้างอิง">
                             </div>
-                        </div>
+                        </div>                        
+                    </div>
+                    <div class="form-group req-box-form">
+                            <div class="col-xs-6">
+                                    <label for="req-date-event">วันที่เสีย</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calculator"></i>
+                                        </span>
+                                        <input type="text" id="req-date-event" data-date-language="th" name="req-date-event" class="form-control" 
+                                        value="{{.data.EventDate}}" {{.r}} placeholder="....">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="req-sn">เลขทะเบียน/SN</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa  fa-location-arrow"></i>
+                                        </span>
+                                        <input type="text" id="req-sn" name="req-sn" class="form-control has-query" autocomplete="off"
+                                        value="{{.data.SerailNumber}}" {{.r}} placeholder="หมายเลขเครื่อง/เลขทะเบียน/Serial Number" >
+                                    </div>
+                                </div>
                     </div>
                 <div class="form-group req-box-form">
                     <div class="col-xs-12">

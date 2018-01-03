@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"bytes"
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
+	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -39,7 +41,7 @@ func (c *ReqController) Get() {
 	}
 
 	c.Layout = "layout.html"
-	c.TplName = "req/req-read.html"
+	c.TplName = "req/req.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
 	c.LayoutSections["Scripts"] = "req/req-script.tpl"
@@ -90,7 +92,9 @@ func (c *ReqController) Post() {
 	reqClassID, _ := strconv.ParseInt(c.GetString("req-class-id"), 10, 32)
 	reqRoomID, _ := strconv.ParseInt(c.GetString("req-room-id"), 10, 32)
 	reqSn := c.GetString("req-sn")
+	reqDocRefNo := c.GetString("req-doc-ref")
 	reqDateEvent := c.GetString("req-date-event")
+	reqDate := c.GetString("req-date")
 	reqTel := c.GetString("req-tel")
 	remark := c.GetString("remark")
 	actionUser, _ := m.GetUserByUserName(h.GetUser(c.Ctx.Request))
@@ -130,10 +134,21 @@ func (c *ReqController) Post() {
 		ret.RetData = "วันที่เสีย"
 	}
 	errDate := errors.New("")
-	timeStamp := time.Now()
-	sp := strings.Split(reqDateEvent, "-")
+	reqDateEventStamp := time.Now()
+	reqDateStamp := time.Now()
+
+	sp := strings.Split(reqDate, "-")
 	if len(sp) == 3 {
-		timeStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+		reqDateStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+	if errDate != nil {
+		ret.RetOK = false
+		ret.RetData = "วันที่แจ้งไม่ถูกต้อง (dd-mm-yyyy)"
+	}
+
+	sp = strings.Split(reqDateEvent, "-")
+	if len(sp) == 3 {
+		reqDateEventStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
 	}
 	if errDate != nil {
 		ret.RetOK = false
@@ -155,10 +170,11 @@ func (c *ReqController) Post() {
 		newReq.Depart = &m.Departs{ID: int(reqDepartID)}
 		newReq.ReqName = reqName
 		newReq.Tel = reqTel
-		newReq.EventDate = timeStamp
+		newReq.EventDate = reqDateEventStamp
 		newReq.SerailNumber = reqSn
 		newReq.Details = remark
-
+		newReq.DocRefNo = reqDocRefNo
+		newReq.ReqDate = reqDateStamp
 		errAction := errors.New("")
 		if reqDocID == 0 {
 			newReq.DocDate = time.Now()
@@ -241,6 +257,47 @@ func (c *ReqController) GetReqList() {
 		ret.RetData = strings.Replace(h.HTMLError, "{err}", err.Error(), -1)
 	}
 
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//ChangeStatus _
+func (c *ReqController) ChangeStatus() {
+	id, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	ret := m.NormalModel{}
+	data := m.NormalModel{}
+	data.ID = id
+	lastStatus, _ := m.GetReqDocLastStatus(int(id))
+	fmt.Println(lastStatus)
+	fmt.Println(lastStatus.Status.ID)
+	data.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
+	data.XSRF = c.XSRFToken()
+	t, err := template.ParseFiles("views/req/req-change-status.html")
+	var tpl bytes.Buffer
+
+	if err = t.Execute(&tpl, data); err != nil {
+		ret.RetOK = err != nil
+		ret.RetData = err.Error()
+	} else {
+		ret.RetOK = true
+		ret.RetData = tpl.String()
+	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//UpdateStatus _
+func (c *ReqController) UpdateStatus() {
+	ret := m.NormalModel{}
+	id := c.GetString("req-id")
+	status := c.GetString("txt-status")
+	remark := c.GetString("remark")
+	_ = id
+	_ = status
+	_ = remark
+	ret.RetOK = true
+	ret.RetData = "บันทึกสำเร็จ"
 	c.Data["json"] = ret
 	c.ServeJSON()
 }

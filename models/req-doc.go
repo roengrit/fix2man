@@ -24,19 +24,22 @@ type RequestDocument struct {
 	Equipmen     *Equipments `orm:"null;rel(one)"`
 	Location     string      `orm:"size(225)"`
 	SerailNumber string      `orm:"size(50)"`
-	EventDate    time.Time
-	Details      string    `orm:"size(500)"`
-	Remark       string    `orm:"size(300)"`
-	CreateUser   *Users    `orm:"rel(one)"`
-	CreatedAt    time.Time `orm:"now()`
-	UpdateUser   *Users    `orm:"null;rel(one)"`
-	UpdatedAt    time.Time `orm:"null"`
+	EventDate    time.Time   `orm:"null"`
+	ReqDate      time.Time   `orm:"null"`
+	Details      string      `orm:"size(500)"`
+	Remark       string      `orm:"size(300)"`
+	DocRefNo     string      `orm:"size(50)"`
+	CreateUser   *Users      `orm:"rel(one)"`
+	CreatedAt    time.Time   `orm:"auto_now_add"`
+	UpdateUser   *Users      `orm:"null;rel(one)"`
+	UpdatedAt    time.Time   `orm:"null"`
 }
 
 //RequestList _
 type RequestList struct {
 	ID        int
 	DocNo     string
+	ReqDate   time.Time
 	DocDate   time.Time
 	ReqName   string
 	Tel       string
@@ -50,11 +53,10 @@ type RequestList struct {
 type RequestStatus struct {
 	ID              int
 	RequestDocument *RequestDocument `orm:"rel(one)"`
-	DocRefNo        string           `orm:"size(20)"`
 	Status          *Status          `orm:"rel(one)"`
 	Remark          string           `orm:"size(300)"`
 	CreateUser      *Users           `orm:"rel(one)"`
-	CreatedAt       time.Time        `orm:"now()`
+	CreatedAt       time.Time        `orm:"auto_now_add"`
 	UpdateUser      *Users           `orm:"null;rel(one)"`
 	UpdatedAt       time.Time        `orm:"null"`
 }
@@ -67,7 +69,7 @@ func init() {
 func CreateReq(req RequestDocument, user Users) (retID int64, errRet error) {
 	o := orm.NewOrm()
 	var firstStatus = GetFirstStatus()
-	status := RequestStatus{RequestDocument: &req, DocRefNo: "", Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
+	status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
 	o.Begin()
 	id, err := o.Insert(&req)
 	_, err = o.Insert(&status)
@@ -90,6 +92,8 @@ func UpdateReq(req RequestDocument) (errRet error) {
 		doc.Depart = req.Depart
 		doc.Details = req.Details
 		doc.EventDate = req.EventDate
+		doc.ReqDate = req.ReqDate
+		doc.DocRefNo = req.DocRefNo
 		doc.ReqName = req.ReqName
 		doc.Room = req.Room
 		doc.SerailNumber = req.SerailNumber
@@ -122,10 +126,17 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 	return reqGet, errRet
 }
 
+func GetReqDocLastStatus(ID int) (req *RequestStatus, errRet error) {
+	o := orm.NewOrm()
+	reqGet := &RequestStatus{}
+	o.QueryTable("request_status").Filter("request_document_id", ID).RelatedSel().OrderBy("-created_at").One(reqGet)
+	return reqGet, errRet
+}
+
 //GetReqDocList _
 func GetReqDocList(top, term, branch, status, dateBegin, dateEnd string) (num int64, err error, reqList []RequestList) {
 
-	var sql = `SELECT  i_d,doc_no,doc_date,req_name,tel,
+	var sql = `SELECT  i_d,doc_no,doc_date,req_date,req_name,tel,
 						(
 							SELECT NAME FROM Branchs WHERE i_d = branch_id  
 						) as branch,

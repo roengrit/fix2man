@@ -13,5 +13,13 @@
     $('#txt-date-begin').datepicker('setDate', new Date(Date.parse("{{.beginDate}}"))) ;
     $('#txt-date-end').datepicker('setDate', new Date(Date.parse("{{.endDate}}"))) ;
 });
-    loadNormalTable()
+function changeStatus(id){
+         hideTopAlert();
+         $.get( "/request/change-status/?id=" + id , function( data ) {
+            $('#small-global-modal-content').html(data.RetData);
+            showGlobalSmallModal();
+          });
+}
+    loadNormalTable();
+
  </script>
