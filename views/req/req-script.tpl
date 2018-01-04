@@ -38,9 +38,6 @@
             if(data.value == 0){
                 return;
             }       
-            if($('#req-doc-id').val()!=''){
-                return;
-            }
 
             $.get( "/service/user/json/?query="+ data.value , function( userData ) {
                     

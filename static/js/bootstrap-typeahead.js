@@ -97,9 +97,9 @@
                     this.options.onSelect({
                         value: value,
                         text: text
-                    });
+                    });                    
                 }
-            }
+            }           
             return this.hide();
         },
         updater: function (item) {
@@ -135,9 +135,10 @@
 
             var query = $.trim(this.$element.val());
 
-            if (query === this.query) {
-                return this;
-            }
+            //console.log("TEST0");
+            //if (query === this.query) {
+               //return this;
+            //}
 
             // Query changed
             this.query = query;
@@ -147,18 +148,18 @@
                 clearTimeout(this.ajax.timerId);
                 this.ajax.timerId = null;
             }
-
-            if (!query || query.length < this.ajax.triggerLength) {
-                // cancel the ajax callback if in progress
-                if (this.ajax.xhr) {
-                    this.ajax.xhr.abort();
-                    this.ajax.xhr = null;
-                    this.ajaxToggleLoadClass(false);
-                }
-
-                return this.shown ? this.hide() : this;
-            }
-
+            //console.log("TEST1");
+            // if (!query || query.length < this.ajax.triggerLength) {
+            //     // cancel the ajax callback if in progress
+            //     if (this.ajax.xhr) {
+            //         this.ajax.xhr.abort();
+            //         this.ajax.xhr = null;
+            //         this.ajaxToggleLoadClass(false);
+            //     }
+            //     console.log("TEST11");
+            //     return this.shown ? this.hide() : this;
+            // }
+            //console.log("TEST2");
             function execute() {
                 this.ajaxToggleLoadClass(true);
 
@@ -169,6 +170,7 @@
                 var params = this.ajax.preDispatch ? this.ajax.preDispatch(query) : {
                     query: query
                 };
+                //console.log("TEST3");
                 this.ajax.xhr = $.ajax({
                     url: this.ajax.url,
                     data: params,
@@ -439,6 +441,13 @@
         },
         focus: function (e) {
             this.focused = true
+            if(this.parent != undefined){
+                this.ajax.url = this.fixurl + '&parent=' + $('#'+this.parent).val() 
+            }
+            if (this.ajax)
+                this.ajaxLookup()
+            else
+                this.lookup()
         },
         blur: function (e) {
             this.focused = false

@@ -222,7 +222,7 @@ func (c *ReqController) ReqList() {
 	c.Layout = "layout.html"
 	c.TplName = "req/req-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
+	c.LayoutSections["HtmlHead"] = "req/req-list-style.tpl"
 	c.LayoutSections["Scripts"] = "req/req-list-script.tpl"
 	c.Render()
 }

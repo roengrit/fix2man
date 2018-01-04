@@ -20,6 +20,6 @@ function changeStatus(id){
             showGlobalSmallModal();
           });
 }
-    loadNormalTable();
+loadNormalTable();
 
  </script>

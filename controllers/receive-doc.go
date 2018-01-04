@@ -3,9 +3,7 @@ package controllers
 import (
 	h "fix2man/helps"
 	m "fix2man/models"
-	"html/template"
 	"strings"
-	"time"
 )
 
 //RecController _
@@ -15,32 +13,24 @@ type RecController struct {
 
 //Get _
 func (c *RecController) Get() {
-	now := time.Now()
 	c.Data["title"] = "สร้างใบรับสินค้า"
-	c.Data["currentDate"] = now.Format("2006-01-02")
-	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
-	c.TplName = "req/rec.html"
+	c.TplName = "receive/rec.html"
 	c.LayoutSections = make(map[string]string)
-	//c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
-	//c.LayoutSections["Scripts"] = "req/req-script.tpl"
+	c.LayoutSections["HtmlHead"] = "receive/rec-list-style.tpl"
+	c.LayoutSections["Scripts"] = "receive/rec-list-script.tpl"
+
 	c.Render()
 }
 
 //RecList _
 func (c *RecController) RecList() {
 	c.Data["title"] = "รายการใบรับสินค้า"
-	c.Data["beginDate"] = time.Date(time.Now().Year(), 1, 1, 0, 0, 0, 0, time.Local).Format("2006-01-02")
-	c.Data["endDate"] = time.Date(time.Now().Year(), time.Now().Month()+1, 0, 0, 0, 0, 0, time.Local).Format("2006-01-02")
-	c.Data["retCount"] = "0"
-	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.Data["status"] = m.GetAllStatus()
-	c.Data["branch"] = m.GetAllBranch()
 	c.Layout = "layout.html"
-	c.TplName = "req/req-list.html"
+	c.TplName = "receive/rec-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
-	c.LayoutSections["Scripts"] = "req/req-list-script.tpl"
+	c.LayoutSections["HtmlHead"] = "receive/rec-style.tpl"
+	c.LayoutSections["Scripts"] = "receive/rec-list-script.tpl"
 	c.Render()
 }
 
