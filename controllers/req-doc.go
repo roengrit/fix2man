@@ -53,7 +53,7 @@ func (c *ReqController) Read() {
 	id := c.Ctx.Request.URL.Query().Get("id")
 	docID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	now := time.Now()
-	c.Data["title"] = "สร้างใบแจ้งงาน"
+	c.Data["title"] = "ใบแจ้งงาน"
 	c.Data["retCount"] = "0"
 	c.Data["currentDate"] = now.Format("2006-01-02")
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
