@@ -1,24 +1,23 @@
 package helps
 
 import (
-	"net/smtp"
+	"crypto/tls"
+
+	"gopkg.in/gomail.v2"
 )
 
 //SendMail _
 func SendMail(email, body string) string {
 
-	from := "badcode.th@gmail.com"
-	pwd := ""
-	to := "logon.firstclass@hotmail.com"
-
-	msg := "From: " + from + "\n" +
-		"To: " + to + "\n" +
-		"Subject: Your new password : " + body
-
-	auth := smtp.PlainAuth("", from, pwd, "smtp.gmail.com")
-	err := smtp.SendMail("smtp.gmail.com:587", auth, from, []string{to}, []byte(msg))
-
-	if err != nil {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "Your mail")
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "Forget password!")
+	m.SetBody("text/html", "Your password has been change to : "+body)
+	d := gomail.NewDialer("Mail server", 25, "Your mail", "password") // ส่งผ่าน Server
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+	//d.SSL = true
+	if err := d.DialAndSend(m); err != nil {
 		return err.Error()
 	}
 	return ""
