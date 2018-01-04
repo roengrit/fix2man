@@ -59,9 +59,7 @@
      $('#change-status-form').keyup(function(e){
         if (e.keyCode == 13) {
             e.preventDefault();
-            if($("#remark").val()!=''){
-               Save();
-            }
+            SaveStatus();
             return false;
         }
       })

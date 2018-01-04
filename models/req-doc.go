@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 	"time"
@@ -57,8 +58,6 @@ type RequestStatus struct {
 	Remark          string           `orm:"size(300)"`
 	CreateUser      *Users           `orm:"rel(one)"`
 	CreatedAt       time.Time        `orm:"auto_now_add"`
-	UpdateUser      *Users           `orm:"null;rel(one)"`
-	UpdatedAt       time.Time        `orm:"null"`
 }
 
 func init() {
@@ -123,6 +122,9 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 		reqGet.CreateUser = nil
 		reqGet.UpdateUser = nil
 	}
+	if reqGet.ID == 0 {
+		return nil, errors.New("ไม่พบข้อมูล")
+	}
 	return reqGet, errRet
 }
 
@@ -131,6 +133,9 @@ func GetReqDocLastStatus(ID int) (req *RequestStatus, errRet error) {
 	o := orm.NewOrm()
 	reqGet := &RequestStatus{}
 	o.QueryTable("request_status").Filter("request_document_id", ID).RelatedSel().OrderBy("-created_at").One(reqGet)
+	if reqGet.ID == 0 {
+		return nil, errors.New("ไม่พบข้อมูล")
+	}
 	return reqGet, errRet
 }
 
@@ -139,6 +144,9 @@ func GetReqDocHasStatus(docID, statusID int) (req *RequestStatus, errRet error) 
 	o := orm.NewOrm()
 	reqGet := &RequestStatus{}
 	o.QueryTable("request_status").Filter("request_document_id", docID).Filter("status_id", statusID).RelatedSel().OrderBy("-created_at").One(reqGet)
+	if reqGet.ID == 0 {
+		return nil, errors.New("ไม่พบข้อมูล")
+	}
 	return reqGet, errRet
 }
 

@@ -269,7 +269,6 @@ func (c *ReqController) ChangeStatus() {
 	dataRenderTemplate.ID = id
 	dataRenderTemplate.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
 	dataRenderTemplate.XSRF = c.XSRFToken()
-
 	t, err := template.ParseFiles("views/req/req-change-status.html")
 	var tpl bytes.Buffer
 
@@ -302,26 +301,28 @@ func (c *ReqController) UpdateStatus() {
 		}
 	}
 	if ret.RetOK && remark == "" {
-		docHasStatus, _ := m.GetReqDocHasStatus(int(docID), int(statusID))
-		if int(statusID) == docHasStatus.ID {
-			ret.RetOK = false
-			ret.RetData = "คุณกำลังกลับไปสถานะก่อนหน้านี้ กรุณาระบุหมายเหตุ"
+		docHasStatus, errHas := m.GetReqDocHasStatus(int(docID), int(statusID))
+		if errHas == nil && docHasStatus != nil && (&m.RequestStatus{}) != docHasStatus {
+			if int(statusID) == docHasStatus.Status.ID {
+				ret.RetOK = false
+				ret.RetData = "คุณกำลังกลับไปสถานะก่อนหน้านี้ กรุณาระบุหมายเหตุ"
+			}
 		}
 	}
 	if ret.RetOK {
 		actionUser, _ := m.GetUserByUserName(h.GetUser(c.Ctx.Request))
 		status := m.RequestStatus{Remark: remark, CreateUser: actionUser, CreatedAt: time.Now()}
+		status.Status = &m.Status{ID: int(statusID)}
 		status.RequestDocument = &m.RequestDocument{ID: int(docID)}
 		_, err := m.CreateReqStatus(status)
 		if err != nil {
-			ret.RetData = "บันทึกไม่สำเร็จ"
+			ret.RetOK = false
+			ret.RetData = "บันทึกไม่สำเร็จ " + err.Error()
 		} else {
 			ret.RetData = "บันทึกสำเร็จ"
 		}
 	}
-
 	ret.XSRF = c.XSRFToken()
-
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
