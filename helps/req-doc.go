@@ -32,9 +32,9 @@ const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละ�
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">รับ/แจกจ่ายงาน</a></li>
-								<li><a href="#">ประเมินวันที่แล้วเสร็จ</a></li>
-								<li><a href="#">ใบแจ้งงานต่อเนื่อง</a></li>								
+								<li><a href="#">ประเมินราคา/มูลค่า/วันที่แล้วเสร็จ</a></li>								
+								<li><a href="#">รับ/แจกจ่ายงาน</a></li>								
+								<li><a href="/create-request/?doc_ref={docno}">ใบแจ้งงานต่อเนื่อง</a></li>								
 								<li><a href="#">เบิกอะไหล่</a></li>
 								<li><a href="#">เบิกเครื่องสำรอง</a></li>
 								<li><a href="#">ประเมินผลการซ่อม</a></li>								
@@ -58,7 +58,9 @@ func GenReqHTML(lists []m.RequestList) string {
 		temp = strings.Replace(temp, "{eventdate}", val.EventDate.Format("02-01-2006"), -1)
 		temp = strings.Replace(temp, "{details}", val.Details, -1)
 		temp = strings.Replace(temp, "{status}", val.Status, -1)
-		temp = strings.Replace(temp, "{action}", strings.Replace(HTMLReqActionEnable, "{id}", strconv.Itoa(val.ID), -1), -1)
+		tempAction := strings.Replace(HTMLReqActionEnable, "{id}", strconv.Itoa(val.ID), -1)
+		tempAction = strings.Replace(tempAction, "{docno}", val.DocNo, -1)
+		temp = strings.Replace(temp, "{action}", tempAction, -1)
 		hmtlBuffer.WriteString(temp)
 	}
 	return hmtlBuffer.String()

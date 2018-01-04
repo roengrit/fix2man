@@ -139,6 +139,14 @@ func GetReqDocLastStatus(ID int) (req *RequestStatus, errRet error) {
 	return reqGet, errRet
 }
 
+//GetReqDocStatusList _
+func GetReqDocStatusList(ID int) (req *[]RequestStatus, errRet error) {
+	o := orm.NewOrm()
+	reqGet := &[]RequestStatus{}
+	o.QueryTable("request_status").Filter("request_document_id", ID).RelatedSel().OrderBy("created_at").All(reqGet)
+	return reqGet, errRet
+}
+
 //GetReqDocHasStatus _
 func GetReqDocHasStatus(docID, statusID int) (req *RequestStatus, errRet error) {
 	o := orm.NewOrm()

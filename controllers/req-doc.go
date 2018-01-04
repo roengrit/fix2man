@@ -24,6 +24,7 @@ func (c *ReqController) Get() {
 	c.Data["retCount"] = "0"
 	c.Data["currentDate"] = now.Format("2006-01-02")
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["reqDocRef"] = c.Ctx.Request.URL.Query().Get("doc_ref")
 	if id != "" {
 		ret, err := m.GetReqDocID(id)
 		if err != nil {
@@ -50,6 +51,7 @@ func (c *ReqController) Get() {
 //Read _
 func (c *ReqController) Read() {
 	id := c.Ctx.Request.URL.Query().Get("id")
+	docID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	now := time.Now()
 	c.Data["title"] = "สร้างใบแจ้งงาน"
 	c.Data["retCount"] = "0"
@@ -62,6 +64,8 @@ func (c *ReqController) Read() {
 			c.Data["err"] = err.Error()
 		} else {
 			c.Data["data"] = ret
+			statusList, _ := m.GetReqDocStatusList(int(docID))
+			c.Data["status"] = statusList
 			if nil != ret.User {
 				c.Data["userID"] = ret.User.ID
 			} else {
@@ -72,7 +76,7 @@ func (c *ReqController) Read() {
 	}
 
 	c.Layout = "layout.html"
-	c.TplName = "req/req.html"
+	c.TplName = "req/req-read.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
 	c.LayoutSections["Scripts"] = "req/req-read-script.tpl"

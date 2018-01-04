@@ -121,8 +121,16 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-file-o"></i>
                                 </span>
+                                {{if .data.DocRefNo}}
                                 <input type="text" id="req-doc-ref" name="req-doc-ref" class="form-control has-query" autocomplete="off" value="{{.data.DocRefNo}}"
+                                   readonly placeholder="เอกสารอ้างอิง">
+                                {{else if .reqDocRef}}
+                                <input type="text" id="req-doc-ref" name="req-doc-ref" class="form-control has-query" autocomplete="off" value="{{.reqDocRef}}"
+                                    readonly placeholder="เอกสารอ้างอิง">
+                                {{else}}
+                                <input type="text" id="req-doc-ref" name="req-doc-ref" class="form-control has-query" autocomplete="off" value=""
                                     {{.r}} placeholder="เอกสารอ้างอิง">
+                                {{end}}
                             </div>
                         </div>                        
                     </div>
