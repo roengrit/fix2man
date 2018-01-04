@@ -5,7 +5,6 @@ import (
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
-	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -265,17 +264,16 @@ func (c *ReqController) GetReqList() {
 func (c *ReqController) ChangeStatus() {
 	id, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	ret := m.NormalModel{}
-	data := m.NormalModel{}
-	data.ID = id
 	lastStatus, _ := m.GetReqDocLastStatus(int(id))
-	fmt.Println(lastStatus)
-	fmt.Println(lastStatus.Status.ID)
-	data.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
-	data.XSRF = c.XSRFToken()
+	dataRenderTemplate := m.NormalModel{}
+	dataRenderTemplate.ID = id
+	dataRenderTemplate.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
+	dataRenderTemplate.XSRF = c.XSRFToken()
+
 	t, err := template.ParseFiles("views/req/req-change-status.html")
 	var tpl bytes.Buffer
 
-	if err = t.Execute(&tpl, data); err != nil {
+	if err = t.Execute(&tpl, dataRenderTemplate); err != nil {
 		ret.RetOK = err != nil
 		ret.RetData = err.Error()
 	} else {
@@ -291,13 +289,40 @@ func (c *ReqController) ChangeStatus() {
 func (c *ReqController) UpdateStatus() {
 	ret := m.NormalModel{}
 	id := c.GetString("req-id")
-	status := c.GetString("txt-status")
+	docID, _ := strconv.ParseInt(id, 10, 32)
+	statusVal := c.GetString("txt-status")
+	statusID, _ := strconv.ParseInt(statusVal, 10, 32)
 	remark := c.GetString("remark")
-	_ = id
-	_ = status
-	_ = remark
 	ret.RetOK = true
-	ret.RetData = "บันทึกสำเร็จ"
+	if ret.RetOK {
+		lastStatus, _ := m.GetReqDocLastStatus(int(docID))
+		if int(statusID) == lastStatus.Status.ID {
+			ret.RetOK = false
+			ret.RetData = "เอกสารเป็นสถานะนี้อยู่แล้ว"
+		}
+	}
+	if ret.RetOK && remark == "" {
+		docHasStatus, _ := m.GetReqDocHasStatus(int(docID), int(statusID))
+		if int(statusID) == docHasStatus.ID {
+			ret.RetOK = false
+			ret.RetData = "คุณกำลังกลับไปสถานะก่อนหน้านี้ กรุณาระบุหมายเหตุ"
+		}
+	}
+	if ret.RetOK {
+		actionUser, _ := m.GetUserByUserName(h.GetUser(c.Ctx.Request))
+		status := m.RequestStatus{Remark: remark, CreateUser: actionUser, CreatedAt: time.Now()}
+		status.RequestDocument = &m.RequestDocument{ID: int(docID)}
+		_, err := m.CreateReqStatus(status)
+		if err != nil {
+			ret.RetData = "บันทึกไม่สำเร็จ"
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	}
+
+	ret.XSRF = c.XSRFToken()
+
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
 }

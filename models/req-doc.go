@@ -126,11 +126,32 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 	return reqGet, errRet
 }
 
+//GetReqDocLastStatus _
 func GetReqDocLastStatus(ID int) (req *RequestStatus, errRet error) {
 	o := orm.NewOrm()
 	reqGet := &RequestStatus{}
 	o.QueryTable("request_status").Filter("request_document_id", ID).RelatedSel().OrderBy("-created_at").One(reqGet)
 	return reqGet, errRet
+}
+
+//GetReqDocHasStatus _
+func GetReqDocHasStatus(docID, statusID int) (req *RequestStatus, errRet error) {
+	o := orm.NewOrm()
+	reqGet := &RequestStatus{}
+	o.QueryTable("request_status").Filter("request_document_id", docID).Filter("status_id", statusID).RelatedSel().OrderBy("-created_at").One(reqGet)
+	return reqGet, errRet
+}
+
+//CreateReqStatus _
+func CreateReqStatus(reqStatus RequestStatus) (retID int64, errRet error) {
+	o := orm.NewOrm()
+	o.Begin()
+	id, err := o.Insert(&reqStatus)
+	o.Commit()
+	if err == nil {
+		retID = id
+	}
+	return retID, err
 }
 
 //GetReqDocList _
