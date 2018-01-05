@@ -5,7 +5,6 @@ import (
 	m "fix2man/models"
 	"fmt"
 	"html/template"
-	"net/url"
 	"strings"
 	"time"
 
@@ -19,12 +18,20 @@ type RecController struct {
 
 //Product _
 type Product struct {
-	Name string
+	ID   int
 	Code string
+	Name string
+	Unit Unit
 }
 
 //Suplier _
 type Suplier struct {
+	ID   string
+	Name string
+}
+
+//Unit _
+type Unit struct {
 	ID   string
 	Name string
 }
@@ -62,25 +69,28 @@ func (c *RecController) Get() {
 func (c *RecController) Post() {
 	c.Data["title"] = "สร้างใบรับ"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.Layout = "layout.html"
-	c.TplName = "receive/rec.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
-	c.LayoutSections["Scripts"] = "receive/rec-script.html"
+	//c.Layout = "layout.html"
+	//c.TplName = "receive/rec.html"
+	//c.LayoutSections = make(map[string]string)
+	//c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
+	//c.LayoutSections["Scripts"] = "receive/rec-script.html"
 	decoder := form.NewDecoder()
-	c.Ctx.Request.ParseForm()
-	var input url.Values
-	input = c.Ctx.Request.Form
-	var user RecDocument
-	err := decoder.Decode(&user, input)
+	var recDoc RecDocument
+	err := decoder.Decode(&recDoc, c.Ctx.Request.Form)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(user.Suplier.ID)
-	fmt.Println(user.Suplier.Name)
-	fmt.Println(user.Project.Name)
-	fmt.Println(user.Product[0].Code)
-	c.Render()
+	fmt.Println(recDoc.Suplier.ID)
+	fmt.Println(recDoc.Suplier.Name)
+	fmt.Println(recDoc.Project.ID)
+	fmt.Println(recDoc.Project.Name)
+	fmt.Println(recDoc.Product[0].Code)
+	for _, ret := range recDoc.Product {
+		fmt.Println(ret.Code)
+	}
+	//ret := m.NormalModel{}
+	c.Data["json"] = recDoc
+	c.ServeJSON()
 }
 
 //RecList _
