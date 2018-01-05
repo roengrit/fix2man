@@ -1,0 +1,57 @@
+<script>
+    $(document).ready(function () {
+        var $editOveray = $('#editOveray');
+        $('#description').on("click", "tbody > tr", function () {
+            var bottomWidth = $(this).css('width');
+            var intWidth = parseInt(bottomWidth.replace("px", ""));
+            var bottomHeight = '40px';
+            var rowPos = $(this).position();
+            bottomTop = rowPos.top;
+            bottomLeft = rowPos.left;
+            eTop = $(this).offset().top + 7;
+            $editOveray.css({
+                position: 'absolute',
+                top: eTop,
+                width: (intWidth - 15) + 'px',
+                height: bottomHeight,
+            });
+            $editOveray.show();
+        })
+        $editOveray.mouseleave(function () {
+            $editOveray.hide();
+        });
+
+        $(".cancel-edit-row").click(function (event) {
+            $editOveray.hide();
+        });
+        var templateRow = `<tr  style="cursor: pointer;" >
+                                            <td class="col-md-2 table-td-mid" ><input type="hidden" name="Product[0].Name" value="NTest" /> <input type="hidden" name="Product[1].Name" value="Name1" /></td>
+                                            <td class="col-md-3 table-td-mid" ><input type="hidden" name="Product[0].Code" value="Ctest" /> <input type="hidden" name="Product[1].Code" value="Code1" /></td>
+                                            <td class="col-md-1 table-td-mid table-td-center-text"  ></td>
+                                            <td class="col-md-1 table-td-mid table-td-number"  >0.00</td>
+                                            <td class="col-md-2 table-td-mid table-td-number"  >0.00</td>
+                                            <td class="col-md-2 table-td-mid table-td-number"  >0.00</td>
+                                            <td class="col-md-1 table-td-mid table-td-number"  >
+                                                <div class="btn-group">
+                                                    <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
+                                                        <i class="fa  fa-close"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>`;
+        for (i = 0; i <= 0; i++) {
+            $('#retData').append(templateRow);
+        }
+        $(".delete-row").click(function (event) {
+                $(this).parent().parent().parent().remove();
+                $editOveray.hide();
+        });
+        $(".add-row").click(function (event) {
+            $('#retData').append(templateRow);
+            $(".delete-row").click(function (event) {
+                $(this).parent().parent().parent().remove();
+                $editOveray.hide();
+            });
+        });
+    });
+</script>

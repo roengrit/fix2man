@@ -27,7 +27,7 @@ func (c *EntitryController) Get() {
 		c.Layout = "layout.html"
 		c.TplName = "normal/normal.html"
 		c.LayoutSections = make(map[string]string)
-		c.LayoutSections["Scripts"] = "normal/normal-script.tpl"
+		c.LayoutSections["Scripts"] = "normal/normal-script.html"
 		c.Render()
 	}
 }

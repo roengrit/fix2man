@@ -61,5 +61,41 @@
 .dropdown-menu>li>a {
     color: black;
 }
+.col-md-1-table{
+    width: 8.33333333%;
+    background-color:#E9E9E9!important;
+    border-color:#E9E9E9!important;
+}
+.col-md-2-table{
+    width: 16.66666667%;
+    background-color:#E9E9E9!important;
+    border-color:#E9E9E9!important;
+}
+.col-md-3-table{
+    width: 25%;
+    background-color:#E9E9E9!important;
+    border-color:#E9E9E9!important;
+}
+.col-md-4-table{
+    width: 33.33333333%;
+    background-color:#E9E9E9!important;
+    border-color:#E9E9E9!important;
+}
+
+.table-td-mid{ 
+    vertical-align: middle; 
+    border-top-color:#E9E9E9!important;
+}
+.table-td-center-text{ 
+    text-align: center; 
+}
+.table-td-number{ 
+    text-align: right; 
+}
+
+.col-md-overay{
+    margin-right: -5px;
+}
+
 
  

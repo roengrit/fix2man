@@ -3,7 +3,12 @@ package controllers
 import (
 	h "fix2man/helps"
 	m "fix2man/models"
+	"fmt"
+	"html/template"
+	"net/url"
 	"strings"
+
+	"github.com/go-playground/form"
 )
 
 //RecController _
@@ -11,26 +16,75 @@ type RecController struct {
 	BaseController
 }
 
+func parseForm() url.Values {
+	return url.Values{
+		"Name":                []string{"joeybloggs"},
+		"Age":                 []string{"3"},
+		"Gender":              []string{"Male"},
+		"Address[0].Name":     []string{"26 Here Blvd."},
+		"Address[0].Phone":    []string{"9(999)999-9999"},
+		"Address[1].Name":     []string{"26 There Blvd."},
+		"Address[1].Phone":    []string{"1(111)111-1111"},
+		"active":              []string{"true"},
+		"MapExample[key]":     []string{"value"},
+		"NestedMap[key][key]": []string{"value"},
+		"NestedArray[0][0]":   []string{"value"},
+	}
+}
+
+//Product _
+type Product struct {
+	Name string
+	Code string
+}
+type ReqX struct {
+	Product []Product
+}
+
 //Get _
 func (c *RecController) Get() {
-	c.Data["title"] = "สร้างใบรับสินค้า"
+	c.Data["title"] = "สร้างใบรับ"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
 	c.TplName = "receive/rec.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "receive/rec-list-style.tpl"
-	c.LayoutSections["Scripts"] = "receive/rec-list-script.tpl"
+	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
+	c.LayoutSections["Scripts"] = "receive/rec-script.html"
+	c.Render()
+}
 
+//Post _
+func (c *RecController) Post() {
+	c.Data["title"] = "สร้างใบรับ"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Layout = "layout.html"
+	c.TplName = "receive/rec.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
+	c.LayoutSections["Scripts"] = "receive/rec-script.html"
+	decoder := form.NewDecoder()
+	c.Ctx.Request.ParseForm()
+	var input url.Values
+	input = c.Ctx.Request.Form
+	fmt.Println(input)
+	var user ReqX
+	err := decoder.Decode(&user, input)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(user.Product[0].Code)
+	fmt.Printf("%#v\n", user)
 	c.Render()
 }
 
 //RecList _
 func (c *RecController) RecList() {
-	c.Data["title"] = "รายการใบรับสินค้า"
+	c.Data["title"] = "รายการใบรับ"
 	c.Layout = "layout.html"
 	c.TplName = "receive/rec-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "receive/rec-style.tpl"
-	c.LayoutSections["Scripts"] = "receive/rec-list-script.tpl"
+	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
+	c.LayoutSections["Scripts"] = "receive/rec-list-script.html"
 	c.Render()
 }
 

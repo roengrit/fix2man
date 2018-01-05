@@ -6,11 +6,11 @@
     </h1>
 </section>
 <section class="content">
-    <form action="/update-receive" autocomplete="off" id="rec-form" onsubmit="return false;" method="post">
+    <form action="/create-receive" autocomplete="off" id="rec-form"   method="post">
         {{ .xsrfdata }}
         <div id="box-req" class="box box-primary">
             <div class="box-header ui-sortable-handle">
-                <h4 class="box-title  req-box-title ">ผู้จำหน่าย</h4>
+                <h4 class="box-title  req-box-title ">รายละเอียด <span style="font-size:12px; color:red;">**ใบรับนี้ ไม่ใช่เอกสารทางบัญชี จึงมีแค่ราคา เพื่อให้รู้มูลค่า ของอุปกรณ์หรืออะไหล่เท่านั้น </span></h4>
             </div>
             <div class="box-body">
                 <div class="form-group req-box-form">
@@ -25,41 +25,30 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="req-box-title">รายละเอียด</h4>
                 <div class="form-group req-box-form">
                     <div class="col-xs-8">
-                        <label for="req-date-event">วันที่</label>
+                        <label for="req-date-event">เลขที่เอกสาร</label>
                         <div class="input-group">
-                                <span class="input-group-addon">
-                                        <i class="fa fa-file-o"></i>
-                                    </span>
-                                    <input type="text" id="rec-doc" name="rec-doc" class="form-control has-query" autocomplete="off" value="" {{.r}} placeholder="ปล่อยว่างเพื่อสร้างอัตโนมัติ">
+                            <span class="input-group-addon">
+                                <i class="fa fa-file-o"></i>
+                            </span>
+                            <input type="text" id="rec-doc" name="rec-doc" class="form-control has-query" autocomplete="off" value="" {{.r}} placeholder="ปล่อยว่างเพื่อสร้างอัตโนมัติ">
                         </div>
                     </div>
                     <div class="col-xs-4">
-                        <label for="req-sn">เลขที่เอกสาร</label>
+                        <label for="req-sn">วันที่</label>
                         <div class="input-group">
-                            
-                                <span class="input-group-addon">
-                                        <i class="fa fa-calculator"></i>
-                                    </span>
-                                    <input type="text" id="rec-date" data-date-language="th" name="rec-date" class="form-control" value="{{.data.RecDate}}" {{.r}}
-                                        placeholder="....">
+
+                            <span class="input-group-addon">
+                                <i class="fa fa-calculator"></i>
+                            </span>
+                            <input type="text" id="rec-date" data-date-language="th" name="rec-date" class="form-control" value="{{.data.RecDate}}" {{.r}}
+                                placeholder="....">
                         </div>
                     </div>
                 </div>
                 <div class="form-group req-box-form">
-                    <div class="col-xs-6">
-                        <label for="req-date-event">โปรเจค</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-tags"></i>
-                            </span>
-                            <input type="text" id="rec-pro" data-date-language="th" name="rec-pro" class="form-control" value="{{.data.Project}}" {{.r}}
-                                placeholder="....">
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-8">
                         <label for="req-sn">เอกสารอ้างอิง</label>
                         <div class="input-group">
                             <span class="input-group-addon">
@@ -69,67 +58,112 @@
                                 {{.r}} placeholder="เอกสารอ้างอิง">
                         </div>
                     </div>
+                    <div class="col-xs-4">
+                        <label for="req-date-event">โปรเจค</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-tags"></i>
+                            </span>
+                            <input type="text" id="rec-pro" data-date-language="th" name="rec-pro" class="form-control" value="{{.data.Project}}" {{.r}}
+                                placeholder="....">
+                        </div>
+                    </div>
                 </div>
-                <h4 class="req-box-title">สินค้า/อะไหล่</h4>
-                <div class="form-group req-box-form">
+                <h4 class="req-box-title">เครื่องมือ/อุปกรณ์/อะไหล่</h4>
+                <!-- <div class="form-group req-box-form">
                         <div class="col-md-2">
                             <label for="req-sn">รหัส</label>
-                            <input type="text" id="item-code" name="item-code" class="form-control has-query" style="width:100%!important" autocomplete="off"
+                            <input type="text" id="item-code" name="item-code" class="form-control has-query"   autocomplete="off"
                                 value="{{.data.DocRef}}" {{.r}} placeholder="รหัส">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="req-sn">ชื่อ</label>
-                            <input type="text" id="item-code" name="item-code" class="form-control has-query" style="width:100%!important" autocomplete="off"
+                            <input type="text" id="item-code" name="item-code" class="form-control has-query"   autocomplete="off"
                                 value="{{.data.DocRef}}" {{.r}} placeholder="่ชื่อ">
                         </div>
                         <div class="col-md-1">
                                 <label for="req-sn">หน่วย</label>
-                                    <input type="text" id="item-code" name="item-code" class="form-control has-query" style="width:100%!important" autocomplete="off" value="{{.data.DocRef}}"
+                                    <input type="text" id="item-code" name="item-code"  class="form-control  " readonly   autocomplete="off" value="{{.data.DocRef}}"
+                                        {{.r}} placeholder="หน่วย">
+                        </div>
+                        <div class="col-md-1">
+                                <label for="req-sn">จำนวน</label>
+                                    <input type="text" id="item-code" name="item-code" class="form-control has-query"   autocomplete="off" value="{{.data.DocRef}}"
                                         {{.r}} placeholder="จำนวน">
                         </div>
                         <div class="col-md-2">
-                                <label for="req-sn">จำนวน</label>
-                                    <input type="text" id="item-code" name="item-code" class="form-control has-query" style="width:100%!important" autocomplete="off" value="{{.data.DocRef}}"
-                                        {{.r}} placeholder="รหัส">
-                        </div>
-                        <div class="col-md-3">
                                 <label for="req-sn">ราคา</label>
                                 <div class="input-group ">
                                         <input type="text" id="StockSub_price" value="" class="form-control numeric" style="text-align: right;">
                                         <span class="input-group-btn">
-                                                <button type="button" class="btn btn-success">Go!</button>
+                                                <button type="button" class="btn btn-success">ตกลง</button>
                                               </span>
                                     </div>
                         </div>
                          
 
-                </div>
+                </div> -->
                 <div class="form-group req-box-form">
                     <div class="col-xs-12">
-                            <table class="table">
-                                    <thead  >
-                                        <tr  >
-                                            <th style="width: 150px!important;background-color:#E9E9E9;border-color:#E9E9E9;">รหัส</th>
-                                            <th style="background-color:#E9E9E9;border-color:#E9E9E9;">ชื่อ</th>
-                                            <th style="width: 140px!important;background-color:#E9E9E9;border-color:#E9E9E9;">จำนวน</th>
-                                            <th style="width: 100px!important;background-color:#E9E9E9;border-color:#E9E9E9;">หน่วย</th>
-                                            <th style="background-color:#E9E9E9;border-color:#E9E9E9;">ราคา:หน่วย</th>
-                                            <th style="width: 100px!important;background-color:#E9E9E9;border-color:#E9E9E9;">รวม</th>
-                                            <th style="width: 180px!important;background-color:#E9E9E9;border-color:#E9E9E9;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-bordered table-condensed" id="retData">
-                
-                                    </tbody>
-                                </table>
+                        <table class="table" id="description">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2 col-md-2-table">รหัส</th>
+                                    <th class="col-md-3 col-md-3-table">ชื่อ</th>
+                                    <th class="col-md-1 col-md-1-table" style="text-align:center;">หน่วย</th>
+                                    <th class="col-md-1 col-md-1-table" style="text-align:right;">จำนวน</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:right;">ราคา:หน่วย</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:right;">รวม</th>
+                                    <th class="col-md-2 col-md-2-table"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-bordered table-condensed" id="retData">
+
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success pull-right add-row">เพิ่ม</button>
                     </div>
                 </div>
+                <div class="form-group req-box-form">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <textarea class="form-control" {{.r}} id="remark" name="remark" rows="4" placeholder="หมายเหตุ">{{.data.Details}}</textarea>
+                            </div>
+                        </div>
+                    </div>
             </div>
             <div class="box-footer">
                 {{if .r}} {{else}}
-                <button type="submit" onclick="Save()" class="btn btn-primary">บันทึก</button>
+                <button type="submit"   class="btn btn-lg btn-primary pull-right">บันทึก</button>
                 {{end}}
+            </div>
+        </div>
+        <div class="col-xs-11" id="editOveray">
+            <div class="col-md-2">
+                <input type="text" id="item-code" name="item-code" class="form-control has-query" autocomplete="off" {{.r}} placeholder="รหัส/Serail Number">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="item-name" name="item-name" class="form-control has-query" autocomplete="off" {{.r}} placeholder="่ชื่อ">
+            </div>
+            <div class="col-md-1">
+                <input type="text" tabindex="-1" id="unit-name" name="unit-name" class="form-control" style="text-align:center;" readonly
+                    autocomplete="off" {{.r}} placeholder="หน่วย">
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="qty" name="qty" class="form-control" style="text-align: right;" autocomplete="off"
+                    {{.r}} placeholder="จำนวน">
+            </div>
+            <div class="col-md-4">
+                <div class="input-group ">
+                    <input type="number" id="price" name="price" class="form-control" style="text-align: right;" {{.r}} placeholder="ราคา">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-success">ตกลง</button>
+                        <button type="button" class="btn btn-default cancel-edit-row">ยกเลิก</button>
+                    </span>
+                </div>
             </div>
         </div>
     </form>
 </section>
+     

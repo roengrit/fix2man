@@ -43,8 +43,8 @@ func (c *ReqController) Get() {
 	c.Layout = "layout.html"
 	c.TplName = "req/req.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
-	c.LayoutSections["Scripts"] = "req/req-script.tpl"
+	c.LayoutSections["HtmlHead"] = "req/req-style.html"
+	c.LayoutSections["Scripts"] = "req/req-script.html"
 	c.Render()
 }
 
@@ -78,8 +78,8 @@ func (c *ReqController) Read() {
 	c.Layout = "layout.html"
 	c.TplName = "req/req-read.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "req/req-style.tpl"
-	c.LayoutSections["Scripts"] = "req/req-read-script.tpl"
+	c.LayoutSections["HtmlHead"] = "req/req-style.html"
+	c.LayoutSections["Scripts"] = "req/req-read-script.html"
 	c.Render()
 }
 
@@ -222,8 +222,8 @@ func (c *ReqController) ReqList() {
 	c.Layout = "layout.html"
 	c.TplName = "req/req-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "req/req-list-style.tpl"
-	c.LayoutSections["Scripts"] = "req/req-list-script.tpl"
+	c.LayoutSections["HtmlHead"] = "req/req-list-style.html"
+	c.LayoutSections["Scripts"] = "req/req-list-script.html"
 	c.Render()
 }
 
