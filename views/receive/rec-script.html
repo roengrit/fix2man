@@ -1,8 +1,6 @@
 <script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script>
-    function toggleScan(){
-        $("#sn-scan").toggle();
-    }
+    
     $(document).ready(function () {
         var $editOveray = $('#editOveray');
         $('#ret-table').on("click", "tbody > tr", function (index) {
@@ -32,7 +30,11 @@
         $editOveray.mouseleave(function () {
             //$editOveray.hide();
         });
-
+        $("#sn-toggle").click(function(){
+            $("#sn-scan").toggle();
+            $editOveray.hide();
+        });
+        
         $(".cancel-edit-row").click(function (event) {
             $editOveray.hide();
         });

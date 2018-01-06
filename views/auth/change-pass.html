@@ -1,0 +1,60 @@
+<section class="content-header">
+    <div id="top-alert" style="display:none">
+    </div>
+    <h1 id="title-content">
+        {{.title}}
+    </h1>
+</section>
+<section class="content">
+    <form action="/change-pass" autocomplete="off" id="rec-form" method="post">
+        {{ .xsrfdata }} {{if .error}}
+        <p class="login-box-msg login-err">{{.error}}</p>
+        {{end}}
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+                {{if .error}}
+                <div class="form-group req-box-form has-error">
+                    {{else if .success}}
+                    <div class="form-group req-box-form has-success">
+                        {{else}}
+                        <div class="form-group req-box-form">
+                            {{end}}
+
+                            <div class="col-xs-12">
+                                <label for="req-name">รหัสผ่าน</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                    <input type="password" id="password" name="password" class="form-control has-query" required autocomplete="off" placeholder="รหัสผ่าน"
+                                        value="">
+                                </div>
+                            </div>
+                        </div>
+                        {{if .error}}
+                        <div class="form-group req-box-form has-error">
+                            {{else if .success}}
+                            <div class="form-group req-box-form has-success">
+                                {{else}}
+                                <div class="form-group req-box-form">
+                                    {{end}}
+                                    <div class="col-xs-12">
+                                        <label for="req-name">ยืนยันรหัสผ่าน</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                            <input type="password" id="password-retry" required name="password-retry" class="form-control has-query" autocomplete="off"
+                                                placeholder="ยืนยันรหัสผ่าน" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                {{if .r}} {{else}}
+                                <button type="submit" class="btn btn-primary pull-right">บันทึก</button>
+                                {{end}}
+                            </div>
+                        </div>
+    </form>
+</section>

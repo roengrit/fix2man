@@ -137,6 +137,29 @@ func ForgetPass(username, newPass string) (ok bool, errRet string) {
 	return ok, errRet
 }
 
+//ChangePass _
+func ChangePass(username, newPass string) (ok bool, errRet string) {
+	o := orm.NewOrm()
+	user := Users{Username: username}
+	err := o.Read(&user, "Username")
+	if err == orm.ErrNoRows {
+		errRet = "ไม่พบ email นี้ในระบบ"
+	} else {
+		if hash, err := bcrypt.GenerateFromPassword([]byte(newPass), bcrypt.DefaultCost); err != nil {
+			errRet = err.Error()
+		} else {
+			user.Password = string(hash)
+			if num, errUpdate := o.Update(&user); errUpdate != nil {
+				errRet = errUpdate.Error()
+				_ = num
+			} else {
+				ok = true
+			}
+		}
+	}
+	return ok, errRet
+}
+
 //RandStringRunes password _
 func RandStringRunes(n int) string {
 	b := make([]rune, n)

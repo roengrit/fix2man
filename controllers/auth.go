@@ -51,6 +51,52 @@ func (c *AuthController) Post() {
 	c.Render()
 }
 
+//ChangePass _
+func (c *AuthController) ChangePass() {
+	val := h.GetUser(c.Ctx.Request)
+	if val == "" {
+		c.Ctx.Redirect(http.StatusFound, "/auth")
+	}
+	c.Data["UserDisplay"] = val
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["title"] = "เปลี่ยนรหัสผ่าน"
+	c.Layout = "layout.html"
+	c.TplName = "auth/change-pass.html"
+	c.Render()
+}
+
+//UpdatePass _
+func (c *AuthController) UpdatePass() {
+	val := h.GetUser(c.Ctx.Request)
+	if val == "" {
+		c.Ctx.Redirect(http.StatusFound, "/auth")
+	}
+	passwordForm := c.GetString("password")
+	passwordReTryForm := c.GetString("password-retry")
+	if passwordForm == passwordReTryForm && passwordForm != "" && len(passwordForm) >= 6 {
+		val := h.GetUser(c.Ctx.Request)
+		if ok, err := models.ChangePass(val, passwordForm); ok {
+			c.Data["success"] = "ok"
+		} else {
+			c.Data["error"] = err
+		}
+	} else {
+		c.Data["error"] = "รหัสผ่านไม่ตรงกัน"
+	}
+	if len(passwordForm) < 6 {
+		c.Data["error"] = "รหัสผ่านต้องอย่างน้อย 6 ตัว"
+	}
+	if passwordForm == "" {
+		c.Data["error"] = "กรุณาระบุรหัสผ่านให้ตรงกัน"
+	}
+	c.Data["UserDisplay"] = val
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["title"] = "เปลี่ยนรหัสผ่าน"
+	c.Layout = "layout.html"
+	c.TplName = "auth/change-pass.html"
+	c.Render()
+}
+
 //Get to logout
 func (c *LogoutController) Get() {
 	h.LogOut(c.Ctx.ResponseWriter)

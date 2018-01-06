@@ -27,8 +27,8 @@ func main() {
 
 	beego.Router("/", &c.AppController{})
 	beego.Router("/auth", &c.AuthController{})
+	beego.Router("/change-pass", &c.AuthController{}, "get:ChangePass;post:UpdatePass")
 	beego.Router("/logout", &c.LogoutController{})
-	beego.Router("/prof-name", &c.GetNameController{}, "get:GetName")
 	beego.Router("/forget-password", &c.ForgetController{})
 
 	beego.Router("/normal", &c.EntitryController{})
