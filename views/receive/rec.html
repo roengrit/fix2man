@@ -76,7 +76,37 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="req-box-title">เครื่องมือ/อุปกรณ์/อะไหล่</h4>
+                <h4 class="req-box-title">เครื่องมือ/อุปกรณ์/อะไหล่ <a href="#" onclick="toggleScan()" style="font-size:12px;" >(Scan SN)</a></h4>
+                <div class="form-group req-box-form" id="sn-scan" style="display:none;">
+                    <div class="col-xs-11">
+                        <div class="col-md-2">
+                            <input type="text" id="item-code-sn" name="item-code-sn" class="form-control" autocomplete="off" placeholder="รหัส">
+                            <input type="hidden" id="item-code-id-sn" name="item-code-id-sn" class="form-control" autocomplete="off" placeholder="รหัส">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="item-name-sn" name="item-name-sn" class="form-control" autocomplete="off" placeholder="่ชื่อ">
+                        </div>
+                
+                        <div class="col-md-1">
+                            <input type="hidden" tabindex="-1" id="unit-code-sn" name="unit-code-sn" class="form-control" style="text-align:center;"
+                                readonly autocomplete="off" placeholder="หน่วย">
+                            <input type="text" tabindex="-1" id="unit-name-sn" name="unit-name-sn" class="form-control" style="text-align:center;" readonly
+                                autocomplete="off" placeholder="หน่วย">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" id="price-sn" name="price-sn" class="form-control" style="text-align: right;" placeholder="ราคา">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group ">
+                                <input type="text" id="item-sn" name="item-sn" class="form-control" autocomplete="off" placeholder="Seril Number">
+                
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-success ok-sn">ตกลง</button>                                    
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group req-box-form">
                     <div class="col-xs-12">
                         <table class="table" id="ret-table">
@@ -97,8 +127,8 @@
                             <tfoot class="table-bordered table-condensed">
                                 <tr>
                                     <th><button type="button" class="btn btn-success add-row">เพิ่ม</button></th>
-                                    <th colspan="4" style="text-align:right;">รวมทั้งหมด</th>
-                                    <th class="col-md-2" style="text-align:right;" id="total-text">0.00</th>
+                                    <th colspan="4" style="text-align:right;vertical-align: middle;">รวมทั้งหมด</th>
+                                    <th class="col-md-2" style="text-align:right;vertical-align: middle;" id="total-text">0.00</th>
                                     <th></th>
                                 </tr>
                             </tfoot>
