@@ -9,8 +9,8 @@ import (
 	"github.com/astaxie/beego"
 )
 
-//AuthController _
-type AuthController struct {
+//UserController _
+type UserController struct {
 	beego.Controller
 }
 
@@ -19,8 +19,13 @@ type LogoutController struct {
 	beego.Controller
 }
 
+//ForgetController _
+type ForgetController struct {
+	beego.Controller
+}
+
 //Get to view login
-func (c *AuthController) Get() {
+func (c *UserController) Get() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["username"] = "logon.firstclass@gmail.com"
 	c.Data["title"] = "เข้าสู่ระบบเพื่อเริ่มการทำงาน"
@@ -29,7 +34,7 @@ func (c *AuthController) Get() {
 }
 
 //Post to login
-func (c *AuthController) Post() {
+func (c *UserController) Post() {
 	usernameForm := c.GetString("username")
 	passwordForm := c.GetString("password")
 
@@ -52,7 +57,7 @@ func (c *AuthController) Post() {
 }
 
 //ChangePass _
-func (c *AuthController) ChangePass() {
+func (c *UserController) ChangePass() {
 	val := h.GetUser(c.Ctx.Request)
 	if val == "" {
 		c.Ctx.Redirect(http.StatusFound, "/auth")
@@ -66,7 +71,7 @@ func (c *AuthController) ChangePass() {
 }
 
 //UpdatePass _
-func (c *AuthController) UpdatePass() {
+func (c *UserController) UpdatePass() {
 	val := h.GetUser(c.Ctx.Request)
 	if val == "" {
 		c.Ctx.Redirect(http.StatusFound, "/auth")
@@ -102,3 +107,50 @@ func (c *LogoutController) Get() {
 	h.LogOut(c.Ctx.ResponseWriter)
 	c.Ctx.Redirect(http.StatusFound, "/auth")
 }
+
+//Get _
+func (c *ForgetController) Get() {
+
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["username"] = ""
+	c.Data["title"] = "กรอก email เพื่อรับรหัสผ่าน"
+	c.TplName = "forget-password/forget.html"
+	c.Render()
+}
+
+//Post to
+func (c *ForgetController) Post() {
+	usernameForm := c.GetString("username")
+	newPass := models.RandStringRunes(8)
+	if hasUser, errFindeuser := models.GetUser(usernameForm); hasUser {
+		if errSendMail := h.SendMail(usernameForm, newPass); errSendMail == "" {
+			if ok, err := models.ForgetPass(usernameForm, newPass); ok {
+				c.Data["success"] = "ส่งรหัสผ่านสำเร็จ"
+			} else {
+				c.Data["error"] = err
+			}
+		} else {
+			c.Data["error"] = errSendMail
+		}
+	} else {
+		c.Data["error"] = errFindeuser
+	}
+
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["username"] = c.GetString("username")
+
+	c.TplName = "forget-password/forget.html"
+	c.Render()
+}
+
+//GetName -
+// func (c *GetNameController) GetName() {
+// 	c.Data["json"] = h.GetUser(c.Ctx.Request)
+// 	c.ServeJSON()
+// }
+
+//ChangeBranch -
+// func (c *GetNameController) ChangeBranch() {
+// 	c.Data["json"] = h.GetUser(c.Ctx.Request)
+// 	c.ServeJSON()
+// }

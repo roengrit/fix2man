@@ -9,9 +9,6 @@ import (
 
 //HTMLTemplate _
 const HTMLTemplate = `<tr>
-							<td>
-								{code} 
-							</td>
 							<td>{name}</td>
 							<td>
 								<div class="btn-group">
@@ -83,8 +80,7 @@ func GetEntityParentField(entity string) string {
 func GenEntityHTML(lists []m.NormalEntity) string {
 	var hmtlBuffer bytes.Buffer
 	for _, val := range lists {
-		temp := strings.Replace(HTMLTemplate, "{code}", val.Code, -1)
-		temp = strings.Replace(temp, "{name}", val.Name, -1)
+		temp := strings.Replace(HTMLTemplate, "{name}", val.Name, -1)
 		if !val.Lock {
 			temp = strings.Replace(temp, "{action}", strings.Replace(HTMLActionEnable, "{id}", strconv.Itoa(val.ID), -1), -1)
 		} else {

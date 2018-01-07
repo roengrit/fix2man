@@ -1,0 +1,74 @@
+<section class="content-header">
+        <div id="top-alert" style="display:none">
+    
+        </div>
+        <h1 id="title-content">
+            {{.title}}
+        </h1>
+    </section>
+    <section class="content">
+        <form action="/supplier/list" id="search-form" onsubmit="return false;" method="post">
+            {{ .xsrfdata }}
+               <div class="input-group input-group-sm col-xs-6 search-top">
+                    <input type="text" id="txt-search" name="txt-search" placeholder="ค้นหา" class="form-control">
+                    <input type="hidden" id="top" value="10" name="top" />
+                    <div class="input-group-btn">
+                            <button type="button" id="btn-search-submit" class="btn btn-primary ">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            <label type="button" id="top-search-label" class="btn btn-default ">
+                                5 รายการ
+                            </label>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+    
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a class="change-top" href="#" top="5">5 รายการ</a>
+                                </li>
+                                <li>
+                                    <a class="change-top" href="#" top="10">10 รายการ</a>
+                                </li>
+                                <li>
+                                    <a class="change-top" href="#" top="50">50 รายการ</a>
+                                </li>
+                                <li>
+                                    <a class="change-top" href="#" top="100">100 รายการ</a>
+                                </li>
+                                <li>
+                                    <a class="change-top" href="#" top="0"> ทั้งหมด</a>
+                                </li>
+                            </ul>
+                        </div>
+                </div>
+        </form>
+        <div id="box-ret" class="box box-primary">
+            <div class="box-header ui-sortable-handle">
+                <i class="fa fa-list-alt"></i>
+                <h3 class="box-title">ค้นเจอทั้งหมด
+                    <span id="retCount"> {{.retCount}}</span> รายการ</h3>
+                <div class="box-tools pull-right">
+                    <a href="/create-supplier" id="sup-add" class="btn btn-sm btn-success">เพิ่มข้อมูล</a>
+                </div>
+            </div>
+            <div class="box-body">
+                <div>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th >ชื่อ</th>
+                                <th style="width:400px!important;">ผู้ติดต่อ</th>
+                                <th style="width:400px!important;">เบอร์โทร</th>
+                                <th style="width: 180px!important;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="retData">
+    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>

@@ -8,8 +8,8 @@ import (
 
 //Units _
 type Units struct {
-	ID        int
-	Code      string `orm:"size(20)"`
+	ID int
+	//Code      string `orm:"size(20)"`
 	Name      string `orm:"size(225)"`
 	Lock      bool
 	CreatedAt time.Time

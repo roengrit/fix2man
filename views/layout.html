@@ -112,7 +112,7 @@
                             <span>หน้าหลัก</span>
                         </a>
                     </li>
-                    <li class="treeview {{.active_p_001}}">
+                    <li class="treeview {{.m_request}}">
                         <a href="#">
                             <i class="fa fa-edit"></i>
                             <span>แจ้งงาน</span>
@@ -121,11 +121,11 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="{{.active_c_001}}">
+                            <li class="{{.m_create_request}}">
                                 <a href="/create-request">
                                     <i class="fa fa-circle-o"></i> แจ้งงาน</a>
                             </li>
-                            <li>
+                            <li class="{{.m_request_list}}">
                                 <a href="/request/list">
                                     <i class="fa fa-circle-o"></i> รายการแจ้งงาน</a>
                             </li>
@@ -138,22 +138,24 @@
                             <span>PM/ติดตั้ง/PJ</span>
                         </a>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview {{.m_supplier}}">
                         <a href="#">
                             <i class="fa fa-tty"></i>
-                            <span>ร้านค้า/Supplier</span>
+                            <span>ร้านค้า/Supplier</span><span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
-                    </li>
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-cube"></i>
-                            <span>อะไหล่/เครื่องมือ</span>
-                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{.m_supplier_list}}">
+                                <a href="/supplier/list">
+                                    <i class="fa fa-circle-o"></i>ร้านค้า/Supplier</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-reorder"></i>
-                            <span>เครื่องจักร/อุปกรณ์</span>
+                            <span>อุปกรณ์/อะไหล่</span>
                         </a>
                     </li>
                     <li class="treeview">

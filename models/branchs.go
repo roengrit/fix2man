@@ -8,8 +8,8 @@ import (
 
 //Branchs _
 type Branchs struct {
-	ID                  int
-	Code                string `orm:"size(20)"`
+	ID int
+	//Code                string `orm:"size(20)"`
 	Name                string `orm:"size(225)"`
 	Lock                bool
 	TokenLine           string

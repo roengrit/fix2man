@@ -1,0 +1,17 @@
+<script> 
+function Save() {
+    hideTopAlert();
+    url = $('#sub-form').attr('action');
+    $.post(url, $('#sub-form').serialize(), function (data) {
+        if (data.RetOK) {
+            showTopAlert(data.RetData, "success")
+            setTimeout(function () { window.location.href = '/supplier/list' }, 2000);
+        } else {
+            showTopAlert(data.RetData, "danger")
+        }
+    });
+}
+{{if .data.Province.ID}}
+    $("#province").val("{{.data.Province.ID}}");
+{{end}}
+</script>

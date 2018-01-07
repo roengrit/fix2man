@@ -15,7 +15,7 @@ type RequestDocument struct {
 	DocNo        string `orm:"size(20)"`
 	DocDate      time.Time
 	ReqName      string      `orm:"size(255)"`
-	User         *Users      `orm:"rel(one)"`
+	User         *Users      `orm:"null;rel(fk)"`
 	Tel          string      `orm:"size(50)"`
 	Branch       *Branchs    `orm:"null;rel(one)"`
 	Depart       *Departs    `orm:"null;rel(one)"`

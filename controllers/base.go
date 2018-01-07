@@ -2,6 +2,8 @@ package controllers
 
 import (
 	h "fix2man/helps"
+	"fmt"
+	s "strings"
 
 	"github.com/astaxie/beego"
 )
@@ -19,6 +21,26 @@ func (b *BaseController) Prepare() {
 	}
 	b.Data["UserDisplay"] = val
 	//Todo กำหนด รหัส Menu แล้วใส่ เป็น Data
-	b.Data["active_p_001"] = "active menu-open"
-	b.Data["active_c_001"] = "active"
+	uri := b.Ctx.Request.URL.RequestURI()
+	fmt.Println(uri)
+	switch {
+	case s.Contains(uri, "request"):
+		{
+			b.Data["m_request"] = "active menu-open"
+			if s.Contains(uri, "/create-request") {
+				b.Data["m_create_request"] = "active"
+			}
+			if s.Contains(uri, "/request/list") {
+				b.Data["m_request_list"] = "active"
+			}
+		}
+	case s.Contains(uri, "supplier"):
+		{
+			b.Data["m_supplier"] = "active menu-open"
+			if s.Contains(uri, "/supplier/list") {
+				b.Data["m_supplier_list"] = "active"
+			}
+		}
+	}
+
 }

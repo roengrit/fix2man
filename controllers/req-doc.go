@@ -5,6 +5,7 @@ import (
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
+	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -73,6 +74,7 @@ func (c *ReqController) Read() {
 			}
 			c.Data["currentDate"] = ret.EventDate.Format("2006-01-02")
 		}
+		fmt.Println(ret)
 	}
 
 	c.Layout = "layout.html"

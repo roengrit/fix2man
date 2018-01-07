@@ -105,7 +105,7 @@ func (c *EntitryController) NewEntity() {
 	t, err := template.ParseFiles("views/normal/normal-add.html")
 
 	if id == "" {
-		code = m.GetMaxEntity(entity)
+
 	} else {
 		errGet, retVal := m.GetEntity(entity, id)
 
@@ -138,22 +138,10 @@ func (c *EntitryController) NewEntity() {
 	c.ServeJSON()
 }
 
-//MaxEntity _
-func (c *EntitryController) MaxEntity() {
-	entity := c.Ctx.Request.URL.Query().Get("entity")
-	ret := m.NormalModel{}
-	max := m.GetMaxEntity(entity)
-	ret.RetOK = true
-	ret.RetData = max
-	c.Data["json"] = ret
-	c.ServeJSON()
-}
-
 //UpdateEntity _
 func (c *EntitryController) UpdateEntity() {
 	entity := c.GetString("entity")
 	id := c.GetString("narmal-id")
-	code := c.GetString("normal-code")
 	name := c.GetString("normal-name")
 	del := c.GetString("del-flag")
 	title := h.GetEntityTitle(entity)
@@ -178,7 +166,7 @@ func (c *EntitryController) UpdateEntity() {
 	}
 
 	if id != "" && del == "" && ret.RetOK { // แก้ไข
-		err := m.UpdateEntity(entity, id, code, name)
+		err := m.UpdateEntity(entity, id, name)
 		if err == nil {
 			ret.RetOK = true
 			ret.RetData = "แก้ไขข้อมูลสำเร็จ"
@@ -189,7 +177,7 @@ func (c *EntitryController) UpdateEntity() {
 	}
 
 	if id == "" && del == "" && ret.RetOK { // สร้าง
-		_, err := m.CreateEntity(entity, code, name)
+		_, err := m.CreateEntity(entity, name)
 		if err == nil {
 			ret.RetOK = true
 			ret.RetData = "บันทึกข้อมูลสำเร็จ"

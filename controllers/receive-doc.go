@@ -69,11 +69,6 @@ func (c *RecController) Get() {
 func (c *RecController) Post() {
 	c.Data["title"] = "สร้างใบรับ"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	//c.Layout = "layout.html"
-	//c.TplName = "receive/rec.html"
-	//c.LayoutSections = make(map[string]string)
-	//c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
-	//c.LayoutSections["Scripts"] = "receive/rec-script.html"
 	decoder := form.NewDecoder()
 	var recDoc RecDocument
 	err := decoder.Decode(&recDoc, c.Ctx.Request.Form)
