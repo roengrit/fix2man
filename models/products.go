@@ -23,6 +23,15 @@ type Units struct {
 	UpdatedAt time.Time
 }
 
+//Categorys _
+type Categorys struct {
+	ID        int
+	Name      string `orm:"size(225)"`
+	Lock      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 func init() {
-	orm.RegisterModel(new(Products), new(Units)) // Need to register model in init
+	orm.RegisterModel(new(Products), new(Units), new(Categorys)) // Need to register model in init
 }

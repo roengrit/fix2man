@@ -26,13 +26,13 @@ const HTMLActionDisable = `<button type="button" class="btn btn-sm btn-primary d
 						 <button type="button" class="btn btn-sm btn-danger disabled" >ลบ</button>`
 
 //HTMLNotFoundRows _
-const HTMLNotFoundRows = `<tr><td></td><td>*** ไม่พบข้อมูล ***</td><td></td></tr>`
+const HTMLNotFoundRows = `<tr><td colspan="2">*** ไม่พบข้อมูล ***</td> </tr>`
 
 //HTMLPermissionDenie _
-const HTMLPermissionDenie = `<tr><td></td><td>*** ไม่อนุญาติ ใน entity อื่น ***</td><td></td></tr>`
+const HTMLPermissionDenie = `<tr><td colspan="2">*** ไม่อนุญาติ ใน entity อื่น ***</td></tr>`
 
 //HTMLError _
-const HTMLError = `<tr><td></td><td>{err}</td><td></td></tr>`
+const HTMLError = `<tr><td colspan="2"> {err}</td></tr>`
 
 //GetEntityTitle _
 func GetEntityTitle(entity string) string {
@@ -45,8 +45,8 @@ func GetEntityTitle(entity string) string {
 		return "สถานะการซ่อม"
 	case "branchs":
 		return "สาขา/ไซต์"
-	case "departs":
-		return "แผนก"
+	case "categorys":
+		return "หมวดหมู่อุปกรณ์"
 	default:
 		return ""
 	}
@@ -64,13 +64,15 @@ func GetEntityParentField(entity string) string {
 	case "branchs":
 		return ""
 	case "departs":
-		return ""
+		return "branch_id"
 	case "buildings":
 		return "branch_id"
 	case "class":
 		return "building_id"
 	case "rooms":
 		return "class_id"
+	case "categorys":
+		return ""
 	default:
 		return ""
 	}

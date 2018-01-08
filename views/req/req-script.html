@@ -92,6 +92,20 @@
             }
         });
 
+        $('#req-depart').typeahead({
+            ajax: '/service/entity-list/json/?entity=departs',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            onSelect: function (data) {
+                $('#req-depart').addClass('check-text');
+                $('#req-depart-id').val(data.value);
+            },
+            parent: 'req-branch-id',
+            fixurl: '/service/entity-list-p/json/?entity=departs'
+        });
+
         $('#req-building').typeahead({
             ajax: '/service/entity-list-p/json/?entity=buildings',
             display: 'Name',
@@ -147,19 +161,7 @@
             },
             parent: 'req-class-id',
             fixurl: '/service/entity-list-p/json/?entity=rooms'
-        });
-
-        $('#req-depart').typeahead({
-            ajax: '/service/entity-list/json/?entity=departs',
-            display: 'Name',
-            displayField: 'Name',
-            valueField: 'ID',
-            val: 'ID',
-            onSelect: function (data) {
-                $('#req-depart').addClass('check-text');
-                $('#req-depart-id').val(data.value);
-            }
-        });
+        });        
 
         $('#req-sn').typeahead({
             ajax: '/service/entity-list/json/?entity=sns',
@@ -242,7 +244,6 @@
         hideTopAlert();
         url = $('#req-form').attr('action');
         $.post(url, $('#req-form').serialize(), function (data) {
-            $('#normal-code').removeClass('load-text');
             if (data.RetOK) {
                 showTopAlert(data.RetData, "success")
                 setTimeout(function () { window.location.href = '/request/list/' }, 2000);

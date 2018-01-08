@@ -1,0 +1,26 @@
+<script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
+<script>
+    $('#req-branch').typeahead({
+            ajax: '/service/entity-list/json/?entity=branchs',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            onSelect: function (data) {
+                $('#req-branch').addClass('check-text');
+                $('#branch-id').val(data.value);
+            }
+        });
+   function Save() {
+        hideTopAlert();
+        url = $('#depart-form').attr('action');
+        $.post(url, $('#depart-form').serialize(), function (data) {
+            if (data.RetOK) {
+                showTopAlert(data.RetData, "success")
+                setTimeout(function () { window.location.href = '/entity/location/depart/list' }, 2000);
+            } else {
+                showTopAlert(data.RetData, "danger")
+            }
+        });
+    }
+</script>

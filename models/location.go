@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -24,8 +25,8 @@ type Departs struct {
 	Branch    *Branchs `orm:"rel(one)"`
 	Name      string   `orm:"size(225)"`
 	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `orm:"auto_now_add"`
+	UpdatedAt time.Time `orm:"null"`
 }
 
 //Buildings _
@@ -87,4 +88,54 @@ func GetAllBranch() (req *[]Branchs) {
 	reqGet := &[]Branchs{}
 	o.QueryTable("branchs").RelatedSel().All(reqGet)
 	return reqGet
+}
+
+//GetDepartByID _
+func GetDepartByID(ID int) (dept *Departs, errRet error) {
+	reqGet := &Departs{}
+	o := orm.NewOrm()
+	o.QueryTable("departs").Filter("ID", ID).RelatedSel().One(reqGet)
+	return reqGet, errRet
+}
+
+//GetDepartList _
+func GetDepartList(term, branchID string, limit int) (dept *[]Departs, rowCount int, errRet error) {
+	reqGet := &[]Departs{}
+	o := orm.NewOrm()
+	qs := o.QueryTable("departs")
+	cond := orm.NewCondition()
+	cond1 := cond.Or("Name__icontains", term)
+	if branchID != "" {
+		cond1 = cond.Or("Name__icontains", term).And("branchs__ID", branchID)
+	}
+	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
+	return reqGet, len(*reqGet), errRet
+}
+
+//CreateDeparts _
+func CreateDeparts(depart Departs) (retID int64, errRet error) {
+	o := orm.NewOrm()
+	o.Begin()
+	id, err := o.Insert(&depart)
+	o.Commit()
+	if err == nil {
+		retID = id
+	}
+	return retID, err
+}
+
+//UpdateDeparts _
+func UpdateDeparts(depart Departs) (errRet error) {
+	o := orm.NewOrm()
+	getUpdate, _ := GetDepartByID(depart.ID)
+	if getUpdate == nil {
+		errRet = errors.New("ไม่พบข้อมูล")
+	} else {
+		depart.CreatedAt = getUpdate.CreatedAt
+		if num, errUpdate := o.Update(&depart); errUpdate != nil {
+			errRet = errUpdate
+			_ = num
+		}
+	}
+	return errRet
 }

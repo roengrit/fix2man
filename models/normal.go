@@ -58,7 +58,7 @@ func GetAllProvince() (req *[]Provinces) {
 
 //GetListEntity _
 func GetListEntity(entity, top, term string) (num int64, err error, entityList []NormalEntity) {
-	var sql = "SELECT i_d,name,lock FROM " + entity + " WHERE lower(name) like lower(?) order by code limit {0}"
+	var sql = "SELECT i_d,name,lock FROM " + entity + " WHERE lower(name) like lower(?) order by i_d limit {0}"
 	if top == "0" {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {

@@ -196,7 +196,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview {{.m_user}}">
                         <a href="#">
                             <i class="fa fa-users"></i>
                             <span>สมาชิก</span>
@@ -213,13 +213,13 @@
                                 <a href="../forms/advanced.html">
                                     <i class="fa fa-circle-o"></i> รายชื่อสมาชิก</a>
                             </li>
-                            <li>
+                            <li class="{{.m_role_list}}">
                                 <a href="/normal/?entity=roles">
                                     <i class="fa fa-circle-o"></i>สิทธิ์</a>
                             </li>
                         </ul>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview {{.m_setting}}">
                         <a href="#">
                             <i class="fa fa-gear"></i>
                             <span>ตั้งค่า</span>
@@ -229,24 +229,28 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="../forms/advanced.html">
+                                <a href="#">
                                     <i class="fa fa-circle-o"></i> รายละเอียดบริษัท</a>
                             </li>
-                            <li>
+                            <li class="{{.m_status_list}}">
                                 <a href="/normal/?entity=status">
                                     <i class="fa fa-circle-o"></i> สถานะการซ่อม</a>
                             </li>
-                            <li>
+                            <li class="{{.m_category_list}}">
+                                <a href="/normal/?entity=categorys">
+                                    <i class="fa fa-circle-o"></i>หมวดหมู่อุปกรณ์</a>
+                            </li>
+                            <li class="{{.m_unit_list}}">
                                 <a href="/normal/?entity=units">
                                     <i class="fa fa-circle-o"></i> หน่วย</a>
                             </li>
-                            <li>
-                                <a href="/normal/?entity=departs">
-                                    <i class="fa fa-circle-o"></i> แผนก</a>
-                            </li>
-                            <li>
+                            <li class="{{.m_branch_list}}">
                                 <a href="/normal/?entity=branchs">
                                     <i class="fa fa-circle-o"></i> สาขา/ไซต์</a>
+                            </li>
+                            <li class="{{.m_depart_list}}">
+                                <a href="/entity/location/depart/list">
+                                    <i class="fa fa-circle-o"></i> แผนก</a>
                             </li>
                             <li>
                                 <a href="/normal/?entity=buildings">

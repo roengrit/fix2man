@@ -36,6 +36,18 @@ func main() {
 	beego.Router("/normal/update", &c.EntitryController{}, "post:UpdateEntity")
 	beego.Router("/normal/list", &c.EntitryController{}, "post:ListEntity")
 
+	beego.Router("/entity/location/depart/list", &c.LocationController{}, "get:GetDepartList")
+	beego.Router("/entity/location/depart", &c.LocationController{}, "get:CreateDepart;post:UpdateDepart")
+
+	//beego.Router("/entity/location/building/list", &c.LocationController{}, "get:GetBuildingList")
+	//beego.Router("/entity/location/building", &c.LocationController{}, "get:CreateBuilding;post:UpdateBuilding")
+
+	//beego.Router("/entity/location/class/list", &c.LocationController{}, "get:GetClassList")
+	//beego.Router("/entity/location/class", &c.LocationController{}, "get:CreateClass;post:UpdateClass")
+
+	//beego.Router("/entity/location/room/list", &c.LocationController{}, "get:GetRoomList")
+	//beego.Router("/entity/location/room", &c.LocationController{}, "get:CreateRoom;post:UpdateRoom")
+
 	beego.Router("/service/entity-list/json", &c.ServiceController{}, "get:ListEntityJSON")
 	beego.Router("/service/entity-list-p/json", &c.ServiceController{}, "get:ListEntityWithParentJSON")
 

@@ -75,7 +75,6 @@ func (c *SupplierController) CreateSup() {
 
 //UpdateSup _
 func (c *SupplierController) UpdateSup() {
-	c.Data["title"] = "หน้าหลัก"
 	var sub m.Suppliers
 	decoder := form.NewDecoder()
 	err := decoder.Decode(&sub, c.Ctx.Request.Form)
