@@ -25,8 +25,8 @@ type RequestDocument struct {
 	Equipmen     *Equipments `orm:"null;rel(one)"`
 	Location     string      `orm:"size(225)"`
 	SerailNumber string      `orm:"size(50)"`
-	EventDate    time.Time   `orm:"null"`
-	ReqDate      time.Time   `orm:"null"`
+	EventDate    time.Time   `form:"-"orm:"null"`
+	ReqDate      time.Time   `form:"-"orm:"null"`
 	Details      string      `orm:"size(500)"`
 	Remark       string      `orm:"size(300)"`
 	DocRefNo     string      `orm:"size(50)"`
@@ -65,7 +65,12 @@ func init() {
 }
 
 //CreateReq _
-func CreateReq(req RequestDocument, user Users) (retID int64, errRet error) {
+func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, errRet error) {
+	req.DocNo = GetMaxDoc("request_document", "REQ")
+	req.DocDate = time.Now()
+	req.CreatedAt = time.Now()
+	req.CreateUser = &user
+	orm.Debug = true
 	o := orm.NewOrm()
 	var firstStatus = GetFirstStatus()
 	status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
@@ -74,14 +79,13 @@ func CreateReq(req RequestDocument, user Users) (retID int64, errRet error) {
 	_, err = o.Insert(&status)
 	o.Commit()
 	if err == nil {
-
 		retID = id
 	}
-	return retID, err
+	return retID, req.DocNo, err
 }
 
 //UpdateReq _
-func UpdateReq(req RequestDocument) (errRet error) {
+func UpdateReq(req RequestDocument, user Users) (errRet error) {
 	o := orm.NewOrm()
 	doc := RequestDocument{ID: req.ID}
 	if o.Read(&doc) == nil {
@@ -222,7 +226,7 @@ func GetReqDocList(top, term, branch, status, dateBegin, dateEnd string) (num in
 	if filterSQL != "" {
 		sql = strings.Replace(sql, "1=1", filterSQL, -1)
 	}
-	sql = sql + ` ORDER BY i_d desc LIMIT {0}`
+	sql = sql + ` ORDER BY doc_no desc LIMIT {0}`
 	if top == "0" {
 		sql = strings.Replace(sql, "LIMIT {0}", "", -1)
 	} else {

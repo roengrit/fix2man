@@ -60,8 +60,8 @@ func (c *RecController) Get() {
 	c.Layout = "layout.html"
 	c.TplName = "receive/rec.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
-	c.LayoutSections["Scripts"] = "receive/rec-script.html"
+	c.LayoutSections["html_head"] = "receive/rec-style.html"
+	c.LayoutSections["scripts"] = "receive/rec-script.html"
 	c.Render()
 }
 
@@ -94,8 +94,8 @@ func (c *RecController) RecList() {
 	c.Layout = "layout.html"
 	c.TplName = "receive/rec-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "receive/rec-style.html"
-	c.LayoutSections["Scripts"] = "receive/rec-list-script.html"
+	c.LayoutSections["html_head"] = "receive/rec-style.html"
+	c.LayoutSections["scripts"] = "receive/rec-list-script.html"
 	c.Render()
 }
 

@@ -3,6 +3,9 @@
     </div>
     <h1 id="title-content">
         {{.title}}
+        {{if .data.DocNo}} 
+         เลขที่ : {{.data.DocNo}}
+        {{end}}
     </h1>
 </section>
 <section class="content">
@@ -10,7 +13,7 @@
         {{ .xsrfdata }}
 
         <input type="hidden" id="req-doc-id" name="req-doc-id" value="{{.data.ID}}">
-        <input type="hidden" id="req-name-id" name="req-name-id" value="{{.userID}}">
+        <input type="hidden" id="req-name-id" name="req-name-id" value="{{.data.User.ID}}">
         <input type="hidden" id="req-branch-id" name="req-branch-id" value="{{.data.Branch.ID}}">
         <input type="hidden" id="req-depart-id" name="req-depart-id" value="{{.data.Depart.ID}}">
         <input type="hidden" id="req-building-id" name="req-building-id" value="{{.data.Building.ID}}">

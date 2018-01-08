@@ -6,7 +6,13 @@
     </h1>
 </section>
 <section class="content">
-    <form action="/create-supplier" autocomplete="off" onsubmit="return false;"  id="sub-form" method="post">
+    <form 
+    {{if .r }}
+    
+    {{else }}
+    action="/create-supplier"
+    {{end}}
+     autocomplete="off" onsubmit="return false;"  id="sub-form" method="post">
         {{ .xsrfdata }}
         
         <input type="hidden" id="sup-id" name="ID" value="{{.data.ID}}" />
@@ -22,7 +28,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </span>
-                            <input type="text" id="sup-name" required name="Name" class="form-control" autocomplete="off" placeholder="ชื่อ...." value="{{.data.Name}}">
+                            <input type="text" id="sup-name" required name="Name" class="form-control" {{.r }} autocomplete="off" placeholder="ชื่อ...." value="{{.data.Name}}">
                         </div>
                     </div>
                 </div>
@@ -33,7 +39,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-file-text-o"></i>
                             </span>
-                            <textarea class="form-control"  id="address" required name="Address" rows="3" placeholder="ที่อยู่....">{{.data.Address}}</textarea>
+                            <textarea class="form-control"  id="address" required name="Address" rows="3" {{.r }} placeholder="ที่อยู่....">{{.data.Address}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -44,7 +50,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-location-arrow"></i>
                             </span>
-                            <select id="province" name="Province.ID"  class="form-control">
+                            <select id="province" name="Province.ID"  {{.r }} class="form-control">
                                     {{range $key, $val := .Province}}
                                         <option value="{{$val.ID}}" > {{$val.Name}} </option>
                                     {{end}}   
@@ -57,7 +63,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-location-arrow"></i>
                             </span>
-                            <input type="text" id="post-code"  required name="PostCode" class="form-control"   maxlength="5"
+                            <input type="text" id="post-code"  required name="PostCode" class="form-control" {{.r }}   maxlength="5"
                               value="{{.data.PostCode}}"   placeholder="รหัสไปรษณีย์">
                         </div>
                     </div>
@@ -69,7 +75,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-book"></i>
                             </span>
-                            <input type="text" id="contact" required  name="Contact" class="form-control" autocomplete="off"  
+                            <input type="text" id="contact" required  name="Contact" class="form-control" {{.r }} autocomplete="off"  
                             value="{{.data.Contact}}"   placeholder="ผู้ติดต่อ">
                         </div>
                     </div>
@@ -79,7 +85,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-phone"></i>
                             </span>
-                            <input type="text" id="tel"  required name="Tel" class="form-control"    
+                            <input type="text" id="tel"  required name="Tel" {{.r }} class="form-control"    
                             value="{{.data.Tel}}"  placeholder="โทรศัพท์">
                         </div>
                     </div>
@@ -91,7 +97,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-align-left"></i>
                             </span>
-                            <textarea class="form-control"  id="remark" name="Remark" rows="3" placeholder="หมายเหตุ">{{.data.Remark}}</textarea>
+                            <textarea class="form-control"  {{.r }} id="remark" name="Remark" rows="3" placeholder="หมายเหตุ">{{.data.Remark}}</textarea>
                         </div>
                     </div>
                 </div>

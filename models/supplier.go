@@ -62,7 +62,7 @@ func GetSuppliers(ID int) (sup *Suppliers, errRet error) {
 }
 
 //GetSuppliersList _
-func GetSuppliersList(term string, limit int) (sup *[]Suppliers, errRet error) {
+func GetSuppliersList(term string, limit int) (sup *[]Suppliers, rowCount int, errRet error) {
 	reqGet := &[]Suppliers{}
 	o := orm.NewOrm()
 	qs := o.QueryTable("suppliers")
@@ -73,5 +73,5 @@ func GetSuppliersList(term string, limit int) (sup *[]Suppliers, errRet error) {
 		Or("Remark__icontains", term).
 		Or("Address__icontains", term)
 	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
-	return reqGet, errRet
+	return reqGet, len(*reqGet), errRet
 }

@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-playground/form"
@@ -20,6 +22,8 @@ func (c *SupplierController) SupList() {
 	c.Data["title"] = "ร้านค้า/Supplier"
 	c.Layout = "layout.html"
 	c.TplName = "supplier/sup-list.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["scripts"] = "supplier/sup-list-script.html"
 	c.Render()
 }
 
@@ -29,8 +33,18 @@ func (c *SupplierController) GetSupList() {
 	ret.RetOK = true
 	top, _ := strconv.ParseInt(c.GetString("top"), 10, 32)
 	term := c.GetString("txt-search")
-	retSup, _ := m.GetSuppliersList(term, int(top))
-	ret.Data1 = retSup
+	lists, rowCount, err := m.GetSuppliersList(term, int(top))
+	if err == nil {
+		ret.RetOK = true
+		ret.RetCount = int64(rowCount)
+		ret.RetData = h.GenSupHTML(*lists)
+		if rowCount == 0 {
+			ret.RetData = h.HTMLSupNotFoundRows
+		}
+	} else {
+		ret.RetOK = false
+		ret.RetData = strings.Replace(h.HTMLSupError, "{err}", err.Error(), -1)
+	}
 	ret.XSRF = c.XSRFToken()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
@@ -40,6 +54,9 @@ func (c *SupplierController) GetSupList() {
 //CreateSup _
 func (c *SupplierController) CreateSup() {
 	supID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	if strings.Contains(c.Ctx.Request.URL.RequestURI(), "read") {
+		c.Data["r"] = "readonly"
+	}
 	c.Data["Province"] = m.GetAllProvince()
 	if supID == 0 {
 		c.Data["title"] = "สร้าง ร้านค้า/Supplier"
@@ -52,7 +69,7 @@ func (c *SupplierController) CreateSup() {
 	c.Layout = "layout.html"
 	c.TplName = "supplier/sup.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Scripts"] = "supplier/sup-script.html"
+	c.LayoutSections["scripts"] = "supplier/sup-script.html"
 	c.Render()
 }
 

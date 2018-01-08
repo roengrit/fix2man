@@ -2,9 +2,11 @@ package helps
 
 import (
 	"bytes"
+	"errors"
 	m "fix2man/models"
 	"strconv"
 	"strings"
+	"time"
 )
 
 //HTMLReqTemplate _
@@ -64,4 +66,67 @@ func GenReqHTML(lists []m.RequestList) string {
 		hmtlBuffer.WriteString(temp)
 	}
 	return hmtlBuffer.String()
+}
+
+//ValidateReqData _
+func ValidateReqData(reqDoc m.RequestDocument, reqDate, reqDateEvent string) (
+	ret m.NormalModel,
+	eventDate time.Time,
+	requestDate time.Time) {
+	ret.RetOK = true
+	if reqDoc.ReqName == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุชื่อผู้แจ้ง"
+	}
+	if reqDoc.Tel == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุเบอร์โทรศัพท์"
+	}
+	if reqDoc.Branch == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุสาขา"
+	}
+	if reqDoc.Depart == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุแผนก"
+	}
+	if reqDoc.Building == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุตึก"
+	}
+	if reqDoc.Class == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุชั้น"
+	}
+	if reqDoc.Room == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุห้อง"
+	}
+	errDate := errors.New("")
+	reqDateEventStamp := time.Now()
+	reqDateStamp := time.Now()
+
+	sp := strings.Split(reqDate, "-")
+	if len(sp) == 3 {
+		reqDateStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่แจ้งไม่ถูกต้อง (dd-mm-yyyy)"
+	}
+
+	sp = strings.Split(reqDateEvent, "-")
+	if len(sp) == 3 {
+		reqDateEventStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่เสียไม่ถูกต้อง (dd-mm-yyyy)"
+	}
+
+	if reqDoc.Details == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "รายละเอียดการชำรุด/ปัญหา/อาการเสีย"
+	}
+	return ret, reqDateEventStamp, reqDateStamp
 }

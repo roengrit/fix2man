@@ -48,6 +48,7 @@ func main() {
 
 	beego.Router("/supplier/list", &c.SupplierController{}, "get:SupList;post:GetSupList")
 	beego.Router("/create-supplier", &c.SupplierController{}, "get:CreateSup;post:UpdateSup")
+	beego.Router("/supplier/read", &c.SupplierController{}, "get:CreateSup")
 
 	beego.Router("/create-receive", &c.RecController{})
 	//beego.Router("/receive/read", &c.RecController{}, "get:Read")
