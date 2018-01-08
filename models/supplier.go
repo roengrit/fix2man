@@ -12,7 +12,7 @@ type Suppliers struct {
 	ID        int
 	Name      string     `orm:"size(225)"`
 	Address   string     `orm:"size(300)"`
-	Province  *Provinces `orm:"rel(one)"`
+	Province  *Provinces `orm:"rel(fk)"`
 	PostCode  string     `orm:"size(10)"`
 	Contact   string     `orm:"size(255)"`
 	Tel       string     `orm:"size(100)"`
@@ -63,7 +63,6 @@ func GetSuppliers(ID int) (sup *Suppliers, errRet error) {
 
 //GetSuppliersList _
 func GetSuppliersList(term string, limit int) (sup *[]Suppliers, errRet error) {
-	orm.Debug = true
 	reqGet := &[]Suppliers{}
 	o := orm.NewOrm()
 	qs := o.QueryTable("suppliers")
