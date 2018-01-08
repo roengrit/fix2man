@@ -14,26 +14,25 @@ type RequestDocument struct {
 	ID           int
 	DocNo        string `orm:"size(20)"`
 	DocDate      time.Time
-	ReqName      string      `orm:"size(255)"`
-	User         *Users      `orm:"null;rel(fk)"`
-	Tel          string      `orm:"size(50)"`
-	Branch       *Branchs    `orm:"null;rel(one)"`
-	Depart       *Departs    `orm:"null;rel(one)"`
-	Building     *Buildings  `orm:"null;rel(one)"`
-	Class        *Class      `orm:"null;rel(one)"`
-	Room         *Rooms      `orm:"null;rel(one)"`
-	Equipmen     *Equipments `orm:"null;rel(one)"`
-	Location     string      `orm:"size(225)"`
-	SerailNumber string      `orm:"size(50)"`
-	EventDate    time.Time   `form:"-"orm:"null"`
-	ReqDate      time.Time   `form:"-"orm:"null"`
-	Details      string      `orm:"size(500)"`
-	Remark       string      `orm:"size(300)"`
-	DocRefNo     string      `orm:"size(50)"`
-	CreateUser   *Users      `orm:"rel(one)"`
-	CreatedAt    time.Time   `orm:"auto_now_add"`
-	UpdateUser   *Users      `orm:"null;rel(one)"`
-	UpdatedAt    time.Time   `orm:"null"`
+	ReqName      string     `orm:"size(255)"`
+	User         *Users     `orm:"null;rel(fk)"`
+	Tel          string     `orm:"size(50)"`
+	Branch       *Branchs   `orm:"null;rel(one)"`
+	Depart       *Departs   `orm:"null;rel(one)"`
+	Building     *Buildings `orm:"null;rel(one)"`
+	Class        *Class     `orm:"null;rel(one)"`
+	Room         *Rooms     `orm:"null;rel(one)"`
+	Location     string     `orm:"size(225)"`
+	SerailNumber string     `orm:"size(50)"`
+	EventDate    time.Time  `form:"-"orm:"null"`
+	ReqDate      time.Time  `form:"-"orm:"null"`
+	Details      string     `orm:"size(500)"`
+	Remark       string     `orm:"size(300)"`
+	DocRefNo     string     `orm:"size(50)"`
+	CreateUser   *Users     `orm:"rel(one)"`
+	CreatedAt    time.Time  `orm:"auto_now_add"`
+	UpdateUser   *Users     `orm:"null;rel(one)"`
+	UpdatedAt    time.Time  `orm:"null"`
 }
 
 //RequestList _
@@ -60,8 +59,42 @@ type RequestStatus struct {
 	CreatedAt       time.Time        `orm:"auto_now_add"`
 }
 
+//Status _
+type Status struct {
+	ID        int
+	Name      string `orm:"size(225)"`
+	IsDef     bool
+	Lock      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 func init() {
-	orm.RegisterModel(new(RequestDocument), new(RequestStatus)) // Need to register model in init
+	orm.RegisterModel(new(RequestDocument), new(RequestStatus), new(Status)) // Need to register model in init
+}
+
+//GetAllStatus _
+func GetAllStatus() (req *[]Status) {
+	o := orm.NewOrm()
+	reqGet := &[]Status{}
+	o.QueryTable("status").RelatedSel().OrderBy("ID").All(reqGet)
+	return reqGet
+}
+
+//GetAllStatusExcludeID _
+func GetAllStatusExcludeID(ID int) (req *[]Status) {
+	o := orm.NewOrm()
+	reqGet := &[]Status{}
+	o.QueryTable("status").RelatedSel().OrderBy("ID").Exclude("ID__in", ID).All(reqGet)
+	return reqGet
+}
+
+//GetFirstStatus _
+func GetFirstStatus() (req *Status) {
+	o := orm.NewOrm()
+	reqGet := &Status{}
+	o.QueryTable("status").RelatedSel().OrderBy("ID").Filter("is_def", true).One(reqGet)
+	return reqGet
 }
 
 //CreateReq _
@@ -73,10 +106,10 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 	orm.Debug = true
 	o := orm.NewOrm()
 	var firstStatus = GetFirstStatus()
-	status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
+	first_status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
 	o.Begin()
 	id, err := o.Insert(&req)
-	_, err = o.Insert(&status)
+	_, err = o.Insert(&first_status)
 	o.Commit()
 	if err == nil {
 		retID = id

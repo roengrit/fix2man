@@ -7,12 +7,32 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+//Branchs _
+type Branchs struct {
+	ID                  int
+	Name                string `orm:"size(225)"`
+	Lock                bool
+	TokenLine           string
+	CostAvgPerTechnical float64
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+}
+
+//Departs _
+type Departs struct {
+	ID        int
+	Branch    *Branchs `orm:"rel(one)"`
+	Name      string   `orm:"size(225)"`
+	Lock      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 //Buildings _
 type Buildings struct {
-	ID     int
-	Branch *Branchs `orm:"rel(fk)"`
-	//Code      string   `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
+	ID        int
+	Branch    *Branchs `orm:"rel(fk)"`
+	Name      string   `orm:"size(225)"`
 	Lock      bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -20,10 +40,9 @@ type Buildings struct {
 
 //Class _
 type Class struct {
-	ID       int
-	Building *Buildings `orm:"rel(one)"`
-	//Code      string     `orm:"size(20)"`
-	Name      string `orm:"size(225)"`
+	ID        int
+	Building  *Buildings `orm:"rel(one)"`
+	Name      string     `orm:"size(225)"`
 	Lock      bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -45,6 +64,8 @@ func init() {
 		new(Buildings),
 		new(Class),
 		new(Rooms),
+		new(Branchs),
+		new(Departs),
 	) // Need to register model in init
 }
 
@@ -58,4 +79,12 @@ func GetBuildingList(top, branchID, term string) (num int64, err error, buildLis
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, branchID, "%"+term+"%").QueryRows(&buildList)
 	return num, err, buildList
+}
+
+//GetAllBranch _
+func GetAllBranch() (req *[]Branchs) {
+	o := orm.NewOrm()
+	reqGet := &[]Branchs{}
+	o.QueryTable("branchs").RelatedSel().All(reqGet)
+	return reqGet
 }

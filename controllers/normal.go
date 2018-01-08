@@ -91,7 +91,7 @@ func (c *EntitryController) ListEntityJSON() {
 //NewEntity _
 func (c *EntitryController) NewEntity() {
 	entity := c.Ctx.Request.URL.Query().Get("entity")
-	id := c.Ctx.Request.URL.Query().Get("id")
+	ID := c.Ctx.Request.URL.Query().Get("id")
 	del := c.Ctx.Request.URL.Query().Get("del")
 	title := h.GetEntityTitle(entity)
 
@@ -104,10 +104,10 @@ func (c *EntitryController) NewEntity() {
 
 	t, err := template.ParseFiles("views/normal/normal-add.html")
 
-	if id == "" {
+	if ID == "" {
 
 	} else {
-		errGet, retVal := m.GetEntity(entity, id)
+		errGet, retVal := m.GetEntity(entity, ID)
 
 		if errGet == nil && (m.NormalEntity{}) != retVal {
 			code = retVal.Code
@@ -121,7 +121,7 @@ func (c *EntitryController) NewEntity() {
 
 	tplVal := map[string]string{
 		"entity": entity, "title": title,
-		"code": code, "id": id, "name": name,
+		"code": code, "id": ID, "name": name,
 		"alert": alert, "del": del,
 		"xsrfdata": c.XSRFToken()}
 
@@ -141,7 +141,7 @@ func (c *EntitryController) NewEntity() {
 //UpdateEntity _
 func (c *EntitryController) UpdateEntity() {
 	entity := c.GetString("entity")
-	id := c.GetString("narmal-id")
+	ID := c.GetString("narmal-id")
 	name := c.GetString("normal-name")
 	del := c.GetString("del-flag")
 	title := h.GetEntityTitle(entity)
@@ -155,7 +155,7 @@ func (c *EntitryController) UpdateEntity() {
 	}
 
 	if del != "" && ret.RetOK { // ลบ
-		err := m.DeleteEntity(entity, id)
+		err := m.DeleteEntity(entity, ID)
 		if err == nil {
 			ret.RetOK = true
 			ret.RetData = "ลบข้อมูลสำเร็จ"
@@ -165,8 +165,8 @@ func (c *EntitryController) UpdateEntity() {
 		}
 	}
 
-	if id != "" && del == "" && ret.RetOK { // แก้ไข
-		err := m.UpdateEntity(entity, id, name)
+	if ID != "" && del == "" && ret.RetOK { // แก้ไข
+		err := m.UpdateEntity(entity, ID, name)
 		if err == nil {
 			ret.RetOK = true
 			ret.RetData = "แก้ไขข้อมูลสำเร็จ"
@@ -176,7 +176,7 @@ func (c *EntitryController) UpdateEntity() {
 		}
 	}
 
-	if id == "" && del == "" && ret.RetOK { // สร้าง
+	if ID == "" && del == "" && ret.RetOK { // สร้าง
 		_, err := m.CreateEntity(entity, name)
 		if err == nil {
 			ret.RetOK = true

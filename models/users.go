@@ -39,10 +39,20 @@ type Permiss struct {
 	UpdatedAt time.Time
 }
 
+//Roles _
+type Roles struct {
+	ID int
+	//Code      string `orm:"size(20)"`
+	Name      string `orm:"size(225)"`
+	Lock      bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
 func init() {
-	orm.RegisterModel(new(Users), new(Permiss)) // Need to register model in init
+	orm.RegisterModel(new(Users), new(Permiss), new(Roles)) // Need to register model in init
 }
 
 // Login getUser Pass

@@ -35,15 +35,8 @@ const HTMLRecActionEnable = `<a   class="btn bg-purple" title="รายละ�
 							</ul>
 								 `
 
-//HTMLReqActionDisable _
-//const HTMLReqActionDisable = `<button type="button" class="btn btn-sm btn-primary disabled" >แก้ไข</button>
-//						      <button type="button" class="btn btn-sm btn-danger disabled" >ลบ</button>`
-
 //HTMLRecNotFoundRows _
 const HTMLRecNotFoundRows = `<tr> <td  colspan="8" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`
-
-//HTMLReqPermissionDenie _
-///const HTMLReqPermissionDenie = `<tr> <td  colspan="8" style="text-align:center;">*** ไม่อนุญาติ ใน entity อื่น ***</td></tr>`
 
 //HTMLRecError _
 const HTMLRecError = `<tr> <td  colspan="8" style="text-align:center;">{err}</td></tr>`

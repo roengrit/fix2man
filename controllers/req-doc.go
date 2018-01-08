@@ -41,8 +41,8 @@ func (c *ReqController) Get() {
 	c.Render()
 }
 
-//Read _
-func (c *ReqController) Read() {
+//ReadReq _
+func (c *ReqController) ReadReq() {
 	ID := c.Ctx.Request.URL.Query().Get("id")
 	docID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	c.Data["title"] = "ใบแจ้งงาน"
@@ -162,17 +162,17 @@ func (c *ReqController) GetReqList() {
 
 //ChangeStatus _
 func (c *ReqController) ChangeStatus() {
-	id, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	ID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	ret := m.NormalModel{}
-	lastStatus, _ := m.GetReqDocLastStatus(int(id))
-	dataRenderTemplate := m.NormalModel{}
-	dataRenderTemplate.ID = id
-	dataRenderTemplate.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
-	dataRenderTemplate.XSRF = c.XSRFToken()
+	lastStatus, _ := m.GetReqDocLastStatus(int(ID))
+	dataTemplate := m.NormalModel{}
+	dataTemplate.ID = ID
+	dataTemplate.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
+	dataTemplate.XSRF = c.XSRFToken()
 	t, err := template.ParseFiles("views/req/req-change-status.html")
 	var tpl bytes.Buffer
 
-	if err = t.Execute(&tpl, dataRenderTemplate); err != nil {
+	if err = t.Execute(&tpl, dataTemplate); err != nil {
 		ret.RetOK = err != nil
 		ret.RetData = err.Error()
 	} else {
@@ -187,8 +187,8 @@ func (c *ReqController) ChangeStatus() {
 //UpdateStatus _
 func (c *ReqController) UpdateStatus() {
 	ret := m.NormalModel{}
-	id := c.GetString("req-id")
-	docID, _ := strconv.ParseInt(id, 10, 32)
+	ID := c.GetString("req-id")
+	docID, _ := strconv.ParseInt(ID, 10, 32)
 	statusVal := c.GetString("txt-status")
 	statusID, _ := strconv.ParseInt(statusVal, 10, 32)
 	remark := c.GetString("remark")

@@ -34,7 +34,7 @@ const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละ�
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">ประเมินราคา/มูลค่า/วันที่แล้วเสร็จ</a></li>								
+								<li><a href="#">ประเมินราคา/มูลค่า</a></li>								
 								<li><a href="#">รับ/แจกจ่ายงาน</a></li>								
 								<li><a href="/create-request/?doc_ref={docno}">ใบแจ้งงานต่อเนื่อง</a></li>								
 								<li><a href="#">เบิกอะไหล่</a></li>
