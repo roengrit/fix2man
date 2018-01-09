@@ -3,6 +3,7 @@ package controllers
 import (
 	h "fix2man/helps"
 	m "fix2man/models"
+	"html/template"
 	"strings"
 )
 
@@ -89,5 +90,12 @@ func (c *ServiceController) GetUserJSON() {
 	} else {
 		c.Data["json"] = user
 	}
+	c.ServeJSON()
+}
+
+//GetXSRF _
+func (c *ServiceController) GetXSRF() {
+	c.Data["json"] = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.ServeJSON()
 }

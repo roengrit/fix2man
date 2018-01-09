@@ -8,7 +8,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">{{.title}}</h4>
+        <h4 class="modal-title">
+                {{if.del}}
+                ยืนยันการลบข้อมูล
+                {{else}}
+                    {{.title}}
+                {{end}}
+        </h4>
     </div>
     <div class="modal-body">
        <div class="alert alert-danger fade in no-margin" 
@@ -23,6 +29,11 @@
         <input type="hidden" id="entity" name="entity" value="{{.entity}}">
         <input type="hidden" id="del-flag" name="del-flag" value="{{.del}}">
         <div class="box-body">
+                {{if.del}} 
+                    <p>ท่านกำลังจะลบข้อมูล, จะดำเนินการต่อหรือไม่?</p>
+                {{else}}
+                {{end}}
+                
             <div class="form-group" style="display:none;">
                 <label   class="col-sm-2 control-label">รหัส</label>
                 <div class="col-sm-8 input-group input-group-sm">
@@ -37,7 +48,12 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group"
+             {{if.del}} 
+                 style="display:none;" 
+             {{else}}
+             {{end}}
+            >
                 <label   class="col-sm-2 control-label">ชื่อ</label>
                 <div class="col-sm-8 input-group input-group-sm">
                     <input type="text" class="form-control" required maxlength="255" name="normal-name" id="normal-name" 

@@ -294,6 +294,34 @@
                 </div>
             </div>
         </div>
+        <div class="modal modal-default fade" id="small-delete-global-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="small-delete-global-modal-content">
+                            <input type="hidden" id="global-delete-id" name="global-delete-id" />
+                            <input type="hidden" id="global-delete-url" name="global-delete-url" />
+                            <input type="hidden" id="global-delete-xsrf" name="global-delete-xsrf" />
+                            <div class="modal-header alert-danger">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title ">ยืนยันการลบข้อมูล</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                        <div class="alert alert-danger fade in no-margin" 
+                                           style="display:none"
+                                          id="global-delete-alert"> 
+                                        </div>
+                                    <p>ท่านกำลังจะลบข้อมูล, จะดำเนินการต่อหรือไม่?</p>
+                                  </div>
+                                  <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"> ปิด </button>
+                                        <button type="button" onclick="deleteGlobal()" class="btn btn-warning">
+                                            <i class="fa fa-trash-o"></i> ลบข้อมูล
+                                        </button>
+                                  </div>
+                                </div>
+                    </div>
+                </div>
+            </div>
     </div>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>

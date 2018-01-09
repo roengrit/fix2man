@@ -17,7 +17,7 @@
         $.post(url, $('#depart-form').serialize(), function (data) {
             if (data.RetOK) {
                 showTopAlert(data.RetData, "success")
-                setTimeout(function () { window.location.href = '/entity/location/depart/list' }, 2000);
+                setTimeout(function () { window.location.href = '/entity/location/depart/list' }, 1000);
             } else {
                 showTopAlert(data.RetData, "danger")
             }

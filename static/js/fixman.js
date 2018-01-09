@@ -37,6 +37,42 @@ function deleteNormal(id) {
     });
 } 
 
+function confirmDeleteGlobal(id,url) {
+    hideTopAlert();
+    hideGlobalDelete();
+    $.get("/service/secure/json" , function (data) {
+         $("#global-delete-xsrf").val(data) 
+    });    
+    $("#global-delete-id").val(id)
+    $("#global-delete-url").val(url)
+    $("#small-delete-global-modal").modal("show");
+} 
+function deleteGlobal() {
+    hideTopAlert();
+    $.ajax({
+        url: $("#global-delete-url").val() + "/" + $("#global-delete-id").val() ,
+        type: 'DELETE',
+        beforeSend: function (xhr) { xhr.setRequestHeader('X-Xsrftoken', $("#global-delete-xsrf").val()); },
+        success: function (data) {
+            if (data.RetOK) {
+                showTopAlert(data.RetData, "success");
+                $("#small-delete-global-modal").modal("hide");
+                loadNormalTable();
+            } else {
+                showGlobalDelete(data.RetData);
+            }
+        }
+    });
+} 
+
+function hideGlobalDelete(){
+    $("#global-delete-alert").hide();
+}
+function showGlobalDelete(msg){
+    $("#global-delete-alert").html(msg);
+    $("#global-delete-alert").show();
+}
+
 function hideGlobalSmalModal()
 {
     $('#small-global-modal').modal("hide");

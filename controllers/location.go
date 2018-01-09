@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-playground/form"
@@ -14,14 +16,58 @@ type LocationController struct {
 	BaseController
 }
 
-//GetDepartList _
-func (c *LocationController) GetDepartList() {
+//DepartList _
+func (c *LocationController) DepartList() {
+	c.Data["title"] = "แผนก"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
 	c.TplName = "location/depart-list.html"
+	c.Data["branch"] = m.GetAllBranch()
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["scripts"] = "location/depart-list-script.html"
 	c.Render()
+}
+
+//GetDepartList _
+func (c *LocationController) GetDepartList() {
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	top, _ := strconv.ParseInt(c.GetString("top"), 10, 32)
+	branchID := c.GetString("txt-branch")
+	term := c.GetString("txt-search")
+	lists, rowCount, err := m.GetDepartList(term, branchID, int(top))
+	if err == nil {
+		ret.RetOK = true
+		ret.RetCount = int64(rowCount)
+		ret.RetData = h.GenDepartHTML(*lists)
+		if rowCount == 0 {
+			ret.RetData = h.HTMLDepartNotFoundRows
+		}
+	} else {
+		ret.RetOK = false
+		ret.RetData = strings.Replace(h.HTMLDepartError, "{err}", err.Error(), -1)
+	}
+	ret.XSRF = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//DeleteDepart _
+func (c *LocationController) DeleteDepart() {
+	ID, _ := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 32)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	err := m.DeleteDepartByID(int(ID))
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	} else {
+		ret.RetData = "ลบข้อมูลสำเร็จ"
+	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
 }
 
 //CreateDepart _
@@ -31,6 +77,22 @@ func (c *LocationController) CreateDepart() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	if departID != 0 {
 		ret, _ := m.GetDepartByID(int(departID))
+		c.Data["data"] = ret
+	}
+	c.Layout = "layout.html"
+	c.TplName = "location/depart.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["scripts"] = "location/depart-script.html"
+	c.Render()
+}
+
+//GetDepart _
+func (c *LocationController) GetDepart() {
+	departID, _ := c.GetInt("id")
+	c.Data["title"] = "สร้าง/แก้ไขแผนก"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	if departID != 0 {
+		ret, _ := m.GetDepartByID(departID)
 		c.Data["data"] = ret
 	}
 	c.Layout = "layout.html"

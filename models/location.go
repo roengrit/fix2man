@@ -70,6 +70,7 @@ func init() {
 	) // Need to register model in init
 }
 
+//GetBuildingList _
 func GetBuildingList(top, branchID, term string) (num int64, err error, buildList []Buildings) {
 	var sql = "SELECT i_d,name FROM buildings WHERE branch_id = ? and lower(name) like lower(?) order by name limit {0}"
 	if top == "0" {
@@ -79,6 +80,9 @@ func GetBuildingList(top, branchID, term string) (num int64, err error, buildLis
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, branchID, "%"+term+"%").QueryRows(&buildList)
+	if err != nil {
+
+	}
 	return num, err, buildList
 }
 
@@ -106,7 +110,7 @@ func GetDepartList(term, branchID string, limit int) (dept *[]Departs, rowCount 
 	cond := orm.NewCondition()
 	cond1 := cond.Or("Name__icontains", term)
 	if branchID != "" {
-		cond1 = cond.Or("Name__icontains", term).And("branchs__ID", branchID)
+		cond1 = cond.Or("Name__icontains", term).And("Branch__ID", branchID)
 	}
 	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
 	return reqGet, len(*reqGet), errRet
@@ -136,6 +140,16 @@ func UpdateDeparts(depart Departs) (errRet error) {
 			errRet = errUpdate
 			_ = num
 		}
+	}
+	return errRet
+}
+
+//DeleteDepartByID _
+func DeleteDepartByID(ID int) (errRet error) {
+	o := orm.NewOrm()
+	if num, errUpdate := o.Delete(&Departs{ID: ID}); errUpdate != nil {
+		errRet = errUpdate
+		_ = num
 	}
 	return errRet
 }

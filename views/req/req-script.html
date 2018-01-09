@@ -246,7 +246,7 @@
         $.post(url, $('#req-form').serialize(), function (data) {
             if (data.RetOK) {
                 showTopAlert(data.RetData, "success")
-                setTimeout(function () { window.location.href = '/request/list/' }, 2000);
+                setTimeout(function () { window.location.href = '/request/list/' }, 1000);
             } else {
                 showTopAlert(data.RetData, "danger")
             }
