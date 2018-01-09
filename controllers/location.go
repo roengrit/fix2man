@@ -18,9 +18,9 @@ type LocationController struct {
 func (c *LocationController) GetDepartList() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
-	c.TplName = "normal/normal.html"
+	c.TplName = "location/depart-list.html"
 	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["scripts"] = "normal/normal-script.html"
+	c.LayoutSections["scripts"] = "location/depart-list-script.html"
 	c.Render()
 }
 
