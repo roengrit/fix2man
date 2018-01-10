@@ -103,7 +103,6 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 	req.DocDate = time.Now()
 	req.CreatedAt = time.Now()
 	req.CreateUser = &user
-	orm.Debug = true
 	o := orm.NewOrm()
 	var firstStatus = GetFirstStatus()
 	first_status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
