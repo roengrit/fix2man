@@ -21,7 +21,8 @@ const HTMLSupTemplate = `<tr>
 
 //HTMLSupActionEnable _
 const HTMLSupActionEnable = `<a   class="btn bg-purple" title="รายละเอียด" target="_blank" href="/supplier/read/?id={id}&r=1"><i class="fa fa-file-text-o"></i></a>
-							 <a   class="btn btn-danger " title="แก้ไข"  href="/create-supplier/?id={id}"><i class="fa fa-edit"></i></a>
+							 <a   class="btn btn-primary " title="แก้ไข"  href="/create-supplier/?id={id}"><i class="fa fa-edit"></i></a>
+							 <a   class="btn btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/supplier/delete")'><i class="fa fa-trash-o"></i></a>
 								 `
 
 //HTMLSupNotFoundRows _

@@ -36,9 +36,9 @@ func main() {
 	beego.Router("/normal/update", &c.EntitryController{}, "post:UpdateEntity")
 	beego.Router("/normal/list", &c.EntitryController{}, "post:ListEntity")
 
-	beego.Router("/entity/location/depart/list", &c.LocationController{}, "get:DepartList;post:GetDepartList")
-	beego.Router("/entity/location/depart", &c.LocationController{}, "get:CreateDepart;post:UpdateDepart")
-	beego.Router("/entity/location/delete-depart/?:id", &c.LocationController{}, "delete:DeleteDepart")
+	beego.Router("/location/depart/list", &c.LocationController{}, "get:DepartList;post:GetDepartList")
+	beego.Router("/location/depart", &c.LocationController{}, "get:CreateDepart;post:UpdateDepart")
+	beego.Router("/location/depart/delete/?:id", &c.LocationController{}, "delete:DeleteDepart")
 
 	//beego.Router("/entity/location/building/list", &c.LocationController{}, "get:GetBuildingList")
 	//beego.Router("/entity/location/building", &c.LocationController{}, "get:CreateBuilding;post:UpdateBuilding")
@@ -50,11 +50,11 @@ func main() {
 	//beego.Router("/entity/location/room", &c.LocationController{}, "get:CreateRoom;post:UpdateRoom")
 	beego.Router("/service/secure/json", &c.ServiceController{}, "get:GetXSRF")
 
-	beego.Router("/service/entity-list/json", &c.ServiceController{}, "get:ListEntityJSON")
-	beego.Router("/service/entity-list-p/json", &c.ServiceController{}, "get:ListEntityWithParentJSON")
+	beego.Router("/service/entity/list/json", &c.ServiceController{}, "get:ListEntityJSON")
+	beego.Router("/service/entity/list/p/json", &c.ServiceController{}, "get:ListEntityWithParentJSON")
 
 	beego.Router("/service/user/json", &c.ServiceController{}, "get:GetUserJSON")
-	beego.Router("/service/user-list/json", &c.ServiceController{}, "get:GetUserListJSON")
+	beego.Router("/service/user/list/json", &c.ServiceController{}, "get:GetUserListJSON")
 
 	beego.Router("/create-request", &c.ReqController{})
 	beego.Router("/request/read", &c.ReqController{}, "get:ReadReq")
@@ -64,6 +64,7 @@ func main() {
 	beego.Router("/create-supplier", &c.SupplierController{}, "get:CreateSup;post:UpdateSup")
 	beego.Router("/supplier/read", &c.SupplierController{}, "get:CreateSup")
 	beego.Router("/supplier/list", &c.SupplierController{}, "get:SupList;post:GetSupList")
+	beego.Router("/supplier/delete/?:id", &c.SupplierController{}, "delete:DeleteSuppliers")
 
 	beego.Router("/create-receive", &c.RecController{})
 	beego.Router("/receive/list", &c.RecController{}, "get:RecList;post:GetRecList")

@@ -18,12 +18,12 @@ const HTMLTemplate = `<tr>
 						</tr>`
 
 //HTMLActionEnable _
-const HTMLActionEnable = `<button type="button" class="btn btn-sm btn-primary" onclick='editNormal({id})'>แก้ไข</button>
-						<button type="button" class="btn btn-sm btn-danger" onclick='deleteNormal({id})'>ลบ</button>`
+const HTMLActionEnable = `<button type="button" class="btn btn-sm btn-primary" onclick='editNormal({id})'><i class="fa fa-edit"></i></button>
+						<button type="button" class="btn btn-sm btn-danger" onclick='deleteNormal({id})'><i class="fa fa-trash-o"></i></button>`
 
 //HTMLActionDisable _
-const HTMLActionDisable = `<button type="button" class="btn btn-sm btn-primary disabled" >แก้ไข</button>
-						 <button type="button" class="btn btn-sm btn-danger disabled" >ลบ</button>`
+const HTMLActionDisable = `<button type="button" class="btn btn-sm btn-primary disabled" ><i class="fa fa-edit"></i></button>
+						 <button type="button" class="btn btn-sm btn-danger disabled" ><i class="fa fa-trash-o"></i></button>`
 
 //HTMLNotFoundRows _
 const HTMLNotFoundRows = `<tr><td colspan="2">*** ไม่พบข้อมูล ***</td> </tr>`

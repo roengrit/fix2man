@@ -26,7 +26,7 @@
         {{end}}
 
         $('#req-name').typeahead({
-            ajax: '/service/user-list/json/?entity=users',
+            ajax: '/service/user/list/json/?entity=users',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -68,7 +68,7 @@
         });
 
         $('#req-branch').typeahead({
-            ajax: '/service/entity-list/json/?entity=branchs',
+            ajax: '/service/entity/list/json/?entity=branchs',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -93,7 +93,7 @@
         });
 
         $('#req-depart').typeahead({
-            ajax: '/service/entity-list/json/?entity=departs',
+            ajax: '/service/entity/list/json/?entity=departs',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -103,11 +103,11 @@
                 $('#req-depart-id').val(data.value);
             },
             parent: 'req-branch-id',
-            fixurl: '/service/entity-list-p/json/?entity=departs'
+            fixurl: '/service/entity/list/p/json/?entity=departs'
         });
 
         $('#req-building').typeahead({
-            ajax: '/service/entity-list-p/json/?entity=buildings',
+            ajax: '/service/entity/list/p/json/?entity=buildings',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -128,10 +128,10 @@
 
             },
             parent: 'req-branch-id',
-            fixurl: '/service/entity-list-p/json/?entity=buildings'
+            fixurl: '/service/entity/list/p/json/?entity=buildings'
         });
         $('#req-class').typeahead({
-            ajax: '/service/entity-list-p/json/?entity=class',
+            ajax: '/service/entity/list/p/json/?entity=class',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -146,11 +146,11 @@
                 $('#req-room').removeClass('check-text');
             },
             parent: 'req-building-id',
-            fixurl: '/service/entity-list-p/json/?entity=class'
+            fixurl: '/service/entity/list/p/json/?entity=class'
         });
 
         $('#req-room').typeahead({
-            ajax: '/service/entity-list-p/json/?entity=rooms',
+            ajax: '/service/entity/list/p/json/?entity=rooms',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -160,11 +160,11 @@
                 $('#req-room-id').val(data.value);
             },
             parent: 'req-class-id',
-            fixurl: '/service/entity-list-p/json/?entity=rooms'
+            fixurl: '/service/entity/list/p/json/?entity=rooms'
         });        
 
         $('#req-sn').typeahead({
-            ajax: '/service/entity-list/json/?entity=sns',
+            ajax: '/service/entity/list/json/?entity=sns',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',

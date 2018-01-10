@@ -19,8 +19,8 @@ const HTMLDepartTemplate = `<tr>
 							</tr>`
 
 //HTMLDepartActionEnable _
-const HTMLDepartActionEnable = `<a   class="btn btn-sm btn-primary " title="แก้ไข"  href="/entity/location/depart/?id={id}"><i class="fa fa-edit"></i></a>
-                                <a   class="btn btn-sm btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/entity/location/delete-depart")'><i class="fa fa-trash-o"></i></a>`
+const HTMLDepartActionEnable = `<a   class="btn btn-sm btn-primary " title="แก้ไข"  href="/location/depart/?id={id}"><i class="fa fa-edit"></i></a>
+                                <a   class="btn btn-sm btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/location/depart/delete/")'><i class="fa fa-trash-o"></i></a>`
 
 //HTMLDepartNotFoundRows _
 const HTMLDepartNotFoundRows = `<tr><td colspan="3">*** ไม่พบข้อมูล ***</td> </tr>`

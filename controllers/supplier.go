@@ -112,3 +112,20 @@ func (c *SupplierController) UpdateSup() {
 	c.Data["json"] = ret
 	c.ServeJSON()
 }
+
+//DeleteSuppliers _
+func (c *SupplierController) DeleteSuppliers() {
+	ID, _ := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 32)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	err := m.DeleteSuppliersByID(int(ID))
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	} else {
+		ret.RetData = "ลบข้อมูลสำเร็จ"
+	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}

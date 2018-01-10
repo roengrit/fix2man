@@ -75,3 +75,13 @@ func GetSuppliersList(term string, limit int) (sup *[]Suppliers, rowCount int, e
 	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
 	return reqGet, len(*reqGet), errRet
 }
+
+//DeleteSuppliersByID _
+func DeleteSuppliersByID(ID int) (errRet error) {
+	o := orm.NewOrm()
+	if num, errUpdate := o.Delete(&Suppliers{ID: ID}); errUpdate != nil {
+		errRet = errUpdate
+		_ = num
+	}
+	return errRet
+}

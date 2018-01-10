@@ -1,7 +1,7 @@
 <script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script>
     $('#req-branch').typeahead({
-            ajax: '/service/entity-list/json/?entity=branchs',
+            ajax: '/service/entity/list/json/?entity=branchs',
             display: 'Name',
             displayField: 'Name',
             valueField: 'ID',
@@ -17,7 +17,7 @@
         $.post(url, $('#depart-form').serialize(), function (data) {
             if (data.RetOK) {
                 showTopAlert(data.RetData, "success")
-                setTimeout(function () { window.location.href = '/entity/location/depart/list' }, 1000);
+                setTimeout(function () { window.location.href = '/location/depart/list' }, 1000);
             } else {
                 showTopAlert(data.RetData, "danger")
             }
