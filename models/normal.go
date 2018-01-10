@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 	"time"
 
@@ -57,12 +58,12 @@ func GetAllProvince() (req *[]Provinces) {
 }
 
 //GetListEntity _
-func GetListEntity(entity, top, term string) (num int64, err error, entityList []NormalEntity) {
+func GetListEntity(entity string, top int, term string) (num int64, err error, entityList []NormalEntity) {
 	var sql = "SELECT i_d,name,lock FROM " + entity + " WHERE lower(name) like lower(?) order by i_d limit {0}"
-	if top == "0" {
+	if top == 0 {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {
-		sql = strings.Replace(sql, "{0}", top, -1)
+		sql = strings.Replace(sql, "{0}", strconv.Itoa(top), -1)
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, "%"+term+"%").QueryRows(&entityList)
@@ -70,12 +71,12 @@ func GetListEntity(entity, top, term string) (num int64, err error, entityList [
 }
 
 //GetListEntityWithParent _
-func GetListEntityWithParent(entity, entityParent, top, parentID, term string) (num int64, err error, entityList []NormalEntity) {
+func GetListEntityWithParent(entity string, entityParent string, top int, parentID string, term string) (num int64, err error, entityList []NormalEntity) {
 	var sql = "SELECT i_d, name FROM " + entity + " WHERE " + entityParent + "= ? and lower(name) like lower(?) order by name limit {0}"
-	if top == "0" {
+	if top == 0 {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {
-		sql = strings.Replace(sql, "{0}", top, -1)
+		sql = strings.Replace(sql, "{0}", strconv.Itoa(top), -1)
 	}
 	o := orm.NewOrm()
 	num, err = o.Raw(sql, parentID, "%"+term+"%").QueryRows(&entityList)

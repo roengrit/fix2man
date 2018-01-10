@@ -18,7 +18,7 @@ func (c *ServiceController) ListEntityJSON() {
 	term := strings.TrimSpace(c.GetString("query"))
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	ret := m.NormalModel{}
-	rowCount, err, lists := m.GetListEntity(entity, "15", term)
+	rowCount, err, lists := m.GetListEntity(entity, 15, term)
 	if err == nil {
 		ret.RetOK = true
 		ret.RetCount = rowCount
@@ -43,7 +43,7 @@ func (c *ServiceController) ListEntityWithParentJSON() {
 	parent := strings.TrimSpace(c.GetString("parent"))
 	parentEntity := h.GetEntityParentField(entity)
 	ret := m.NormalModel{}
-	rowCount, err, lists := m.GetListEntityWithParent(entity, parentEntity, "15", parent, term)
+	rowCount, err, lists := m.GetListEntityWithParent(entity, parentEntity, 15, parent, term)
 	if err == nil {
 		ret.RetOK = true
 		ret.RetCount = rowCount

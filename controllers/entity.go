@@ -36,7 +36,7 @@ func (c *EntitryController) Get() {
 func (c *EntitryController) ListEntity() {
 
 	term := c.GetString("txt-search")
-	top := c.GetString("top")
+	top, _ := c.GetInt("top")
 	entity := c.GetString("entity")
 	title := h.GetEntityTitle(entity)
 	ret := m.NormalModel{}
@@ -68,7 +68,7 @@ func (c *EntitryController) ListEntityJSON() {
 	title := h.GetEntityTitle(entity)
 	ret := m.NormalModel{}
 	if title != "" {
-		rowCount, err, lists := m.GetListEntity(entity, "15", term)
+		rowCount, err, lists := m.GetListEntity(entity, 15, term)
 		if err == nil {
 			ret.RetOK = true
 			ret.RetCount = rowCount
@@ -90,11 +90,12 @@ func (c *EntitryController) ListEntityJSON() {
 
 //NewEntity _
 func (c *EntitryController) NewEntity() {
+
 	entity := c.Ctx.Request.URL.Query().Get("entity")
 	ID := c.Ctx.Request.URL.Query().Get("id")
 	del := c.Ctx.Request.URL.Query().Get("del")
-	title := h.GetEntityTitle(entity)
 
+	title := h.GetEntityTitle(entity)
 	ret := m.NormalModel{}
 	var code, name, alert string
 
@@ -104,11 +105,8 @@ func (c *EntitryController) NewEntity() {
 
 	t, err := template.ParseFiles("views/normal/normal-add.html")
 
-	if ID == "" {
-
-	} else {
+	if ID != "" {
 		errGet, retVal := m.GetEntity(entity, ID)
-
 		if errGet == nil && (m.NormalEntity{}) != retVal {
 			code = retVal.Code
 			name = retVal.Name
@@ -140,6 +138,7 @@ func (c *EntitryController) NewEntity() {
 
 //UpdateEntity _
 func (c *EntitryController) UpdateEntity() {
+
 	entity := c.GetString("entity")
 	ID := c.GetString("narmal-id")
 	name := c.GetString("normal-name")
