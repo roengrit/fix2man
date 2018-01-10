@@ -16,8 +16,8 @@ type SupplierController struct {
 	BaseController
 }
 
-//SupList _
-func (c *SupplierController) SupList() {
+//SuppliersList _
+func (c *SupplierController) SuppliersList() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["title"] = "ร้านค้า/Supplier"
 	c.Layout = "layout.html"
@@ -27,8 +27,8 @@ func (c *SupplierController) SupList() {
 	c.Render()
 }
 
-//GetSupList _
-func (c *SupplierController) GetSupList() {
+//GetSuppliersList _
+func (c *SupplierController) GetSuppliersList() {
 	ret := m.NormalModel{}
 	ret.RetOK = true
 	top, _ := strconv.ParseInt(c.GetString("top"), 10, 32)
@@ -51,8 +51,8 @@ func (c *SupplierController) GetSupList() {
 	c.ServeJSON()
 }
 
-//CreateSup _
-func (c *SupplierController) CreateSup() {
+//CreateSuppliers _
+func (c *SupplierController) CreateSuppliers() {
 	supID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	if strings.Contains(c.Ctx.Request.URL.RequestURI(), "read") {
 		c.Data["r"] = "readonly"
@@ -73,8 +73,8 @@ func (c *SupplierController) CreateSup() {
 	c.Render()
 }
 
-//UpdateSup _
-func (c *SupplierController) UpdateSup() {
+//UpdateSuppliers _
+func (c *SupplierController) UpdateSuppliers() {
 	var sub m.Suppliers
 	decoder := form.NewDecoder()
 	err := decoder.Decode(&sub, c.Ctx.Request.Form)

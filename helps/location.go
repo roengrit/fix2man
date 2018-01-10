@@ -15,7 +15,7 @@ const HTMLDepartTemplate = `<tr>
 									<div class="btn-group">
 										{action}
 									</div>
-								</td>                             
+								</td>
 							</tr>`
 
 //HTMLDepartActionEnable _
@@ -38,6 +38,46 @@ func GenDepartHTML(lists []m.Departs) string {
 		temp := strings.Replace(HTMLDepartTemplate, "{branch_name}", val.Branch.Name, -1)
 		temp = strings.Replace(temp, "{name}", val.Name, -1)
 		tempAction := strings.Replace(HTMLDepartActionEnable, "{id}", strconv.Itoa(val.ID), -1)
+		temp = strings.Replace(temp, "{action}", tempAction, -1)
+		hmtlBuffer.WriteString(temp)
+	}
+	return hmtlBuffer.String()
+}
+
+/////////////////////////////////////////////  อาคาร /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//HTMLDepartTemplate _
+const HTMLBuildingTemplate = `<tr>
+								<td>{branch_name}</td>
+								<td>{name}</td>
+								<td>
+									<div class="btn-group">
+										{action}
+									</div>
+								</td>
+							</tr>`
+
+//HTMLBuildingActionEnable _
+const HTMLBuildingActionEnable = `<a   class="btn btn-sm btn-primary " title="แก้ไข"  href="/location/building/?id={id}"><i class="fa fa-edit"></i></a>
+                                <a   class="btn btn-sm btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/location/building/delete/")'><i class="fa fa-trash-o"></i></a>`
+
+//HTMLBuildingNotFoundRows _
+const HTMLBuildingNotFoundRows = `<tr><td colspan="3">*** ไม่พบข้อมูล ***</td> </tr>`
+
+//HTMLBuildingPermissionDenie _
+const HTMLBuildingPermissionDenie = `<tr><td colspan="3">*** ไม่อนุญาติ ใน entity อื่น ***</td></tr>`
+
+//HTMLBuildingError _
+const HTMLBuildingError = `<tr><td colspan="3"> {err}</td></tr>`
+
+//GenBuildingHTML _
+func GenBuildingHTML(lists []m.Buildings) string {
+	var hmtlBuffer bytes.Buffer
+	for _, val := range lists {
+		temp := strings.Replace(HTMLBuildingTemplate, "{branch_name}", val.Branch.Name, -1)
+		temp = strings.Replace(temp, "{name}", val.Name, -1)
+		tempAction := strings.Replace(HTMLBuildingActionEnable, "{id}", strconv.Itoa(val.ID), -1)
 		temp = strings.Replace(temp, "{action}", tempAction, -1)
 		hmtlBuffer.WriteString(temp)
 	}
