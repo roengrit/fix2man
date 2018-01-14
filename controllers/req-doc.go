@@ -33,6 +33,7 @@ func (c *ReqController) Get() {
 			c.Data["data"] = ret
 		}
 	}
+	c.Data["current_date"] = time.Now()
 	c.Layout = "layout.html"
 	c.TplName = "req/req.html"
 	c.LayoutSections = make(map[string]string)

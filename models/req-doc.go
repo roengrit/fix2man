@@ -24,15 +24,31 @@ type RequestDocument struct {
 	Room         *Rooms     `orm:"null;rel(one)"`
 	Location     string     `orm:"size(225)"`
 	SerailNumber string     `orm:"size(50)"`
-	EventDate    time.Time  `form:"-"orm:"null"`
-	ReqDate      time.Time  `form:"-"orm:"null"`
-	Details      string     `orm:"size(500)"`
-	Remark       string     `orm:"size(300)"`
-	DocRefNo     string     `orm:"size(50)"`
-	CreateUser   *Users     `orm:"rel(one)"`
-	CreatedAt    time.Time  `orm:"auto_now_add"`
-	UpdateUser   *Users     `orm:"null;rel(one)"`
-	UpdatedAt    time.Time  `orm:"null"`
+
+	EventDate       time.Time `orm:"null"`
+	EventTime       string    `orm:"null"`
+	ReqDate         time.Time `orm:"null"`
+	ReqTime         string    `orm:"null"`
+	AppointmentDate time.Time `orm:"null"`
+	AppointmentTime string    `orm:"null"`
+	GoalDate        time.Time `orm:"null"`
+	GoalTime        string    `orm:"null"`
+	ActionDate      time.Time `orm:"null"`
+	ActionTime      string    `orm:"null"`
+	CompleteDate    time.Time `orm:"null"`
+	CompleteTime    string    `orm:"null"`
+
+	EstimatePrice float64
+	OtherPrice    float64
+
+	Details      string `orm:"size(500)"`
+	Remark       string `orm:"size(300)"`
+	DocRefNo     string `orm:"size(50)"`
+	ActionNumber int
+	CreateUser   *Users    `orm:"rel(one)"`
+	CreatedAt    time.Time `orm:"auto_now_add"`
+	UpdateUser   *Users    `orm:"null;rel(one)"`
+	UpdatedAt    time.Time `orm:"null"`
 }
 
 //RequestList _

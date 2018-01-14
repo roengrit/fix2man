@@ -1,30 +1,116 @@
 <script src="/static/js/datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="/static/js/datepicker/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
+
 <script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script>
     $(function () {
-        {{if .r}}
-        {{else}}
-        $('#req-date').datepicker({
-            autoclose: true,
-            language: 'th',
-            todayBtn: true,
-            orientation: "bottom auto",
-            todayHighlight: true,
-            format: 'dd-mm-yyyy',
-        });
-        $('#req-date-event').datepicker({
-            autoclose: true,
-            language: 'th',
-            todayBtn: true,
-            orientation: "bottom auto",
-            todayHighlight: true,
-            format: 'dd-mm-yyyy',
-        });
-        $('#req-date').datepicker('setDate', new Date(Date.parse("{{.data.ReqDate}}")));
-        $('#req-date-event').datepicker('setDate', new Date(Date.parse("{{.data.EventDate}}")));
-        {{end}}
 
+        $(".title-toggle").click(function(){
+            $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+            $("."+$(this).attr("target-toggle")).toggle("display");
+        });
+
+        var $editOveray = $('#editOveray');
+        $editOveray.hide();
+        $('#ret-table').on("click", "tbody > tr", function (index) {
+            var bottomWidth = $(this).css('width');
+            var intWidth = parseInt(bottomWidth.replace("px", ""));
+            var bottomHeight = '40px';
+            var rowPos = $(this).position();
+            bottomTop = rowPos.top;
+            bottomLeft = rowPos.left;
+            eTop = $(this).offset().top + 7;
+            $editOveray.css({
+                position: 'absolute',
+                top: eTop,
+                width: (intWidth - 15) + 'px',
+                height: bottomHeight,
+            });
+            $("#current-row").val($(this).attr("index-val"));
+            $("#item-user-edit").val($(this).find(".item-user-id").val());
+            $("#item-user-id-edit").val($(this).find(".item-user-name").val());
+            $editOveray.show();
+        })
+        $editOveray.mouseleave(function () {
+           
+        });
+
+        $(".cancel-edit-row").click(function (event) {
+            $editOveray.hide();
+        });
+        $(".ok-edit-row").click(function (event) {
+            $editOveray.hide();
+        });   
+
+        var templateRow = `<tr  style="cursor: pointer;" index-val="@">
+                                <input type="hidden" class="item-user-id" name="UserAction[@].ID" value="" /> 
+                                <input type="hidden" class="item-user-name" name="UserAction[@].Name" value="" />
+                                <td class="col-md-9 table-td-mid product-code-text"  > 
+                                   
+                                </td>
+                                <td class="col-md-3 table-td-mid table-td-number"  >
+                                    <div class="btn-group">
+                                        <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
+                                            <i class="fa  fa-close"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                         </tr>`;
+
+        if ($("#action-number").val() != "" && $("#action-number").val() != "0") {
+            for (i = 0; i < parseInt($("#action-number").val()); i++) {
+                appendRow(i);
+            }
+        }
+        if ($("#action-number").val() == "" || $("#action-number").val() == "0") {
+            for (i = 0; i <= 3; i++) {
+                appendRow(i);
+            }
+        }
+        
+        $(".delete-row").click(function (event) {
+            deleteRow($(this));
+        });
+        $(".add-row").click(function (event) {
+            var rowCount = $('#ret-data tr').length;
+            if(rowCount == parseInt($("#action-number").val()))
+              return;
+            appendRow(rowCount);
+            $(".delete-row").click(function (event) {
+                deleteRow($(this));
+                $editOveray.hide();
+            });
+        });
+        function appendRow(index) {
+            $('#ret-data').append(templateRow.replace(/@/g, index));
+        }
+        function deleteRow(buttonRow) {
+            buttonRow.parent().parent().parent().remove();
+            $editOveray.hide();
+            $("#ret-data tr").each(function (index) {
+                $(this).attr("index-val", index);
+                $(this).find(".item-user-id").attr("name", "UserAction[" + index + "].ID");
+                $(this).find(".item-user-name").attr("name", "UserAction[" + index + "].Name");
+            });            
+        }
+
+
+
+        $('#req-date,#req-date-event,#req-date-appointment,#req-date-goal,#req-date-action,#req-date-complete').datepicker({
+            autoclose: true,
+            language: 'th',
+            todayBtn: true,
+            orientation: "auto",
+            todayHighlight: true,
+            format: 'dd-mm-yyyy',
+        });
+        $('#req-time-event,#req-time,#req-time-appointment,#req-time-goal,#req-time-action,#req-time-complete').timepicker({
+            minuteStep: 1,
+            disableFocus: true,
+            template: 'dropdown',
+            orientation: "auto",
+            showMeridian:false
+         });  
         $('#req-name').typeahead({
             ajax: '/service/user/list/json/?entity=users',
             display: 'Name',
@@ -180,7 +266,7 @@
             } else {
                 $('#req-tel').addClass('check-text');
             }
-        });      
+        });          
     });
     function Clear() {
         $('#req-doc-id').val('');

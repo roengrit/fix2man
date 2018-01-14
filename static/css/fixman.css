@@ -82,6 +82,12 @@
     border-color:#E9E9E9!important;
 }
 
+.col-md-9-table{
+    width: 75%;
+    background-color:#E9E9E9!important;
+    border-color:#E9E9E9!important;
+}
+
 .table-td-mid{ 
     vertical-align: middle; 
     border-top-color:#E9E9E9!important;
