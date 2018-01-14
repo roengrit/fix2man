@@ -16,7 +16,7 @@
         {{ .xsrfdata }}
         
         <input type="hidden" id="req-branch-id" name="Building.Branch.ID" value="{{.data.Building.Branch.ID}}" />
-        <input type="hidden" id="req-buildind-id" name="Building.ID" value="{{.data.Building.ID}}" />
+        <input type="hidden" id="req-building-id" name="Building.ID" value="{{.data.Building.ID}}" />
         <input type="hidden" id="req-class-id" name="ID" value="{{.data.ID}}" />
         <div id="box-req" class="box box-primary">
             <div class="box-header ui-sortable-handle">
@@ -42,7 +42,7 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-building-o"></i>
                             </span>
-                            <input type="text" id="req-buildind"   class="form-control has-query" 
+                            <input type="text" id="req-building"   class="form-control has-query" 
                             autocomplete="off" {{.r}} placeholder="อาคาร...." value="{{.data.Building.Name}}">
                         </div>
                     </div>

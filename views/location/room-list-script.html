@@ -1,3 +1,46 @@
+<script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script>
+    $(function () {
+        $('#req-branch').typeahead({
+            ajax: '/service/entity/list/json/?entity=branchs',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            onSelect: function (data) {
+                $('#req-branch-id').val(data.value);
+                $('#req-building').val('');
+                $('#req-building-id').val('');
+                $('#req-class').val('');
+                $('#req-class-id').val('');
+            }
+        });
+        $('#req-building').typeahead({
+            ajax: '/service/entity/list/p/json/?entity=buildings',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            parent: $('#req-branch-id'),
+            onSelect: function (data) {
+                $('#req-building-id').val(data.value);
+            },
+            parent: 'req-branch-id',
+            fixurl: '/service/entity/list/p/json/?entity=buildings'
+        });
+        $('#req-class').typeahead({
+            ajax: '/service/entity/list/p/json/?entity=class',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            parent: $('#req-building-id'),
+            onSelect: function (data) {
+                $('#req-class-id').val(data.value);
+            },
+            parent: 'req-building-id',
+            fixurl: '/service/entity/list/p/json/?entity=class'
+        });
+      });
     loadNormalTable();
 </script>

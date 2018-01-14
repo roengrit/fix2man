@@ -10,13 +10,15 @@
     {{if .r }}
     
     {{else }}
-    action="/location/depart"
+    action="/location/room"
     {{end}}
-     autocomplete="off" onsubmit="return false;"  id="depart-form" method="post">
+     autocomplete="off" onsubmit="return false;"  id="room-form" method="post">
         {{ .xsrfdata }}
         
-        <input type="hidden" id="depart-id" name="ID" value="{{.data.ID}}" />
-        <input type="hidden" id="branch-id" name="Branch.ID" value="{{.data.Branch.ID}}" />
+        <input type="hidden" id="req-branch-id" name="Class.Building.Branch.ID" value="{{.data.Class.Building.Branch.ID}}" />
+        <input type="hidden" id="req-building-id" name="Class.Building.ID" value="{{.data.Class.Building.ID}}" />
+        <input type="hidden" id="req-class-id" name="Class.ID" value="{{.data.Class.ID}}" />
+        <input type="hidden" id="req-room-id" name="ID" value="{{.data.ID}}" />
         <div id="box-req" class="box box-primary">
             <div class="box-header ui-sortable-handle">
                 <h4 class="box-title  req-box-title ">รายละเอียด </h4>
@@ -30,19 +32,43 @@
                                 <i class="fa fa-bank"></i>
                             </span>
                             <input type="text" id="req-branch"   class="form-control has-query" 
-                            autocomplete="off" {{.r}} placeholder="สาขา...." value="{{.data.Branch.Name}}">
+                            autocomplete="off" {{.r}} placeholder="สาขา...." value="{{.data.Class.Building.Branch.Name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <label for="req-name">อาคาร</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-building-o"></i>
+                            </span>
+                            <input type="text" id="req-building"   class="form-control has-query" 
+                            autocomplete="off" {{.r}} placeholder="อาคาร...." value="{{.data.Class.Building.Name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <label for="req-name">ชั้น</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-bars"></i>
+                            </span>
+                            <input type="text" id="req-class"   class="form-control has-query" 
+                            autocomplete="off" {{.r}} placeholder="ชั้น...." value="{{.data.Class.Name}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group req-box-form"  >
                     <div class="col-xs-12">
-                        <label for="req-date-event">ชื่อแผนก</label>
+                        <label for="req-date-event">ห้อง</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <i class="fa fa-file-text-o"></i>
+                                <i class="fa fa-bed"></i>
                             </span>
                             <input type="text"  id="Name" required name="Name"    class="form-control" 
-                            autocomplete="off" {{.r}} placeholder="แผนก...." value="{{.data.Name}}">
+                            autocomplete="off" {{.r}} placeholder="ห้อง...." value="{{.data.Name}}">
                         </div>
                     </div>
                 </div>
@@ -50,7 +76,7 @@
             <div class="box-footer">
                 {{if .r}} {{else}}
                 <button type="submit" onclick="Save()" class="btn btn-primary pull-right">บันทึก</button>
-                <a href="/location/depart/list" class="btn btn-default pull-right" style="margin-right:3px;">ยกเลิก</a>
+                <a href="/location/room/list" class="btn btn-default pull-right" style="margin-right:3px;">ยกเลิก</a>
                 {{end}}
             </div>
         </div>

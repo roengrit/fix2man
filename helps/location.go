@@ -125,3 +125,48 @@ func GenClassHTML(lists []m.Class) string {
 	}
 	return hmtlBuffer.String()
 }
+
+/////////////////////////////////////////////  ห้อง /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//HTMLRoomTemplate _
+const HTMLRoomTemplate = `<tr>
+								<td>{branch_name}</td>
+								<td>{building_name}</td>
+								<td>{class_name}</td>
+								<td>{name}</td>
+								<td>
+									<div class="btn-group">
+										{action}
+									</div>
+								</td>
+							</tr>`
+
+//HTMLRoomActionEnable _
+const HTMLRoomActionEnable = `<a   class="btn btn-sm btn-primary " title="แก้ไข"  href="/location/room/?id={id}"><i class="fa fa-edit"></i></a>
+                              <a   class="btn btn-sm btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/location/room/delete/")'><i class="fa fa-trash-o"></i></a>`
+
+//HTMLRoomNotFoundRows _
+const HTMLRoomNotFoundRows = `<tr><td colspan="5">*** ไม่พบข้อมูล ***</td> </tr>`
+
+//HTMLRoomPermissionDenie _
+const HTMLRoomPermissionDenie = `<tr><td colspan="5">*** ไม่อนุญาติ ใน entity อื่น ***</td></tr>`
+
+//HTMLRoomError _
+const HTMLRoomError = `<tr><td colspan="5"> {err}</td></tr>`
+
+//GenRoomHTML _
+func GenRoomHTML(lists []m.Rooms) string {
+	var hmtlBuffer bytes.Buffer
+	for _, val := range lists {
+		val.Class.Building.Branch, _ = m.GetBranchByID(val.Class.Building.Branch.ID)
+		temp := strings.Replace(HTMLRoomTemplate, "{branch_name}", val.Class.Building.Branch.Name, -1)
+		temp = strings.Replace(temp, "{building_name}", val.Class.Building.Name, -1)
+		temp = strings.Replace(temp, "{class_name}", val.Class.Name, -1)
+		temp = strings.Replace(temp, "{name}", val.Name, -1)
+		tempAction := strings.Replace(HTMLRoomActionEnable, "{id}", strconv.Itoa(val.ID), -1)
+		temp = strings.Replace(temp, "{action}", tempAction, -1)
+		hmtlBuffer.WriteString(temp)
+	}
+	return hmtlBuffer.String()
+}

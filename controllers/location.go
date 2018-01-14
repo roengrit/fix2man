@@ -350,32 +350,14 @@ func (c *LocationController) UpdateClass() {
 		ret.RetData = err.Error()
 	}
 
-	if c.GetString("Building.Branch.ID") == "" && ret.RetOK {
+	if (c.GetString("Building.Branch.ID") == "" || c.GetString("Building.Branch.ID") == "0") && ret.RetOK {
 		ret.RetOK = false
 		ret.RetData = "กรุณาระบุสาขา"
 	}
 
-	if c.GetString("Building.ID") == "" && ret.RetOK {
+	if (c.GetString("Building.ID") == "" || c.GetString("Building.ID") == "0") && ret.RetOK {
 		ret.RetOK = false
 		ret.RetData = "กรุณาระบุอาคาร"
-	}
-
-	if class.Building != nil && ret.RetOK {
-		if class.Building.Branch == nil {
-			ret.RetOK = false
-			ret.RetData = "กรุณาระบุสาขา"
-		}
-	}
-
-	if class.Building == nil && ret.RetOK {
-		ret.RetOK = false
-		ret.RetData = "กรุณาระบุอาคาร"
-	}
-	if class.Building != nil && ret.RetOK {
-		if class.Building.ID == 0 {
-			ret.RetOK = false
-			ret.RetData = "กรุณาระบุอาคาร"
-		}
 	}
 
 	if class.Name == "" && ret.RetOK {
@@ -414,6 +396,141 @@ func (c *LocationController) DeleteClass() {
 	ret := m.NormalModel{}
 	ret.RetOK = true
 	err := m.DeleteClassByID(int(ID))
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	} else {
+		ret.RetData = "ลบข้อมูลสำเร็จ"
+	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+/////////////////////////////////////////////////// ห้อง ///////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//RoomList _
+func (c *LocationController) RoomList() {
+	c.Data["title"] = "ห้อง"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Layout = "layout.html"
+	c.TplName = "location/room-list.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["scripts"] = "location/room-list-script.html"
+	c.Render()
+}
+
+//GetRoomList _
+func (c *LocationController) GetRoomList() {
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	top, _ := strconv.ParseInt(c.GetString("top"), 10, 32)
+	branchID := c.GetString("Branch.ID")
+	buildingID := c.GetString("Building.ID")
+	classID := c.GetString("Class.ID")
+	term := c.GetString("txt-search")
+	lists, rowCount, err := m.GetRoomList(term, branchID, buildingID, classID, int(top))
+	if err == nil {
+		ret.RetOK = true
+		ret.RetCount = int64(rowCount)
+		ret.RetData = h.GenRoomHTML(*lists)
+		if rowCount == 0 {
+			ret.RetData = h.HTMLRoomNotFoundRows
+		}
+	} else {
+		ret.RetOK = false
+		ret.RetData = strings.Replace(h.HTMLRoomError, "{err}", err.Error(), -1)
+	}
+	ret.XSRF = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//CreateRoom _
+func (c *LocationController) CreateRoom() {
+	classID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	c.Data["title"] = "สร้าง/แก้ไขห้อง"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	if classID != 0 {
+		ret, err := m.GetRoomByID(int(classID))
+		if err == nil {
+			ret.Class.Building.Branch, _ = m.GetBranchByID(ret.Class.Building.Branch.ID)
+		}
+		c.Data["data"] = ret
+	}
+	c.Layout = "layout.html"
+	c.TplName = "location/room.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["scripts"] = "location/room-script.html"
+	c.Render()
+}
+
+//UpdateRoom _
+func (c *LocationController) UpdateRoom() {
+	var room m.Rooms
+	decoder := form.NewDecoder()
+	err := decoder.Decode(&room, c.Ctx.Request.Form)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	}
+
+	if (c.GetString("Class.Building.Branch.ID") == "" || c.GetString("Class.Building.Branch.ID") == "0") && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุสาขา"
+	}
+
+	if (c.GetString("Class.Building.ID") == "" || c.GetString("Class.Building.ID") == "0") && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุอาคาร"
+	}
+
+	if (c.GetString("Class.ID") == "" || c.GetString("Class.ID") == "0") && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุชั้น"
+	}
+
+	if room.Name == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุชื่อ"
+	}
+
+	if ret.RetOK && room.ID == 0 {
+		room.CreatedAt = time.Now()
+		_, err := m.CreateRoom(room)
+		if err != nil {
+			ret.RetOK = false
+			ret.RetData = err.Error()
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	} else if ret.RetOK && room.ID > 0 {
+		room.UpdatedAt = time.Now()
+		err := m.UpdateRoom(room)
+		if err != nil {
+			ret.RetOK = false
+			ret.RetData = err.Error()
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	}
+	ret.XSRF = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//DeleteRoom _
+func (c *LocationController) DeleteRoom() {
+	ID, _ := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 32)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	err := m.DeleteRoomByID(int(ID))
 	if err != nil {
 		ret.RetOK = false
 		ret.RetData = err.Error()

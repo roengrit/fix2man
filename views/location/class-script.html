@@ -8,10 +8,11 @@
             val: 'ID',
             onSelect: function (data) {
                 $('#req-branch-id').val(data.value);
-                $('#req-building-id').val('');
+                $('#req-building-id').val('');               
+                $('#req-building').val('');
             }
         });
-    $('#req-buildind').typeahead({
+    $('#req-building').typeahead({
             ajax: '/service/entity/list/p/json/?entity=buildings',
             display: 'Name',
             displayField: 'Name',
@@ -19,12 +20,12 @@
             val: 'ID',
             parent: $('#req-branch-id'),
             onSelect: function (data) {
-                $('#req-buildind-id').val(data.value);
+                $('#req-building-id').val(data.value);
             },
             parent: 'req-branch-id',
             fixurl: '/service/entity/list/p/json/?entity=buildings'
         });        
-   function Save() {
+    function Save() {
         hideTopAlert();
         url = $('#class-form').attr('action');
         $.post(url, $('#class-form').serialize(), function (data) {

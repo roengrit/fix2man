@@ -7,24 +7,37 @@
     </h1>
 </section>
 <section class="content">
-    <form action="/location/depart/list" id="search-form" onsubmit="return false;" method="post">
+    <form action="/location/room/list" id="search-form" onsubmit="return false;" method="post">
         {{ .xsrfdata }}
+        <input type="hidden" id="req-branch-id" name="Branch.ID"  >
+        <input type="hidden" id="req-building-id" name="Building.ID"  >
+        <input type="hidden" id="req-class-id" name="Class.ID"  >
         <div class="row search-top">
-            <div class="col-xs-3 ">
+            <div class="col-xs-2 ">
                 <div class="input-group input-group-sm">
-                    <span class="input-group-addon">
-                        <i class="fa fa fa-bank"></i>
-                    </span>
-                    <select id="txt-branch" name="txt-branch" class="form-control">
-                        <option value="">
-                            ทุกสาขา
-                        </option>
-                        {{range $key, $val := .branch}}
-                        <option value="{{$val.ID}}">
-                            {{$val.Name}}
-                        </option>
-                        {{end}}
-                    </select>
+                  <span class="input-group-addon">
+                      <i class="fa fa-bank"></i>
+                  </span>
+                  <input type="text" id="req-branch"   class="form-control has-query"
+                  autocomplete="off" {{.r}} placeholder="สาขา...."  >
+                </div>
+            </div>
+            <div class="col-xs-2 ">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon">
+                      <i class="fa fa-building-o"></i>
+                  </span>
+                  <input type="text" id="req-building"   class="form-control has-query"
+                   autocomplete="off" {{.r}} placeholder="ตึก...."  >
+                </div>
+            </div>
+            <div class="col-xs-2 ">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon">
+                      <i class="fa fa-bars"></i>
+                  </span>
+                  <input type="text" id="req-class"   class="form-control has-query"
+                   autocomplete="off" {{.r}} placeholder="ชั้น...."  >
                 </div>
             </div>
             <div class="col-xs-4">
@@ -73,7 +86,7 @@
             <h3 class="box-title">ค้นเจอทั้งหมด
                 <span id="retCount"> 0 </span> รายการ</h3>
             <div class="box-tools pull-right">
-                <a href="/location/depart" id="depart-add" class="btn btn-sm btn-success">เพิ่มข้อมูล</a>
+                <a href="/location/room" id="class-add" class="btn btn-sm btn-success">เพิ่มข้อมูล</a>
             </div>
         </div>
         <div class="box-body">
@@ -82,7 +95,9 @@
                     <thead>
                         <tr>
                             <th style="width: 300px!important;">สาขา</th>
-                            <th>แผนก</th>
+                            <th style="width: 300px!important;">อาคาร</th>
+                            <th style="width: 300px!important;">ชั้น</th>
+                            <th >ห้อง</th>
                             <th style="width: 180px!important;"></th>
                         </tr>
                     </thead>
