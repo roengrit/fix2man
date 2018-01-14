@@ -1,0 +1,39 @@
+<script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
+<script>
+    $('#req-branch').typeahead({
+            ajax: '/service/entity/list/json/?entity=branchs',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            onSelect: function (data) {
+                $('#req-branch-id').val(data.value);
+                $('#req-building-id').val('');
+            }
+        });
+    $('#req-buildind').typeahead({
+            ajax: '/service/entity/list/p/json/?entity=buildings',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            parent: $('#req-branch-id'),
+            onSelect: function (data) {
+                $('#req-buildind-id').val(data.value);
+            },
+            parent: 'req-branch-id',
+            fixurl: '/service/entity/list/p/json/?entity=buildings'
+        });        
+   function Save() {
+        hideTopAlert();
+        url = $('#class-form').attr('action');
+        $.post(url, $('#class-form').serialize(), function (data) {
+            if (data.RetOK) {
+                showTopAlert(data.RetData, "success")
+                setTimeout(function () { window.location.href = '/location/class/list' }, 1000);
+            } else {
+                showTopAlert(data.RetData, "danger")
+            }
+        });
+    }
+</script>

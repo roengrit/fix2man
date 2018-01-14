@@ -44,8 +44,8 @@ type Class struct {
 	Building  *Buildings `orm:"rel(one)"`
 	Name      string     `orm:"size(225)"`
 	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `orm:"auto_now_add"`
+	UpdatedAt time.Time `orm:"null"`
 }
 
 //Rooms _
@@ -55,8 +55,8 @@ type Rooms struct {
 	Code      string `orm:"size(20)"`
 	Name      string `orm:"size(225)"`
 	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `orm:"auto_now_add"`
+	UpdatedAt time.Time `orm:"null"`
 }
 
 func init() {
@@ -199,34 +199,69 @@ func DeleteBuildingsByID(ID int) (errRet error) {
 	}
 	return errRet
 }
-<<<<<<< HEAD
 
 //////////////////////////////////////////////// ชั้น //////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//GetDepartByID _
-func GetClassByID(ID int) (dept *Buildings, errRet error) {
-	reqGet := &Buildings{}
+//GetClassByID _
+func GetClassByID(ID int) (dept *Class, errRet error) {
+	reqGet := &Class{}
 	o := orm.NewOrm()
-	o.QueryTable("buildings").Filter("ID", ID).RelatedSel().One(reqGet)
+	o.QueryTable("class").Filter("ID", ID).RelatedSel().One(reqGet)
 	return reqGet, errRet
 }
 
 //GetClassList _
-func GetClassList(term, branchID, BuildingID string, limit int) (buildings *[]Buildings, rowCount int, errRet error) {
-	reqGet := &[]Buildings{}
+func GetClassList(term, branchID, BuildingID string, limit int) (class *[]Class, rowCount int, errRet error) {
+	reqGet := &[]Class{}
 	o := orm.NewOrm()
-	qs := o.QueryTable("buildings")
+	qs := o.QueryTable("class")
 	cond := orm.NewCondition()
 	cond1 := cond.Or("Name__icontains", term)
 	if branchID != "" {
-		cond1 = cond1.And("Branch__ID", branchID)
+		cond1 = cond1.And("Building__Branch__ID", branchID)
 	}
-	if branchID != "" {
+	if BuildingID != "" {
 		cond1 = cond1.And("Building__ID", BuildingID)
 	}
 	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
 	return reqGet, len(*reqGet), errRet
 }
-=======
->>>>>>> 767d01def22501dd3124d96a63527120ed2464ba
+
+//CreateClass _
+func CreateClass(class Class) (retID int64, errRet error) {
+	o := orm.NewOrm()
+	o.Begin()
+	id, err := o.Insert(&class)
+	o.Commit()
+	if err == nil {
+		retID = id
+	}
+	return retID, err
+}
+
+//UpdateClass _
+func UpdateClass(class Class) (errRet error) {
+	o := orm.NewOrm()
+	getUpdate, _ := GetDepartByID(class.ID)
+	if getUpdate == nil {
+		errRet = errors.New("ไม่พบข้อมูล")
+	} else {
+		class.CreatedAt = getUpdate.CreatedAt
+		if num, errUpdate := o.Update(&class); errUpdate != nil {
+			errRet = errUpdate
+			_ = num
+		}
+	}
+	return errRet
+}
+
+//DeleteClassByID _
+func DeleteClassByID(ID int) (errRet error) {
+	o := orm.NewOrm()
+	if num, errUpdate := o.Delete(&Class{ID: ID}); errUpdate != nil {
+		errRet = errUpdate
+		_ = num
+	}
+	return errRet
+}

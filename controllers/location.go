@@ -162,7 +162,7 @@ func (c *LocationController) BuildingList() {
 	c.Render()
 }
 
-//GetDepartList _
+//GetBuildingList _
 func (c *LocationController) GetBuildingList() {
 	ret := m.NormalModel{}
 	ret.RetOK = true
@@ -187,8 +187,7 @@ func (c *LocationController) GetBuildingList() {
 	c.ServeJSON()
 }
 
-
-//CreateDepart _
+//CreateBuilding _
 func (c *LocationController) CreateBuilding() {
 	buildingID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
 	c.Data["title"] = "สร้าง/แก้ไขอาคาร"
@@ -204,7 +203,7 @@ func (c *LocationController) CreateBuilding() {
 	c.Render()
 }
 
-//GetDepart _
+//GetBuilding _
 func (c *LocationController) GetBuilding() {
 	buildingID, _ := c.GetInt("id")
 	c.Data["title"] = "สร้าง/แก้ไขแผนก"
@@ -220,7 +219,7 @@ func (c *LocationController) GetBuilding() {
 	c.Render()
 }
 
-//UpdateDepart _
+//UpdateBuilding _
 func (c *LocationController) UpdateBuilding() {
 	var building m.Buildings
 	decoder := form.NewDecoder()
@@ -265,7 +264,7 @@ func (c *LocationController) UpdateBuilding() {
 	c.ServeJSON()
 }
 
-//DeleteDepart _
+//DeleteBuilding _
 func (c *LocationController) DeleteBuilding() {
 	ID, _ := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 32)
 	ret := m.NormalModel{}
@@ -281,7 +280,6 @@ func (c *LocationController) DeleteBuilding() {
 	c.Data["json"] = ret
 	c.ServeJSON()
 }
-<<<<<<< HEAD
 
 /////////////////////////////////////////////////// ชั้น ///////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,25 +300,127 @@ func (c *LocationController) GetClassList() {
 	ret := m.NormalModel{}
 	ret.RetOK = true
 	top, _ := strconv.ParseInt(c.GetString("top"), 10, 32)
-	branchID := c.GetString("txt-branch")
-	buildingID := c.GetString("txt-branch")
+	branchID := c.GetString("Branch.ID")
+	buildingID := c.GetString("Building.ID")
 	term := c.GetString("txt-search")
 	lists, rowCount, err := m.GetClassList(term, branchID, buildingID, int(top))
 	if err == nil {
 		ret.RetOK = true
 		ret.RetCount = int64(rowCount)
-		ret.RetData = h.GenBuildingHTML(*lists)
+		ret.RetData = h.GenClassHTML(*lists)
 		if rowCount == 0 {
-			ret.RetData = h.HTMLBuildingNotFoundRows
+			ret.RetData = h.HTMLClassNotFoundRows
 		}
 	} else {
 		ret.RetOK = false
-		ret.RetData = strings.Replace(h.HTMLBuildingError, "{err}", err.Error(), -1)
+		ret.RetData = strings.Replace(h.HTMLClassError, "{err}", err.Error(), -1)
 	}
 	ret.XSRF = c.XSRFToken()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = ret
 	c.ServeJSON()
 }
-=======
->>>>>>> 767d01def22501dd3124d96a63527120ed2464ba
+
+//CreateClass _
+func (c *LocationController) CreateClass() {
+	classID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	c.Data["title"] = "สร้าง/แก้ไขชั้น"
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	if classID != 0 {
+		ret, _ := m.GetClassByID(int(classID))
+		c.Data["data"] = ret
+	}
+	c.Layout = "layout.html"
+	c.TplName = "location/class.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["scripts"] = "location/class-script.html"
+	c.Render()
+}
+
+//UpdateClass _
+func (c *LocationController) UpdateClass() {
+	var class m.Class
+	decoder := form.NewDecoder()
+	err := decoder.Decode(&class, c.Ctx.Request.Form)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	}
+
+	if c.GetString("Building.Branch.ID") == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุสาขา"
+	}
+
+	if c.GetString("Building.ID") == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุอาคาร"
+	}
+
+	if class.Building != nil && ret.RetOK {
+		if class.Building.Branch == nil {
+			ret.RetOK = false
+			ret.RetData = "กรุณาระบุสาขา"
+		}
+	}
+
+	if class.Building == nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุอาคาร"
+	}
+	if class.Building != nil && ret.RetOK {
+		if class.Building.ID == 0 {
+			ret.RetOK = false
+			ret.RetData = "กรุณาระบุอาคาร"
+		}
+	}
+
+	if class.Name == "" && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "กรุณาระบุชื่อ"
+	}
+
+	if ret.RetOK && class.ID == 0 {
+		class.CreatedAt = time.Now()
+		_, err := m.CreateClass(class)
+		if err != nil {
+			ret.RetOK = false
+			ret.RetData = err.Error()
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	} else if ret.RetOK && class.ID > 0 {
+		class.UpdatedAt = time.Now()
+		err := m.UpdateClass(class)
+		if err != nil {
+			ret.RetOK = false
+			ret.RetData = err.Error()
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	}
+	ret.XSRF = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//DeleteClass _
+func (c *LocationController) DeleteClass() {
+	ID, _ := strconv.ParseInt(c.Ctx.Input.Param(":id"), 10, 32)
+	ret := m.NormalModel{}
+	ret.RetOK = true
+	err := m.DeleteClassByID(int(ID))
+	if err != nil {
+		ret.RetOK = false
+		ret.RetData = err.Error()
+	} else {
+		ret.RetData = "ลบข้อมูลสำเร็จ"
+	}
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}

@@ -64,11 +64,17 @@ func (b *BaseController) Prepare() {
 			if s.Contains(uri, "/normal/?entity=branchs") {
 				b.Data["m_branch_list"] = active
 			}
-			if s.Contains(uri, "/location/depart/list") {
+			if s.Contains(uri, "/location/depart") {
 				b.Data["m_depart_list"] = active
 			}
-			if s.Contains(uri, "/location/building/list") {
+			if s.Contains(uri, "/location/building") {
 				b.Data["m_building_list"] = active
+			}
+			if s.Contains(uri, "/location/class") {
+				b.Data["m_class_list"] = active
+			}
+			if s.Contains(uri, "/location/room") {
+				b.Data["m_room_list"] = active
 			}
 		}
 	}

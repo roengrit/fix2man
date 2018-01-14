@@ -43,17 +43,15 @@ func main() {
 	beego.Router("/location/building/list", &c.LocationController{}, "get:BuildingList;post:GetBuildingList")
 	beego.Router("/location/building", &c.LocationController{}, "get:CreateBuilding;post:UpdateBuilding")
 	beego.Router("/location/building/delete/?:id", &c.LocationController{}, "delete:DeleteBuilding")
-<<<<<<< HEAD
 
-	beego.Router("/location/class/list", &c.LocationController{}, "get:ClassList")
-=======
->>>>>>> 767d01def22501dd3124d96a63527120ed2464ba
+	beego.Router("/location/class/list", &c.LocationController{}, "get:ClassList;post:GetClassList")
+	beego.Router("/location/class", &c.LocationController{}, "get:CreateClass;post:UpdateClass")
+	beego.Router("/location/class/delete/?:id", &c.LocationController{}, "delete:DeleteClass")
 
-	//beego.Router("/entity/location/class/list", &c.LocationController{}, "get:GetClassList")
-	//beego.Router("/entity/location/class", &c.LocationController{}, "get:CreateClass;post:UpdateClass")
+	beego.Router("/location/room/list", &c.LocationController{}, "get:RoomList;post:GetRoomList")
+	beego.Router("/location/room", &c.LocationController{}, "get:CreateRoom;post:UpdateRoom")
+	beego.Router("/location/room/delete/?:id", &c.LocationController{}, "delete:DeleteRoom")
 
-	//beego.Router("/entity/location/room/list", &c.LocationController{}, "get:GetRoomList")
-	//beego.Router("/entity/location/room", &c.LocationController{}, "get:CreateRoom;post:UpdateRoom")
 	beego.Router("/service/secure/json", &c.ServiceController{}, "get:GetXSRF")
 
 	beego.Router("/service/entity/list/json", &c.ServiceController{}, "get:ListEntityJSON")
