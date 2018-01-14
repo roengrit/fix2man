@@ -43,8 +43,11 @@ func main() {
 	beego.Router("/location/building/list", &c.LocationController{}, "get:BuildingList;post:GetBuildingList")
 	beego.Router("/location/building", &c.LocationController{}, "get:CreateBuilding;post:UpdateBuilding")
 	beego.Router("/location/building/delete/?:id", &c.LocationController{}, "delete:DeleteBuilding")
+<<<<<<< HEAD
 
 	beego.Router("/location/class/list", &c.LocationController{}, "get:ClassList")
+=======
+>>>>>>> 767d01def22501dd3124d96a63527120ed2464ba
 
 	//beego.Router("/entity/location/class/list", &c.LocationController{}, "get:GetClassList")
 	//beego.Router("/entity/location/class", &c.LocationController{}, "get:CreateClass;post:UpdateClass")

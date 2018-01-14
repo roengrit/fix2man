@@ -199,6 +199,7 @@ func DeleteBuildingsByID(ID int) (errRet error) {
 	}
 	return errRet
 }
+<<<<<<< HEAD
 
 //////////////////////////////////////////////// ชั้น //////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,3 +228,5 @@ func GetClassList(term, branchID, BuildingID string, limit int) (buildings *[]Bu
 	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
 	return reqGet, len(*reqGet), errRet
 }
+=======
+>>>>>>> 767d01def22501dd3124d96a63527120ed2464ba
