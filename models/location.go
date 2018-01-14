@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"github.com/astaxie/beego/orm"
@@ -32,11 +31,11 @@ type Departs struct {
 //Buildings _
 type Buildings struct {
 	ID        int
-	Branch    *Branchs `orm:"rel(fk)"`
+	Branch    *Branchs `orm:"rel(one)"`
 	Name      string   `orm:"size(225)"`
 	Lock      bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `orm:"auto_now_add"`
+	UpdatedAt time.Time `orm:"null"`
 }
 
 //Class _
@@ -68,22 +67,6 @@ func init() {
 		new(Branchs),
 		new(Departs),
 	) // Need to register model in init
-}
-
-//GetBuildingList _
-func GetBuildingList(top, branchID, term string) (num int64, err error, buildList []Buildings) {
-	var sql = "SELECT i_d,name FROM buildings WHERE branch_id = ? and lower(name) like lower(?) order by name limit {0}"
-	if top == "0" {
-		sql = strings.Replace(sql, "limit {0}", "", -1)
-	} else {
-		sql = strings.Replace(sql, "{0}", top, -1)
-	}
-	o := orm.NewOrm()
-	num, err = o.Raw(sql, branchID, "%"+term+"%").QueryRows(&buildList)
-	if err != nil {
-
-	}
-	return num, err, buildList
 }
 
 //GetAllBranch _
@@ -152,4 +135,95 @@ func DeleteDepartByID(ID int) (errRet error) {
 		_ = num
 	}
 	return errRet
+}
+
+//////////////////////////////////////////////// อาคาร //////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//GetDepartByID _
+func GetBuildingsByID(ID int) (dept *Buildings, errRet error) {
+	reqGet := &Buildings{}
+	o := orm.NewOrm()
+	o.QueryTable("buildings").Filter("ID", ID).RelatedSel().One(reqGet)
+	return reqGet, errRet
+}
+
+//GetDepartList _
+func GetBuildingsList(term, branchID string, limit int) (buildings *[]Buildings, rowCount int, errRet error) {
+	reqGet := &[]Buildings{}
+	o := orm.NewOrm()
+	qs := o.QueryTable("buildings")
+	cond := orm.NewCondition()
+	cond1 := cond.Or("Name__icontains", term)
+	if branchID != "" {
+		cond1 = cond.Or("Name__icontains", term).And("Branch__ID", branchID)
+	}
+	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
+	return reqGet, len(*reqGet), errRet
+}
+
+//CreateDeparts _
+func CreateBuildings(buildings Buildings) (retID int64, errRet error) {
+	o := orm.NewOrm()
+	o.Begin()
+	id, err := o.Insert(&buildings)
+	o.Commit()
+	if err == nil {
+		retID = id
+	}
+	return retID, err
+}
+
+//UpdateDeparts _
+func UpdateBuildings(buildings Buildings) (errRet error) {
+	o := orm.NewOrm()
+	getUpdate, _ := GetDepartByID(buildings.ID)
+	if getUpdate == nil {
+		errRet = errors.New("ไม่พบข้อมูล")
+	} else {
+		buildings.CreatedAt = getUpdate.CreatedAt
+		if num, errUpdate := o.Update(&buildings); errUpdate != nil {
+			errRet = errUpdate
+			_ = num
+		}
+	}
+	return errRet
+}
+
+//DeleteDepartByID _
+func DeleteBuildingsByID(ID int) (errRet error) {
+	o := orm.NewOrm()
+	if num, errUpdate := o.Delete(&Buildings{ID: ID}); errUpdate != nil {
+		errRet = errUpdate
+		_ = num
+	}
+	return errRet
+}
+
+//////////////////////////////////////////////// ชั้น //////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//GetDepartByID _
+func GetClassByID(ID int) (dept *Buildings, errRet error) {
+	reqGet := &Buildings{}
+	o := orm.NewOrm()
+	o.QueryTable("buildings").Filter("ID", ID).RelatedSel().One(reqGet)
+	return reqGet, errRet
+}
+
+//GetClassList _
+func GetClassList(term, branchID, BuildingID string, limit int) (buildings *[]Buildings, rowCount int, errRet error) {
+	reqGet := &[]Buildings{}
+	o := orm.NewOrm()
+	qs := o.QueryTable("buildings")
+	cond := orm.NewCondition()
+	cond1 := cond.Or("Name__icontains", term)
+	if branchID != "" {
+		cond1 = cond1.And("Branch__ID", branchID)
+	}
+	if branchID != "" {
+		cond1 = cond1.And("Building__ID", BuildingID)
+	}
+	qs.SetCond(cond1).RelatedSel().Limit(limit).All(reqGet)
+	return reqGet, len(*reqGet), errRet
 }

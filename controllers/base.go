@@ -67,6 +67,9 @@ func (b *BaseController) Prepare() {
 			if s.Contains(uri, "/location/depart/list") {
 				b.Data["m_depart_list"] = active
 			}
+			if s.Contains(uri, "/location/building/list") {
+				b.Data["m_building_list"] = active
+			}
 		}
 	}
 

@@ -252,8 +252,8 @@
                                 <a href="/location/depart/list">
                                     <i class="fa fa-circle-o"></i> แผนก</a>
                             </li>
-                            <li>
-                                <a href="/normal/?entity=buildings">
+                            <li class="{{.m_building_list}}">
+                                <a href="/location/building/list">
                                     <i class="fa fa-circle-o"></i> ตึก</a>
                             </li>
                             <li>
@@ -306,9 +306,9 @@
                                     <h4 class="modal-title ">ยืนยันการลบข้อมูล</h4>
                                   </div>
                                   <div class="modal-body">
-                                        <div class="alert alert-danger fade in no-margin" 
+                                        <div class="alert alert-danger fade in no-margin"
                                            style="display:none"
-                                          id="global-delete-alert"> 
+                                          id="global-delete-alert">
                                         </div>
                                     <p>ท่านกำลังจะลบข้อมูล, จะดำเนินการต่อหรือไม่?</p>
                                   </div>

@@ -161,7 +161,7 @@
             },
             parent: 'req-class-id',
             fixurl: '/service/entity/list/p/json/?entity=rooms'
-        });        
+        });
 
         $('#req-sn').typeahead({
             ajax: '/service/entity/list/json/?entity=sns',
@@ -180,29 +180,7 @@
             } else {
                 $('#req-tel').addClass('check-text');
             }
-        });
-
-        $('.has-query').keyup(function (e) {
-            switch (e.keyCode) {
-                case 40: // down arrow
-                case 38: // up arrow
-                case 16: // shift
-                case 17: // ctrl
-                case 18: // alt
-                    break
-                case 9: // tab
-                case 13: // enter
-                    break
-                case 27: // escape
-                    break
-                default: {
-                    $(this).removeClass("check-text");
-                    var name = $(this).attr("name");
-                    $("#" + name + "-id").val('');
-                } break
-            }
-        });
-
+        });      
     });
     function Clear() {
         $('#req-doc-id').val('');
