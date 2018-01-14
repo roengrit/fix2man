@@ -101,7 +101,7 @@ func (c *ReqController) Post() {
 		retJSON = ret
 	} else {
 		retJSON.RetOK = false
-		retJSON.RetData = "ข้อมูลบิดพลาด"
+		retJSON.RetData = "ข้อมูลผิดพลาด"
 	}
 	retJSON.XSRF = c.XSRFToken()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
