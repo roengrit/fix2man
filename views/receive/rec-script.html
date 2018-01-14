@@ -103,26 +103,5 @@
                 $(this).find(".product-total-price").attr("name", "Product[" + index + "].TotalPrice");
             });            
         }
-        
-        $('#item-code').typeahead({
-            ajax: '/service/user/list/json/?entity=users',
-            display: 'Name',
-            displayField: 'Name',
-            valueField: 'ID',
-            val: 'ID',
-            onSelect: function (data) {
-                //console.log(parseInt($("#current-row").val()));
-                var tr = $("#ret-data").find('tr').eq(parseInt($("#current-row").val()));
-                //tr.find(".product-code").val(data.value);
-                //tr.find(".product-code-text").text(data.text);
-                // tr.find(".product-name").attr("name", "Product[" + index + "].Name");
-                // tr.find(".product-unit-code").attr("name", "Product[" + index + "].UnitCode");
-                // tr.find(".product-unit-name").attr("name", "Product[" + index + "].UnitName");
-                // tr.find(".product-qty").attr("name", "Product[" + index + "].Qty");
-                // tr.find(".product-price").attr("name", "Product[" + index + "].Price");
-                // tr.find(".product-total-price").attr("name", "Product[" + index + "].TotalPrice");
-            }
-        });
-        
     });
 </script>
