@@ -107,7 +107,7 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.ReqDate}}
-                            <input type="text" id="req-date" data-date-language="th" name="ReqDate" class="form-control" value='{{date .data.ReqDate "d-m-Y"}}'
+                            <input type="text" id="req-date" data-date-language="th" name="ReqDate" class="form-control" value='{{date .data.ReqDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
                             <input type="text" id="req-date" data-date-language="th" name="ReqDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
                                 {{.r}} placeholder="...."> {{end}}
@@ -147,7 +147,7 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.EventDate}}
-                            <input type="text" id="req-date-event" data-date-language="th" name="EventDate" class="form-control" value='{{date .data.EventDate "d-m-Y"}}'
+                            <input type="text" id="req-date-event" data-date-language="th" name="EventDate" class="form-control" value='{{date .data.EventDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
                             <input type="text" id="req-date-event" data-date-language="th" name="EventDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
                                 {{.r}} placeholder="...."> {{end}}
@@ -195,9 +195,9 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.AppointmentDate}}
-                            <input type="text" id="req-date-appointment" data-date-language="th" name="AppointmentDate" class="form-control" value='{{date .data.AppointmentDate "d-m-Y"}}'
+                            <input type="text" id="req-date-appointment" data-date-language="th" name="AppointmentDate" class="form-control" value='{{date .data.AppointmentDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-date-appointment" data-date-language="th" name="AppointmentDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
+                            <input type="text" id="req-date-appointment" data-date-language="th" name="AppointmentDate" class="form-control" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -208,9 +208,9 @@
                                 <i class="fa  fa-clock-o"></i>
                             </span>
                             {{if .data.AppointmentTime}}
-                            <input type="text" id="req-time-appointment" name="AppointmentTime" class="form-control timepicker" value='{{  .data.AppointmentTime  }}'
+                            <input type="text" id="req-time-appointment" name="AppointmentTime" class="form-control timepicker" value='{{.data.AppointmentTime  }}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-time-appointment" name="AppointmentTime" class="form-control timepicker" value='{{date .current_date "H:i"}}'
+                            <input type="text" id="req-time-appointment" name="AppointmentTime" class="form-control timepicker" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -221,9 +221,9 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.GoalDate}}
-                            <input type="text" id="req-date-goal" data-date-language="th" name="GoalDate" class="form-control" value='{{date .data.GoalDate "d-m-Y"}}'
+                            <input type="text" id="req-date-goal" data-date-language="th" name="GoalDate" class="form-control" value='{{date .data.GoalDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-date-goal" data-date-language="th" name="GoalDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
+                            <input type="text" id="req-date-goal" data-date-language="th" name="GoalDate" class="form-control" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                             {{if .data.GoalTime}}
                             <input type="text" id="req-time-goal" name="GoalTime" class="form-control timepicker" value='{{  .data.GoalTime }}' {{.r}}
                                 placeholder="...."> {{else}}
-                            <input type="text" id="req-time-goal" name="GoalTime" class="form-control timepicker" value='{{date .current_date "H:i"}}'
+                            <input type="text" id="req-time-goal" name="GoalTime" class="form-control timepicker" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -289,9 +289,9 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.ActionDate}}
-                            <input type="text" id="req-date-action" data-date-language="th" name="ActionDate" class="form-control" value='{{date .data.ActionDate "d-m-Y"}}'
+                            <input type="text" id="req-date-action" data-date-language="th" name="ActionDate" class="form-control" value='{{date .data.ActionDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-date-action" data-date-language="th" name="ActionDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
+                            <input type="text" id="req-date-action" data-date-language="th" name="ActionDate" class="form-control" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -304,7 +304,7 @@
                             {{if .data.ActionTime}}
                             <input type="text" id="req-time-action" name="ActionTime" class="form-control timepicker" value='{{.data.ActionTime}}' {{.r}}
                                 placeholder="...."> {{else}}
-                            <input type="text" id="req-time-action" name="ActionTime" class="form-control timepicker" value='{{date .current_date "H:i"}}'
+                            <input type="text" id="req-time-action" name="ActionTime" class="form-control timepicker" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -315,9 +315,9 @@
                                 <i class="fa fa-calculator"></i>
                             </span>
                             {{if .data.CompleteDate}}
-                            <input type="text" id="req-date-complete" data-date-language="th" name="CompleteDate" class="form-control" value='{{date .data.CompleteDate "d-m-Y"}}'
+                            <input type="text" id="req-date-complete" data-date-language="th" name="CompleteDate" class="form-control" value='{{date .data.CompleteDate "d-m-Y" | emptyDate}}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-date-complete" data-date-language="th" name="CompleteDate" class="form-control" value='{{date .current_date "d-m-Y"}}'
+                            <input type="text" id="req-date-complete" data-date-language="th" name="CompleteDate" class="form-control" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
@@ -330,7 +330,7 @@
                             {{if .data.CompleteTime}}
                             <input type="text" id="req-time-goal" name="CompleteTime" class="form-control timepicker" value='{{  .data.CompleteTime }}'
                                 {{.r}} placeholder="...."> {{else}}
-                            <input type="text" id="req-time-goal" name="CompleteTime" class="form-control timepicker" value='{{date .current_date "H:i"}}'
+                            <input type="text" id="req-time-goal" name="CompleteTime" class="form-control timepicker" value=''
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>

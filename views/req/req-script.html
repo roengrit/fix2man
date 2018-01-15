@@ -109,7 +109,8 @@
             disableFocus: true,
             template: 'dropdown',
             orientation: "auto",
-            showMeridian:false
+            showMeridian:false,
+            defaultTime: 'empty'
          });  
         $('#req-name').typeahead({
             ajax: '/service/user/list/json/?entity=users',

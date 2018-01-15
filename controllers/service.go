@@ -7,6 +7,15 @@ import (
 	"strings"
 )
 
+func EmptyDateString(in string) (out string) {
+	if in == "01-01-0001" {
+		out = ""
+	} else {
+		out = in
+	}
+	return
+}
+
 //ServiceController _
 type ServiceController struct {
 	BaseController

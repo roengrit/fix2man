@@ -73,5 +73,7 @@ func main() {
 	beego.Router("/create-receive", &c.RecController{})
 	beego.Router("/receive/list", &c.RecController{}, "get:RecList;post:GetRecList")
 
+	beego.AddFuncMap("emptyDate", c.EmptyDateString)
+
 	beego.Run()
 }

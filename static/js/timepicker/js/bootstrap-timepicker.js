@@ -100,6 +100,9 @@
     },
 
     decrementHour: function() {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       if (this.showMeridian) {
         if (this.hour === 1) {
           this.hour = 12;
@@ -125,6 +128,9 @@
     },
 
     decrementMinute: function(step) {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       var newVal;
 
       if (step) {
@@ -143,6 +149,9 @@
     },
 
     decrementSecond: function() {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       var newVal = this.second - this.secondStep;
 
       if (newVal < 0) {
@@ -321,6 +330,20 @@
             '<td><a href="#" data-action="toggleMeridian"><i class="' + this.downArrowStyle + '"></i></a></td>'
            : '') +
          '</tr>'+
+        '<tr>' +
+            '<td > ' +
+                  '<a name="ok-time" data-action="commit" class="btn btn-default ok-time" style="padding:5px!important;border-color:#ddd!important;">ตกลง</a>' +
+            '</td>' +
+            '<td class="separator">&nbsp;</td>' +
+            '<td > ' +
+                  '<a name="cls-time" data-action="clear" class="btn btn-default cls-time" style="padding:5px!important;border-color:#ddd!important;">ล้าง</a>' +
+            '</td>' +
+        '</tr>' +
+        '<tr>' +
+            '<td colspan="3"> ' +
+                '<a name="this-time" data-action="currenttime" class="btn btn-default this-time" style="padding:5px!important;border-color:#ddd!important;">เวลาปัจจุบัน</a>' +
+            '</td>' +
+        '</tr>' +          
        '</table>';
 
       switch(this.template) {
@@ -355,9 +378,9 @@
         return;
       }
 
-                        if (this.showInputs) {
-                                this.updateFromWidgetInputs();
-                        }
+      if (this.showInputs) {
+          //  this.updateFromWidgetInputs();
+      }
 
       this.$element.trigger({
         'type': 'hide.timepicker',
@@ -500,7 +523,27 @@
                         }
     },
 
+    
+    commit: function() {
+      this.updateElement();
+      this.hideWidget();
+    },
+    currenttime: function() {
+      this.setTime('');
+      this.$element.val('');
+      this.hideWidget();
+      this.setDefaultTime('current');
+      this.updateElement();
+    },
+    clear: function() {
+      this.setTime('');
+      this.$element.val('');
+      this.hideWidget();
+    },
     incrementHour: function() {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       if (this.showMeridian) {
         if (this.hour === 11) {
           this.hour++;
@@ -515,10 +558,13 @@
         return;
       }
       this.hour++;
-      this.update();
+     this.update();
     },
 
     incrementMinute: function(step) {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       var newVal;
 
       if (step) {
@@ -533,10 +579,13 @@
       } else {
         this.minute = newVal;
       }
-      this.update();
+     this.update();
     },
 
     incrementSecond: function() {
+      if (this.hour == undefined) {
+        this.setTime('');
+      }
       var newVal = this.second + this.secondStep - (this.second % this.secondStep);
 
       if (newVal > 59) {
@@ -582,7 +631,6 @@
           this.minute = minutes;
           this.second = seconds;
           this.meridian = meridian;
-
           this.update();
 
         } else if (defaultTime === false) {
@@ -591,7 +639,7 @@
           this.second = 0;
           this.meridian = 'AM';
         } else {
-          this.setTime(defaultTime);
+          //this.setTime(defaultTime);
         }
       } else {
         this.updateFromElementVal();
@@ -665,6 +713,9 @@
     },
 
     showWidget: function() {
+      if (this.hour == undefined){
+        this.setTime('');
+      }
       if (this.isOpen) {
         return;
       }
@@ -726,7 +777,7 @@
         }
       });
 
-      this.updateElement();
+     // this.updateElement();
       this.updateWidget();
     },
 
