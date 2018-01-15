@@ -25,30 +25,32 @@ type RequestDocument struct {
 	Location     string     `orm:"size(225)"`
 	SerailNumber string     `orm:"size(50)"`
 
-	EventDate       time.Time `orm:"null"`
+	EventDate       time.Time `form:"-"orm:"null"`
 	EventTime       string    `orm:"null"`
-	ReqDate         time.Time `orm:"null"`
+	ReqDate         time.Time `form:"-"orm:"null"`
 	ReqTime         string    `orm:"null"`
-	AppointmentDate time.Time `orm:"null"`
+	AppointmentDate time.Time `form:"-"orm:"null"`
 	AppointmentTime string    `orm:"null"`
-	GoalDate        time.Time `orm:"null"`
+	GoalDate        time.Time `form:"-"orm:"null"`
 	GoalTime        string    `orm:"null"`
-	ActionDate      time.Time `orm:"null"`
+	ActionDate      time.Time `form:"-"orm:"null"`
 	ActionTime      string    `orm:"null"`
-	CompleteDate    time.Time `orm:"null"`
+	CompleteDate    time.Time `form:"-"orm:"null"`
 	CompleteTime    string    `orm:"null"`
 
 	EstimatePrice float64
 	OtherPrice    float64
 
-	Details      string `orm:"size(500)"`
-	Remark       string `orm:"size(300)"`
-	DocRefNo     string `orm:"size(50)"`
+	Details  string `orm:"size(500)"`
+	Remark   string `orm:"size(300)"`
+	DocRefNo string `orm:"size(50)"`
+
 	ActionNumber int
-	CreateUser   *Users    `orm:"rel(one)"`
-	CreatedAt    time.Time `orm:"auto_now_add"`
-	UpdateUser   *Users    `orm:"null;rel(one)"`
-	UpdatedAt    time.Time `orm:"null"`
+	ActionUser   []RequestUserAction `orm:"-"`
+	CreateUser   *Users              `orm:"rel(one)"`
+	CreatedAt    time.Time           `orm:"auto_now_add"`
+	UpdateUser   *Users              `orm:"null;rel(one)"`
+	UpdatedAt    time.Time           `orm:"null"`
 }
 
 //RequestList _
@@ -75,6 +77,14 @@ type RequestStatus struct {
 	CreatedAt       time.Time        `orm:"auto_now_add"`
 }
 
+//RequestUserAction _
+type RequestUserAction struct {
+	ID              int
+	RequestDocument *RequestDocument `orm:"rel(one)"`
+	CreateUser      *Users           `orm:"rel(one)"`
+	CreatedAt       time.Time        `orm:"auto_now_add"`
+}
+
 //Status _
 type Status struct {
 	ID        int
@@ -86,7 +96,7 @@ type Status struct {
 }
 
 func init() {
-	orm.RegisterModel(new(RequestDocument), new(RequestStatus), new(Status)) // Need to register model in init
+	orm.RegisterModel(new(RequestDocument), new(RequestStatus), new(Status), new(RequestUserAction)) // Need to register model in init
 }
 
 //GetAllStatus _
@@ -120,14 +130,25 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 	req.CreatedAt = time.Now()
 	req.CreateUser = &user
 	o := orm.NewOrm()
+	orm.Debug = true
 	var firstStatus = GetFirstStatus()
-	first_status := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
+	firstInsertStatus := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
 	o.Begin()
 	id, err := o.Insert(&req)
-	_, err = o.Insert(&first_status)
+	userActions := []RequestUserAction{}
+	for _, val := range req.ActionUser {
+		val.RequestDocument = &RequestDocument{ID: int(id)}
+		if val.CreateUser.ID != 0{
+			userActions = append(userActions, val)
+		}
+	}
+	_, err = o.Insert(&firstInsertStatus)
+	_, err = o.InsertMulti(len(userActions), userActions)
 	o.Commit()
 	if err == nil {
 		retID = id
+	} else {
+		err = o.Rollback()
 	}
 	return retID, req.DocNo, err
 }
@@ -143,7 +164,23 @@ func UpdateReq(req RequestDocument, user Users) (errRet error) {
 		doc.Depart = req.Depart
 		doc.Details = req.Details
 		doc.EventDate = req.EventDate
+		doc.EventTime = req.EventTime
 		doc.ReqDate = req.ReqDate
+		doc.ReqTime = req.ReqTime
+
+		doc.AppointmentDate = req.AppointmentDate
+		doc.AppointmentTime = req.AppointmentTime
+		doc.GoalDate = req.GoalDate
+		doc.GoalTime = req.GoalTime
+		doc.ActionDate = req.ActionDate
+		doc.ActionTime = req.ActionTime
+		doc.CompleteDate = req.CompleteDate
+		doc.CompleteTime = req.CompleteTime
+
+		doc.ActionNumber = req.ActionNumber
+		doc.EstimatePrice = req.EstimatePrice
+		doc.OtherPrice = req.OtherPrice
+		doc.Remark = req.Remark
 		doc.DocRefNo = req.DocRefNo
 		doc.ReqName = req.ReqName
 		doc.Room = req.Room

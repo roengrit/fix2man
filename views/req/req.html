@@ -16,6 +16,7 @@
         <input type="hidden" id="req-building-id" name="Building.ID" value="{{.data.Building.ID}}">
         <input type="hidden" id="req-class-id" name="Class.ID" value="{{.data.Class.ID}}">
         <input type="hidden" id="req-room-id" name="Room.ID" value="{{.data.Room.ID}}">
+        <input type="hidden" id="current-row" >
 
         <div id="box-req" class="box box-primary">
             <div class="box-body">
@@ -248,7 +249,7 @@
                                 <tr>
                                     <th class="col-md-9 col-md-9-table" style="vertical-align: middle;">ผู้ดำเนินการ</th>
                                     <th class="col-md-3 col-md-3-table">
-                                        <input type="number" id="action-number" class="form-control col-xs-3" style="text-align:right;"
+                                        <input type="number" id="action-number" name="ActionNumber" {{.can_change_action_number}} class="form-control col-xs-3" style="text-align:right;"
                                             placeholder="ไม่จำกัดจำนวนคน" value="{{.data.ActionNumber}}">
                                     </th>
                                 </tr>
@@ -261,7 +262,7 @@
                                     <th>
                                         <button type="button" class="btn btn-success add-row">เพิ่ม</button>
                                     </th>
-                                    <th style="text-align:right;vertical-align: middle;">รวมทั้งหมด 2 คน</th>
+                                    <th style="text-align:right;vertical-align: middle;" id="total">รวมทั้งหมด 2 คน</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -365,8 +366,8 @@
         </div>
         <div class="col-xs-11" id="editOveray">
             <div class="col-md-8">
-                <input type="text" id="item-user" name="item-user" class="form-control has-query" autocomplete="off" placeholder="ช่าง/ผู้ดำเนินการ">
-                <input type="hidden" id="item-user-id" name="item-user-id" class="form-control has-query" autocomplete="off">
+                <input type="text" id="item-user-edit" name="item-user-edit" class="form-control has-query" autocomplete="off" placeholder="ช่าง/ผู้ดำเนินการ">
+                <input type="hidden" id="item-user-edit-id" name="item-user-edit-id" class="form-control" autocomplete="off">
             </div>
             <div class="col-md-4">
                 <div class="input-group ">

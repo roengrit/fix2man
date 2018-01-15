@@ -25,6 +25,7 @@ type Users struct {
 	Rooms            *Rooms     `orm:"null;rel(one)"`
 	Class            *Class     `orm:"null;rel(one)"`
 	Active           bool
+	IsTechnical      bool
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
 }
@@ -113,6 +114,19 @@ func GetUserByUserName(username string) (user *Users, errRet string) {
 //GetUserList _
 func GetUserList(top, term string) (num int64, err error, userList []Users) {
 	var sql = "SELECT i_d,name FROM users WHERE lower(name) like lower(?) order by name limit {0}"
+	if top == "0" {
+		sql = strings.Replace(sql, "limit {0}", "", -1)
+	} else {
+		sql = strings.Replace(sql, "{0}", top, -1)
+	}
+	o := orm.NewOrm()
+	num, err = o.Raw(sql, "%"+term+"%").QueryRows(&userList)
+	return num, err, userList
+}
+
+//GetTechList _
+func GetTechList(top, term string) (num int64, err error, userList []Users) {
+	var sql = "SELECT i_d,name FROM users WHERE is_technical = true and lower(name) like lower(?) order by name limit {0}"
 	if top == "0" {
 		sql = strings.Replace(sql, "limit {0}", "", -1)
 	} else {

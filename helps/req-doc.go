@@ -69,10 +69,18 @@ func GenReqHTML(lists []m.RequestList) string {
 }
 
 //ValidateReqData _
-func ValidateReqData(reqDoc m.RequestDocument, reqDate, reqDateEvent string) (
+func ValidateReqData(reqDoc m.RequestDocument,
+	reqDate, reqDateEvent, reqAppointmentDate,
+	reqGoalDate, reqActionDate, reqCompleteDate string) (
 	ret m.NormalModel,
 	eventDate time.Time,
-	requestDate time.Time) {
+	requestDate time.Time,
+	appointmentDate time.Time,
+	goalDate time.Time,
+	actionDate time.Time,
+	completeDate time.Time,
+) {
+
 	ret.RetOK = true
 	if reqDoc.ReqName == "" && ret.RetOK {
 		ret.RetOK = false
@@ -103,12 +111,9 @@ func ValidateReqData(reqDoc m.RequestDocument, reqDate, reqDateEvent string) (
 		ret.RetData = "กรุณาระบุห้อง"
 	}
 	errDate := errors.New("")
-	reqDateEventStamp := time.Now()
-	reqDateStamp := time.Now()
-
 	sp := strings.Split(reqDate, "-")
 	if len(sp) == 3 {
-		reqDateStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+		requestDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
 	}
 	if errDate != nil && ret.RetOK {
 		ret.RetOK = false
@@ -117,7 +122,7 @@ func ValidateReqData(reqDoc m.RequestDocument, reqDate, reqDateEvent string) (
 
 	sp = strings.Split(reqDateEvent, "-")
 	if len(sp) == 3 {
-		reqDateEventStamp, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+		eventDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
 	}
 	if errDate != nil && ret.RetOK {
 		ret.RetOK = false
@@ -128,5 +133,54 @@ func ValidateReqData(reqDoc m.RequestDocument, reqDate, reqDateEvent string) (
 		ret.RetOK = false
 		ret.RetData = "รายละเอียดการชำรุด/ปัญหา/อาการเสีย"
 	}
-	return ret, reqDateEventStamp, reqDateStamp
+
+	sp = strings.Split(reqAppointmentDate, "-")
+	if len(sp) == 3 && ret.RetOK {
+		appointmentDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่นัดดำเนินการ (dd-mm-yyyy)"
+	}
+
+	sp = strings.Split(reqGoalDate, "-")
+	if len(sp) == 3 && ret.RetOK {
+		goalDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่คาดว่าจะเสร็จ (dd-mm-yyyy)"
+	}
+
+	sp = strings.Split(reqActionDate, "-")
+	if len(sp) == 3 && ret.RetOK {
+		actionDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่ดำเนินการ (dd-mm-yyyy)"
+	}
+
+	sp = strings.Split(reqCompleteDate, "-")
+	if len(sp) == 3 && ret.RetOK {
+		completeDate, errDate = time.Parse("2006-02-01", sp[2]+"-"+sp[0]+"-"+sp[1])
+	}
+
+	if errDate != nil && ret.RetOK {
+		ret.RetOK = false
+		ret.RetData = "วันที่ซ่อมเสร็จ (dd-mm-yyyy)"
+	}
+	// reqDate, reqDateEvent, reqAppointmentDate,
+	// reqGoalDate, reqActionDate, reqCompleteDate string) (
+	// ret m.NormalModel,
+	// eventDate time.Time,
+	// requestDate time.Time,
+	// appointmentDate time.Time,
+	// goalDate time.Time,
+	// actionDate time.Time,
+	// completeDate time.Time,
+	return
 }

@@ -90,6 +90,27 @@ func (c *ServiceController) GetUserListJSON() {
 	c.ServeJSON()
 }
 
+//GetTechListJSON  _
+func (c *ServiceController) GetTechListJSON() {
+	term := strings.TrimSpace(c.GetString("query"))
+	rowCount, err, lists := m.GetTechList("15", term)
+	ret := m.NormalModel{}
+	if err == nil {
+		ret.RetOK = true
+		ret.RetCount = rowCount
+		ret.ListData = lists
+		if rowCount == 0 {
+			ret.RetOK = false
+			ret.RetData = "ไม่พบข้อมูล"
+		}
+	} else {
+		ret.RetOK = false
+		ret.RetData = "ไม่พบข้อมูล"
+	}
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
 //GetUserJSON  _
 func (c *ServiceController) GetUserJSON() {
 	term := strings.TrimSpace(c.GetString("query"))

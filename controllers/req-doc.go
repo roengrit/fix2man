@@ -5,6 +5,7 @@ import (
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
+	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -32,6 +33,9 @@ func (c *ReqController) Get() {
 			c.Data["title"] = "แก้ไขใบแจ้งงาน"
 			c.Data["data"] = ret
 		}
+	}
+	if h.CheckPermissAllow(1001, c.Ctx.Request) {
+		c.Data["can_change_action_number"] = "readonly"
 	}
 	c.Data["current_date"] = time.Now()
 	c.Layout = "layout.html"
@@ -70,17 +74,36 @@ func (c *ReqController) ReadReq() {
 //Post _
 func (c *ReqController) Post() {
 	var reqDoc m.RequestDocument
+	retJSON := m.NormalModel{}
 	decoder := form.NewDecoder()
 	parsFormErr := decoder.Decode(&reqDoc, c.Ctx.Request.Form)
-	retJSON := m.NormalModel{}
+	fmt.Println(reqDoc.ActionUser[0].CreateUser)
 	if parsFormErr == nil {
 		reqEventDateString := c.GetString("EventDate")
 		reqDateString := c.GetString("ReqDate")
+		reqAppointmentDateString := c.GetString("AppointmentDate")
+		reqGoalDateString := c.GetString("GoalDate")
+		reqActionDateString := c.GetString("ActionDate")
+		reqCompleteDateString := c.GetString("CompleteDate")
 		actionUser, _ := m.GetUserByUserName(h.GetUser(c.Ctx.Request))
-		ret, reqDateEvent, reqDate := h.ValidateReqData(reqDoc, reqDateString, reqEventDateString)
+		ret, reqDateEvent, reqDate, reqAppointmentDate, reqGoalDate, reqActionDate, reqCompleteDate := h.ValidateReqData(reqDoc,
+			reqDateString, reqEventDateString, reqAppointmentDateString,
+			reqGoalDateString, reqActionDateString, reqCompleteDateString)
 		if ret.RetOK {
 			reqDoc.EventDate = reqDateEvent
 			reqDoc.ReqDate = reqDate
+			if reqAppointmentDate != (time.Time{}) {
+				reqDoc.AppointmentDate = reqAppointmentDate
+			}
+			if reqGoalDate != (time.Time{}) {
+				reqDoc.GoalDate = reqGoalDate
+			}
+			if reqActionDate != (time.Time{}) {
+				reqDoc.ActionDate = reqActionDate
+			}
+			if reqCompleteDate != (time.Time{}) {
+				reqDoc.CompleteDate = reqCompleteDate
+			}
 			errAction := errors.New("")
 			if reqDoc.ID == 0 {
 				ret.ID, reqDoc.DocNo, errAction = m.CreateReq(reqDoc, m.Users{ID: actionUser.ID})

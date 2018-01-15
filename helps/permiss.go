@@ -88,3 +88,10 @@ func CheckPermiss(roleID, menuID int) bool {
 	}
 	return ret
 }
+
+//CheckPermissAllow check permission
+func CheckPermissAllow(menuID int, r *http.Request) bool {
+	role := GetRole(r)
+	_ = role
+	return true
+}

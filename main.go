@@ -59,6 +59,7 @@ func main() {
 
 	beego.Router("/service/user/json", &c.ServiceController{}, "get:GetUserJSON")
 	beego.Router("/service/user/list/json", &c.ServiceController{}, "get:GetUserListJSON")
+	beego.Router("/service/tech/list/json", &c.ServiceController{}, "get:GetTechListJSON")
 
 	beego.Router("/create-supplier", &c.SupplierController{}, "get:CreateSuppliers;post:UpdateSuppliers")
 	beego.Router("/supplier/read", &c.SupplierController{}, "get:CreateSuppliers")

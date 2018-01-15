@@ -525,15 +525,16 @@
 
     
     commit: function() {
+      this.updateFromWidgetInputs();
       this.updateElement();
       this.hideWidget();
     },
     currenttime: function() {
       this.setTime('');
-      this.$element.val('');
-      this.hideWidget();
+      this.$element.val('');     
       this.setDefaultTime('current');
       this.updateElement();
+      this.hideWidget();
     },
     clear: function() {
       this.setTime('');
@@ -708,7 +709,6 @@
           this.second = 59;
         }
       }
-
       this.update();
     },
 
@@ -776,7 +776,6 @@
           'meridian': this.meridian
         }
       });
-
      // this.updateElement();
       this.updateWidget();
     },
@@ -797,11 +796,9 @@
       if (this.$widget === false) {
         return;
       }
-
       var hour = this.hour < 10 ? '0' + this.hour : this.hour,
           minute = this.minute < 10 ? '0' + this.minute : this.minute,
           second = this.second < 10 ? '0' + this.second : this.second;
-
       if (this.showInputs) {
         this.$widget.find('input.bootstrap-timepicker-hour').val(hour);
         this.$widget.find('input.bootstrap-timepicker-minute').val(minute);
@@ -833,7 +830,6 @@
         $('input.bootstrap-timepicker-minute', this.$widget).val() +
         (this.showSeconds ? ':' + $('input.bootstrap-timepicker-second', this.$widget).val() : '') +
         (this.showMeridian ? ' ' + $('input.bootstrap-timepicker-meridian', this.$widget).val() : '');
-
       this.setTime(time);
     },
 
@@ -850,7 +846,6 @@
     widgetKeydown: function(e) {
       var $input = $(e.target).closest('input'),
           name = $input.attr('name');
-
       switch (e.keyCode) {
       case 9: //tab
         if (this.showMeridian) {
@@ -868,7 +863,6 @@
             }
           }
         }
-
         this.updateFromWidgetInputs();
         break;
       case 27: // escape
