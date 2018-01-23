@@ -81,7 +81,7 @@ type RequestStatus struct {
 type RequestUserAction struct {
 	ID              int
 	RequestDocument *RequestDocument `orm:"rel(one)"`
-	CreateUser      *Users           `orm:"rel(one)"`
+	ActionUser      *Users           `orm:"rel(one)"`
 	CreatedAt       time.Time        `orm:"auto_now_add"`
 }
 
@@ -130,27 +130,31 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 	req.CreatedAt = time.Now()
 	req.CreateUser = &user
 	o := orm.NewOrm()
-	orm.Debug = true
 	var firstStatus = GetFirstStatus()
 	firstInsertStatus := RequestStatus{RequestDocument: &req, Status: firstStatus, CreateUser: &user, CreatedAt: time.Now()}
-	o.Begin()
-	id, err := o.Insert(&req)
-	userActions := []RequestUserAction{}
-	for _, val := range req.ActionUser {
-		val.RequestDocument = &RequestDocument{ID: int(id)}
-		if val.CreateUser.ID != 0{
-			userActions = append(userActions, val)
+	errRet = o.Begin()
+	if errRet == nil {
+		id, err := o.Insert(&req)
+		userActions := []RequestUserAction{}
+		for _, val := range req.ActionUser {
+			val.RequestDocument = &RequestDocument{ID: int(id)}
+			if val.ActionUser.ID != 0 {
+				userActions = append(userActions, val)
+			}
 		}
+		_, err = o.Insert(&firstInsertStatus)
+		if len(userActions) > 0 {
+			_, err = o.InsertMulti(len(userActions), userActions)
+		}
+		o.Commit()
+		if err == nil {
+			retID = id
+		} else {
+			err = o.Rollback()
+		}
+		errRet = err
 	}
-	_, err = o.Insert(&firstInsertStatus)
-	_, err = o.InsertMulti(len(userActions), userActions)
-	o.Commit()
-	if err == nil {
-		retID = id
-	} else {
-		err = o.Rollback()
-	}
-	return retID, req.DocNo, err
+	return retID, req.DocNo, errRet
 }
 
 //UpdateReq _
@@ -189,10 +193,29 @@ func UpdateReq(req RequestDocument, user Users) (errRet error) {
 		doc.UpdatedAt = req.UpdatedAt
 		doc.UpdateUser = req.UpdateUser
 		doc.User = req.User
-		if num, err := o.Update(&doc); err == nil {
-			_ = num
-		} else {
-			errRet = err
+		errRet = o.Begin()
+		if errRet == nil {
+			if _, err := o.Update(&doc); err == nil {
+				_, err = o.QueryTable("request_user_action").Filter("request_document_id", doc.ID).Delete()
+				userActions := []RequestUserAction{}
+				for _, val := range req.ActionUser {
+					val.RequestDocument = &doc
+					if val.ActionUser.ID != 0 {
+						userActions = append(userActions, val)
+					}
+				}
+				if len(userActions) > 0 {
+					_, err = o.InsertMulti(len(userActions), userActions)
+				}
+				o.Commit()
+				if err != nil {
+					errRet = err
+					err = o.Rollback()
+				}
+			} else {
+				errRet = err
+				err = o.Rollback()
+			}
 		}
 	}
 	return errRet
@@ -210,10 +233,20 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 		}
 		reqGet.CreateUser = nil
 		reqGet.UpdateUser = nil
+		actionUser, _ := GetReqUserActionByDocID(ID)
+		reqGet.ActionUser = *actionUser
 	}
 	if reqGet.ID == 0 {
 		return nil, errors.New("ไม่พบข้อมูล")
 	}
+	return reqGet, errRet
+}
+
+//GetReqUserActionByDocID _
+func GetReqUserActionByDocID(ID string) (req *[]RequestUserAction, errRet error) {
+	o := orm.NewOrm()
+	reqGet := &[]RequestUserAction{}
+	o.QueryTable("request_user_action").Filter("request_document_id", ID).RelatedSel().All(reqGet)
 	return reqGet, errRet
 }
 

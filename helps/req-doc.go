@@ -11,35 +11,33 @@ import (
 
 //HTMLReqTemplate _
 const HTMLReqTemplate = `<tr>
-							<td>{branch}</td>
-							<td>{docno}</td>
-							<td>{reqname}</td> 
-							<td>{reqdate}</td>                             
-							<td>{eventdate}</td>        
-							<td>{details}</td>                           
-							<td>{status}</td> 
 							<td>
 								<div class="btn-group">
 									{action}
 								</div>
-							</td>                             
+							</td> 
+							<td class="is-col-toggle">{branch}</td>
+							<td class="info-col" style="cursor: pointer;">{docno} <i class="fa fa-info-circle"><i/></td>
+							<td class="is-col-toggle">{reqname}</td> 
+							<td>{reqdate}</td>                             
+							<td class="is-col-toggle">{eventdate}</td>        
+							<td class="is-col-toggle">{details}</td>                           
+							<td >{status}</td> 
+							                            
 						</tr>`
 
 //HTMLReqActionEnable _
 const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละเอียด" target="_blank" href="/request/read/?id={id}&r=1"><i class="fa fa-file-text-o"></i></a>
-							 <a   class="btn btn-primary" onclick="changeStatus({id})" title="เปลี่ยนสถานะ"><i class="fa fa-list-ol"></i></a>
-							 <a   class="btn btn-danger " title="แก้ไข"  href="/create-request/?id={id}"><i class="fa fa-edit"></i></a>
-							 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+							 <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">ประเมินราคา/มูลค่า</a></li>								
-								<li><a href="#">รับ/แจกจ่ายงาน</a></li>								
-								<li><a href="/create-request/?doc_ref={docno}">ใบแจ้งงานต่อเนื่อง</a></li>								
-								<li><a href="#">เบิกอะไหล่</a></li>
-								<li><a href="#">เบิกเครื่องสำรอง</a></li>
-								<li><a href="#">ประเมินผลการซ่อม</a></li>								
+							    <li><a href="/create-request/?id={id}" title="แก้ไข">แก้ไข</a></li>
+								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
+								<li><a href="#">รับ/แจกจ่ายงาน</a></li>
+								<li><a href="#">เบิกอะไหล่</a></li>	
+								<li><a href="#">เริ่มงาน</a></li>						 								
 							</ul>							 
 								 `
 

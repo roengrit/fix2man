@@ -1,3 +1,10 @@
+<style>
+    {{if .is_mobile}}
+    .is-col-toggle{
+        display: none!important;
+    }
+    {{end}}
+</style>
 <section class="content-header">
     <div id="top-alert" style="display:none">
 
@@ -90,19 +97,19 @@
                 <a href="/create-request" id="req-add" class="btn btn-sm btn-success">เพิ่มข้อมูล</a>
             </div>
         </div>
-        <div class="box-body">
+        <div class="box-body table-responsive">
             <div>
-                <table class="table table-bordered table-condensed">
+                <table class="table table-bordered table-condensed" style="margin-bottom:120px!important;">
                     <thead>
                         <tr>
-                            <th style="width: 150px!important;">สาขา</th>
-                            <th style="width: 140px!important;">เลขที่เอกสาร</th>
-                            <th >ชื่อผู้แจ้ง</th>
-                            <th style="width: 100px!important;">วันที่แจ้ง</th>
-                            <th style="width: 100px!important;">วันที่เสีย</th>
-                            <th>อาการเสีย</th>
-                            <th>สถานะ</th>
-                            <th style="width: 180px!important;"></th>
+                            <th style="width: 80px!important;text-align:center!important;">#</th>
+                            <th style=" white-space: nowrap!important;" class="is-col-toggle">สาขา</th>
+                            <th style=" white-space: nowrap!important;"  >เลขที่เอกสาร</th>
+                            <th style=" white-space: nowrap!important;" class="is-col-toggle">ชื่อผู้แจ้ง</th>
+                            <th style=" white-space: nowrap!important;"  >วันที่แจ้ง</th>
+                            <th style=" white-space: nowrap!important;" class="is-col-toggle">วันที่เสีย</th>
+                            <th style=" white-space: nowrap!important;max-height:350px!important;" class="is-col-toggle">อาการเสีย</th>
+                            <th style=" white-space: nowrap!important;" >สถานะ</th>                           
                         </tr>
                     </thead>
                     <tbody id="retData">

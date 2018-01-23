@@ -22,6 +22,7 @@ func (b *BaseController) Prepare() {
 		b.Ctx.Redirect(302, "/auth")
 	}
 	b.Data["base_user_display"] = val
+	b.Data["is_mobile"] = h.IsMobile(b.Ctx.Request.UserAgent())
 
 	uri := b.Ctx.Request.URL.RequestURI()
 	switch {

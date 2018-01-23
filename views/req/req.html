@@ -255,14 +255,32 @@
                                 </tr>
                             </thead>
                             <tbody class="table-bordered table-condensed" id="ret-data">
-
+                                {{if .user_len}}
+                                {{range $key, $val := .data.ActionUser}}
+                                        <tr  style="cursor: pointer;" index-val="{{$key}}">
+                                                            <input type="hidden" class="item-user-id" name="ActionUser[{{$key}}].ActionUser.ID" value="{{$val.ActionUser.ID}}" /> 
+                                                            <input type="hidden" class="item-user-name" name="ActionUser[{{$key}}].ActionUser.Name" value="{{$val.ActionUser.Name}}" />
+                                                            <td class="col-md-9 table-td-mid item-user-text"> 
+                                                                {{$val.ActionUser.Name}}
+                                                            </td>
+                                                            <td class="col-md-3 table-td-mid table-td-number"  >
+                                                                <div class="btn-group">
+                                                                    <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
+                                                                        <i class="fa  fa-close"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                    </tr>
+                                {{end}}  
+                                 
+                            {{end}}
                             </tbody>
                             <tfoot class="table-bordered table-condensed">
                                 <tr>
                                     <th>
                                         <button type="button" class="btn btn-success add-row">เพิ่ม</button>
                                     </th>
-                                    <th style="text-align:right;vertical-align: middle;" id="total">รวมทั้งหมด 2 คน</th>
+                                    <th style="text-align:right;vertical-align: middle;" id="total"> </th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -359,8 +377,11 @@
                 </div>
             </div>
             <div class="box-footer">
-                {{if .r}} {{else}}
+                {{if .r}}
+                <a href="/request/list"  class="btn btn-default pull-right">ย้อนกลับ</a>
+                {{else}}
                 <button type="submit" onclick="Save()" class="btn btn-primary pull-right">บันทึก</button>
+                <a href="/request/list"  class="btn btn-default pull-right" style="margin-right:3px;">ยกเลิก</a>
                 {{end}}
             </div>
         </div>

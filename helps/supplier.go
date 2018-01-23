@@ -9,21 +9,28 @@ import (
 
 //HTMLSupTemplate _
 const HTMLSupTemplate = `<tr>
-							<td>{name}</td>
-							<td>{contact}</td>
-							<td>{tel}</td> 
 							<td>
 								<div class="btn-group">
 									{action}
 								</div>
-							</td>                             
+							</td>
+							<td>{name}</td>
+							<td>{contact}</td>
+							<td>{tel}</td> 
+							                             
 						</tr>`
 
 //HTMLSupActionEnable _
 const HTMLSupActionEnable = `<a   class="btn bg-purple" title="รายละเอียด" target="_blank" href="/supplier/read/?id={id}&r=1"><i class="fa fa-file-text-o"></i></a>
-							 <a   class="btn btn-primary " title="แก้ไข"  href="/create-supplier/?id={id}"><i class="fa fa-edit"></i></a>
-							 <a   class="btn btn-danger" title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/supplier/delete")'><i class="fa fa-trash-o"></i></a>
-								 `
+								 <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="/create-supplier/?id={id}" title="แก้ไข">แก้ไข</a></li>
+									<li> <a title="ลบ" href="#"  onclick='confirmDeleteGlobal({id},"/supplier/delete")'>ลบ</a></li>								
+								</ul>							 
+									 `
 
 //HTMLSupNotFoundRows _
 const HTMLSupNotFoundRows = `<tr> <td  colspan="4" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`

@@ -9,13 +9,13 @@ import (
 
 //HTMLRecTemplate _
 const HTMLRecTemplate = `<tr>
-							<td>{branch}</td>
+							<td class="is-col-toggle">{branch}</td>
 							<td>{docno}</td>
-							<td>{reqname}</td> 
-							<td>{reqdate}</td>                             
-							<td>{eventdate}</td>        
-							<td>{details}</td>                           
-							<td>{status}</td> 
+							<td class="is-col-toggle">{reqname}</td> 
+							<td >{reqdate}</td>                             
+							<td class="is-col-toggle">{eventdate}</td>        
+							<td class="is-col-toggle">{details}</td>                           
+							<td class="is-col-toggle">{status}</td> 
 							<td>
 								<div class="btn-group">
 									{action}

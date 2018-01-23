@@ -5,7 +5,6 @@ import (
 	"errors"
 	h "fix2man/helps"
 	m "fix2man/models"
-	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -32,6 +31,7 @@ func (c *ReqController) Get() {
 		} else {
 			c.Data["title"] = "แก้ไขใบแจ้งงาน"
 			c.Data["data"] = ret
+			c.Data["user_len"] = len(ret.ActionUser)
 		}
 	}
 	if h.CheckPermissAllow(1001, c.Ctx.Request) {
@@ -77,7 +77,6 @@ func (c *ReqController) Post() {
 	retJSON := m.NormalModel{}
 	decoder := form.NewDecoder()
 	parsFormErr := decoder.Decode(&reqDoc, c.Ctx.Request.Form)
-	fmt.Println(reqDoc.ActionUser[0].CreateUser)
 	if parsFormErr == nil {
 		reqEventDateString := c.GetString("EventDate")
 		reqDateString := c.GetString("ReqDate")
@@ -210,6 +209,50 @@ func (c *ReqController) ChangeStatus() {
 
 //UpdateStatus _
 func (c *ReqController) UpdateStatus() {
+	ret := m.NormalModel{}
+	ID := c.GetString("req-id")
+	docID, _ := strconv.ParseInt(ID, 10, 32)
+	statusVal := c.GetString("txt-status")
+	statusID, _ := strconv.ParseInt(statusVal, 10, 32)
+	remark := c.GetString("remark")
+	ret.RetOK = true
+	if ret.RetOK {
+		lastStatus, _ := m.GetReqDocLastStatus(int(docID))
+		if int(statusID) == lastStatus.Status.ID {
+			ret.RetOK = false
+			ret.RetData = "เอกสารเป็นสถานะนี้อยู่แล้ว"
+		}
+	}
+	if ret.RetOK && remark == "" {
+		docHasStatus, errHas := m.GetReqDocHasStatus(int(docID), int(statusID))
+		if errHas == nil && docHasStatus != nil && (&m.RequestStatus{}) != docHasStatus {
+			if int(statusID) == docHasStatus.Status.ID {
+				ret.RetOK = false
+				ret.RetData = "คุณกำลังกลับไปสถานะก่อนหน้านี้ กรุณาระบุหมายเหตุ"
+			}
+		}
+	}
+	if ret.RetOK {
+		actionUser, _ := m.GetUserByUserName(h.GetUser(c.Ctx.Request))
+		status := m.RequestStatus{Remark: remark, CreateUser: actionUser, CreatedAt: time.Now()}
+		status.Status = &m.Status{ID: int(statusID)}
+		status.RequestDocument = &m.RequestDocument{ID: int(docID)}
+		_, err := m.CreateReqStatus(status)
+		if err != nil {
+			ret.RetOK = false
+			ret.RetData = "บันทึกไม่สำเร็จ " + err.Error()
+		} else {
+			ret.RetData = "บันทึกสำเร็จ"
+		}
+	}
+	ret.XSRF = c.XSRFToken()
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//StartJob _
+func (c *ReqController) StartJob() {
 	ret := m.NormalModel{}
 	ID := c.GetString("req-id")
 	docID, _ := strconv.ParseInt(ID, 10, 32)

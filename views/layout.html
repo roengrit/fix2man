@@ -34,7 +34,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
-<body class="hold-transition skin-purple-light sidebar-mini">
+<body class="skin-purple-light
+{{if .is_mobile}}
+    sidebar-collapse 
+{{end}}" style="height: auto; min-height: 100%;">
     <!-- Site wrapper -->
     <div class="wrapper">
 
@@ -43,7 +46,7 @@
             <a href="/" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">
-                    <b>F</b>IX</span>
+                    <b>FIX</b></span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg">
                     <b>FIX</b>ED</span>
