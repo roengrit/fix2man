@@ -63,9 +63,9 @@
                         </div>
                     </div>
                 </div>
-                <h4 class="req-box-title">ตำแหน่ง/ที่ตั้ง เครื่องมือ/อุปกรณ์ที่เสีย <a href="javascript:void(0)" target-toggle="location" class="title-toggle" style="font-size:12px;">
+                <h4 class="req-box-title">ตำแหน่ง/ที่ตั้ง <a href="javascript:void(0)" target-toggle="location" class="title-toggle" style="font-size:12px;">
                     <i class="fa fa-eye"></i></a></h4>
-                <div class="form-group req-box-form location"  >
+                <div class="form-group req-box-form location" >
                     <div class="col-xs-6">
                         <label for="req-building">ตึก</label>
                         <div class="input-group">
@@ -102,7 +102,7 @@
                 <h4 class="req-box-title">รายละเอียด <a href="javascript:void(0)" target-toggle="details" class="title-toggle" style="font-size:12px;"><i class="fa fa-eye"></i></a></h4>
                 <div class="form-group req-box-form details">
                     <div class="col-xs-3">
-                        <label for="req-date-event">วันที่แจ้ง</label>
+                        <label for="req-date-event">วันที่แจ้ง/ร้องขอ</label>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-calculator"></i>
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3">
-                        <label for="req-date-event">เวลาที่แจ้ง</label>
+                        <label for="req-date-event">เวลาที่แจ้ง/ร้องขอ</label>
                         <div class="input-group bootstrap-timepicker timepicker">
                             <span class="input-group-addon">
                                 <i class="fa  fa-clock-o"></i>
@@ -181,8 +181,8 @@
                 <div class="form-group req-box-form details">
                     <div class="col-xs-12">
                         <div class="form-group">
-                            <label>รายละเอียดการชำรุด/ปัญหา/อาการเสีย</label>
-                            <textarea class="form-control" {{.r}} id="remark" name="Details" rows="4" placeholder="รายละเอียดการชำรุด/ปัญหา/อาการเสีย">{{.data.Details}}</textarea>
+                            <label>รายละเอียด/ปัญหา/อาการเสีย</label>
+                            <textarea class="form-control" {{.r}} id="remark" name="Details" rows="4" placeholder="รายละเอียด/ปัญหา/อาการเสีย">{{.data.Details}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3">
-                        <label for="req-date-event">วันที่คาดว่าจะเสร็จ</label>
+                        <label for="req-date-event">วันที่คาดว่าจะแล้วเสร็จ</label>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-calculator"></i>
@@ -229,7 +229,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3">
-                        <label for="req-date-event">เวลานัดดำเนินการ</label>
+                        <label for="req-date-event">เวลาคาดว่าจะแล้วเสร็จ</label>
                         <div class="input-group  bootstrap-timepicker timepicker">
                             <span class="input-group-addon">
                                 <i class="fa  fa-clock-o"></i>
@@ -328,7 +328,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3" style="margin-top:20px;">
-                        <label for="req-date-event">วันที่ซ่อมเสร็จ</label>
+                        <label for="req-date-event">วันที่ดำเนินการเสร็จ</label>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-calculator"></i>
@@ -341,7 +341,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3" style="margin-top:20px;">
-                        <label for="req-date-event">เวลาซ่อมเสร็จ</label>
+                        <label for="req-date-event">เวลาดำเนินการเสร็จ</label>
                         <div class="input-group  bootstrap-timepicker timepicker">
                             <span class="input-group-addon">
                                 <i class="fa  fa-clock-o"></i>
@@ -387,7 +387,7 @@
         </div>
         <div class="col-xs-11" id="editOveray">
             <div class="col-md-8">
-                <input type="text" id="item-user-edit" name="item-user-edit" class="form-control has-query" autocomplete="off" placeholder="ช่าง/ผู้ดำเนินการ">
+                <input type="text" id="item-user-edit" name="item-user-edit" class="form-control has-query" autocomplete="off" placeholder="ผู้ดำเนินการ">
                 <input type="hidden" id="item-user-edit-id" name="item-user-edit-id" class="form-control" autocomplete="off">
             </div>
             <div class="col-md-4">
