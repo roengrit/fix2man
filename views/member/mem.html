@@ -1,0 +1,144 @@
+<section class="content-header">
+    <div id="top-alert" style="display:none">
+    </div>
+    <h1 id="title-content">
+        {{.title}}
+    </h1>
+</section>
+<section class="content">
+    <form 
+    {{if .r }}
+    {{else }}
+       action="/member"
+    {{end}}
+     autocomplete="off" onsubmit="return false;"  id="sub-form" method="post">
+        {{ .xsrfdata }}
+        <input type="hidden" id="ID" name="ID" value="{{.m.ID}}" />
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <label for="req-name">ชื่อ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" id="Name" required name="Name" class="form-control" {{.r }} autocomplete="off" placeholder="ชื่อ...." value="{{.m.Name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form" style="margin-bottom:50px;">
+                    <div class="col-xs-12">
+                        <label for="req-date-event">ที่อยู่</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-file-text-o"></i>
+                            </span>
+                            <textarea class="form-control"  id="Address" name="Address" rows="3" {{.r }} placeholder="ที่อยู่....">{{.m.Address}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-6">
+                        <label for="req-sn">จังหวัด</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <select id="ProvinceID" name="Province.ID"  {{.r }} class="form-control province">
+                                    {{range $key, $val := .Province}}
+                                        <option value="{{$val.ID}}" > {{$val.Name}} </option>
+                                    {{end}}   
+                            </select>   
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="req-date-event">รหัสไปรษณีย์</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <input type="text" id="PostCode"  name="PostCode" class="form-control" {{.r }}   maxlength="5"
+                              value="{{.m.PostCode}}"   placeholder="รหัสไปรษณีย์">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-6">
+                        <label for="req-sn">ผู้ติดต่อ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-book"></i>
+                            </span>
+                            <input type="text" id="Contact" name="Contact" class="form-control" {{.r }} autocomplete="off"  
+                            value="{{.m.Contact}}"   placeholder="ผู้ติดต่อ">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="req-date-event">โทรศัพท์</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                            <input type="text" id="Tel" name="Tel" {{.r }} class="form-control"    
+                            value="{{.m.Tel}}"  placeholder="โทรศัพท์">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                        <div class="col-xs-4">
+                            <label for="req-sn">ประเภท</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-male"></i>
+                                </span>
+                                <select id="MemberType" name="MemberType" class="form-control" autocomplete="off">
+                                        <option value="0">ร้านค้า/Supplier</option>
+                                        <option value="1">ภายใน</option>
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <label for="req-date-event">ระดับ</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-level-up"></i>
+                                </span>
+                                <select id="Level" name="Level" class="form-control" autocomplete="off">
+                                        <option value="0">ทั่วไป</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                                <label for="req-date-event">คะแนน</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa  fa-money"></i>
+                                    </span>
+                                    <input type="text" id="Score"   name="Score" {{.r }} class="form-control"    
+                                    value="{{.m.Score}}"  placeholder="คะแนน">
+                                </div>
+                            </div>
+                    </div>
+                <div class="form-group req-box-form"  >
+                    <div class="col-xs-12">
+                        <label for="req-date-event">หมายเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-align-left"></i>
+                            </span>
+                            <textarea class="form-control"  {{.r }} id="Remark" name="Remark" rows="3" placeholder="หมายเหตุ">{{.m.Remark}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                {{if .r}} {{else}}
+                <button type="submit" onclick="Save()" class="btn btn-primary pull-right">บันทึก</button>
+                <a href="/member/list" class="btn btn-default pull-right" style="margin-right:3px;">ยกเลิก</a>
+                {{end}}
+            </div>
+        </div>
+    </form>
+</section>
+ 

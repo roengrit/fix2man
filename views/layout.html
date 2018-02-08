@@ -146,14 +146,14 @@
                     <li class="treeview {{.m_supplier}}">
                         <a href="#">
                             <i class="fa fa-tty"></i>
-                            <span>ร้านค้า/Supplier</span><span class="pull-right-container">
+                            <span>สมาชิก</span><span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
                             <li class="{{.m_supplier_list}}">
-                                <a href="/supplier/list">
-                                    <i class="fa fa-circle-o"></i>ร้านค้า/Supplier</a>
+                                <a href="/member/list">
+                                    <i class="fa fa-circle-o"></i>สมาชิก</a>
                             </li>
                         </ul>
                     </li>
@@ -179,12 +179,12 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="/receive/list">
+                                <a href="/pickup/list">
                                     <i class="fa fa-circle-o"></i>เบิก</a>
                             </li>
                             <li>
-                                <a href="/receive-return/list">
-                                    <i class="fa fa-circle-o"></i> รับคืน</a>
+                                <a href="/receive/list">
+                                    <i class="fa fa-circle-o"></i> รับ</a>
                             </li>
                         </ul>
                     </li>
@@ -210,7 +210,7 @@
                     <li class="treeview {{.m_user}}">
                         <a href="#">
                             <i class="fa fa-users"></i>
-                            <span>สมาชิก</span>
+                            <span>ผู้ใช้งาน</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
@@ -218,11 +218,11 @@
                         <ul class="treeview-menu">
                             <li>
                                 <a href="../forms/general.html">
-                                    <i class="fa fa-circle-o"></i> สร้างสมาชิก</a>
+                                    <i class="fa fa-circle-o"></i> สร้างผู้ใช้งาน</a>
                             </li>
                             <li>
                                 <a href="../forms/advanced.html">
-                                    <i class="fa fa-circle-o"></i> รายชื่อสมาชิก</a>
+                                    <i class="fa fa-circle-o"></i> รายชื่อผู้ใช้งาน</a>
                             </li>
                             <li class="{{.m_role_list}}">
                                 <a href="/normal/?entity=roles">
@@ -239,10 +239,6 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-circle-o"></i> รายละเอียดบริษัท</a>
-                            </li>
                             <li class="{{.m_status_list}}">
                                 <a href="/normal/?entity=status">
                                     <i class="fa fa-circle-o"></i> สถานะการซ่อม</a>

@@ -1,0 +1,245 @@
+{{if.r}}
+   <style>
+       .delete-row{
+           display: none;
+       }
+   </style>
+{{end}}     
+<section class="content-header">
+    <div id="top-alert" style="display:none">
+    </div>
+    <h1 id="title-content">
+        {{.title}}
+    </h1>
+</section>
+<section class="content">
+    <form action="/receive" autocomplete="off" id="receive-form" onsubmit="return false;" method="post">
+        {{ .xsrfdata }}
+        
+        <input type="hidden" id="current-row" />
+        <input type="hidden" id="MemberID" name="Member.ID" value="{{.m.Member.ID}}" />
+        <input type="hidden" id="DocNo" name="DocNo" value="{{.m.DocNo}}" />
+        <input type="hidden" id="ID" name="ID" value="{{.m.ID}}" />
+
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+                <div class="form-group req-box-form">
+                    <div class="col-xs-10">
+                        <label for="req-name">ผู้จำหน่าย</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" style="cursor:pointer;" onclick="OTC()">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" id="MemberName" name="MemberName" tabindex="0"
+                                   class="form-control"  autocomplete="off" placeholder="ผู้จำหน่าย...."
+                                   value="{{.m.MemberName}}" {{.r }} />
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                            <label for="req-name">สถานะ</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-bell-o"></i>
+                                </span>
+                                 {{if .m.Active}}
+                                      <input type="text" id="Active" tabindex="1" class="form-control" autocomplete="off" value="N" readonly />
+                                 {{else}}
+                                    {{if .m.DocNo}}
+                                         <input type="text" id="Active" tabindex="1" class="form-control" autocomplete="off" value="C" readonly />
+                                    {{else}}
+                                         <input type="text" id="Active" tabindex="1" class="form-control" autocomplete="off" value="N" readonly /> 
+                                    {{end}}                                   
+                                {{end}}
+                            </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-3">
+                        <label for="req-sn">วันที่รับ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calculator"></i>
+                            </span>
+                            {{if .DocTime}}
+                            <input type="text" id="DocDate" data-date-language="th" name="DocDate" tabindex="2" class="form-control" value='{{.m.DocDate}}' {{.r }} /> {{else}}
+                            <input type="text" id="DocDate" data-date-language="th" name="DocDate" tabindex="2" class="form-control" value='{{date .CurrentDate "d-m-Y"}}' {{.r }} /> {{end}}
+                            
+                        </div>
+                    </div>
+                    <div class="col-xs-2">
+                            <label for="req-sn">เวลาที่รับ</label>
+                            <div class="input-group bootstrap-timepicker timepicker">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </span>
+                                 {{if .DocTime}}
+                                <input type="text" id="DocTime" name="DocTime" class="form-control" value='{{.m.DocTime}}' {{.r }} /> {{else}}
+                                <input type="text" id="DocTime" name="DocTime" class="form-control" value='{{date .CurrentDate "H:i"}}'{{.r }} /> {{end}}
+                            </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="req-sn">เอกสารอ้างอิง</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa  fa-file-text-o"></i>
+                            </span>
+                            <input type="text" id="DocRefNo" name="DocRefNo" class="form-control" autocomplete="off" value="{{.m.DocRefNo}}" placeholder="เอกสารอ้างอิง" {{.r }} />
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <label for="req-sn">ประเภทการรับ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa  fa-file-text-o"></i>
+                            </span>
+                            <select id="DocType" name="DocType" class="form-control" autocomplete="off">
+                                <option value="1"  >ทั่วไป</option>
+                                <option value="2"  >จากการผลิต</option>
+                                <option value="0"  >ยอดยกมา</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>        
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <table class="table" id="ret-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-5 col-md-5-table">ชื่อ</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:right;">จำนวน</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:right;">ราคา:หน่วย</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:right;">รวม</th>
+                                    <th class="col-md-1 col-md-1-table" style="width:100%;"></th>
+                                </tr>
+                            </thead>                           
+                            <tbody class="table-bordered table-condensed" id="RetData">
+                                    {{if .RetCount}}
+                                        {{range $key, $val := .m.ReceiveSub}}
+                                            <tr  style="cursor: pointer;" index-val="{{$key}}">
+                                                    <input type="hidden" class="ProductId" name="ReceiveSub[{{$key}}].Product.ID" value="{{$val.Product.ID}}" /> 
+                                                    <input type="hidden" class="ProductName" name="ReceiveSub[{{$key}}].Product.Name" value="{{$val.Product.Name}}" />
+                                                    <input type="hidden" class="ProductUnitID" name="ReceiveSub[{{$key}}].Unit.ID" value="{{$val.Unit.ID}}" /> 
+                                                    <input type="hidden" class="ProductQty" name="ReceiveSub[{{$key}}].Qty" value="{{$val.Qty}}" />
+                                                    <input type="hidden" class="ProductPrice" name="ReceiveSub[{{$key}}].Price" value="{{$val.Price}}" />
+                                                    <input type="hidden" class="ProductTotalPrice" name="ReceiveSub[{{$key}}].TotalPrice" value="{{$val.TotalPrice}}" />
+                    
+                                                    <td class="col-md-5 table-td-mid ProductNameText">{{$val.Product.Name}}</td> 
+                                                    <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{{$val.Qty | ThCommaSep }}</td>
+                                                    <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{{$val.Price | ThCommaSep }}</td>
+                                                    <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{{$val.TotalPrice | ThCommaSep }}</td>
+                                                    <td class="col-md-1 table-td-mid table-td-number"  >
+                                                        <div class="btn-group">
+                                                            <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
+                                                                <i class="fa  fa-close"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                            </tr>
+                                        {{end}}  
+                                    {{end}}
+                            </tbody>
+                            <tfoot class="table-bordered table-condensed">
+                                <input type="hidden" name="TotalAmount" id="TotalAmount" value="{{.m.TotalAmount}}"/>
+                                <input type="hidden" name="TotalDiscount" id="TotalDiscount" value="{{.m.TotalDiscount}}"/>
+                                <input type="hidden" name="TotalNetAmount" id="TotalNetAmount" value="{{.m.TotalNetAmount}}"/>
+                                <tr>
+                                    <th>
+                                        <button type="button" class="btn btn-sm btn-success add-row" 
+                                        {{if.r }}
+                                          style="display:none;"
+                                        {{else}}
+                                        {{end}}
+                                        >เพิ่ม</button>
+                                    </th>
+                                    <th colspan="2" style="text-align:right;vertical-align: middle;">รวมเป็นเงิน</th>                                   
+                                    <th style="text-align:right;vertical-align: middle;" id="TotalAmountText">
+                                     {{if.m.TotalAmount}} {{.m.TotalAmount | ThCommaSep}} {{else}} 0.00 {{end}}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th> </th>
+                                    <th colspan="2" style="text-align:right;vertical-align: middle;">
+                                        <div style="display:block;">
+                                            <input type="number" step="0.01" class="form-control" id="DiscountWord" value="{{if.m.DiscountWord}}{{.m.DiscountWord | TextThCommaSep}}{{else}}0.00{{end}}"
+                                             name="DiscountWord" style="width:130px!important;float:right;margin-left:5px;text-align: right;" {{.r }}  />
+                                            <select id="DiscountType" name="DiscountType" class="form-control" style="width:80px!important;float:right;margin-left:5px;" {{.r }}  >
+                                                 {{if.m.DiscountType}}
+                                                <option value="1" selected>%</option>
+                                                <option value="0">เงิน</option>
+                                                {{else}}
+                                                <option value="0" selected>เงิน</option>
+                                                <option value="1">%</option>
+                                                {{end}}
+                                            </select>
+                                            <div style="padding-top:5px;height: 34px;float:right;">ส่วนลด</div>
+                                        </div>
+                                    </th>
+                                    <th style="text-align:right;vertical-align: middle;" id="TotalDiscountText">
+                                            {{if.m.TotalDiscount}} {{.m.TotalDiscount | ThCommaSep}} {{else}} 0.00 {{end}}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th> </th>
+                                    <th colspan="2" style="text-align:right;vertical-align: middle;">จำนวนเงินรวมทั้งสิ้น</th>
+                                    <th style="text-align:right;vertical-align: middle;" id="TotalNetAmountText">
+                                            {{if.m.TotalNetAmount}} {{.m.TotalNetAmount | ThCommaSep}} {{else}} 0.00 {{end}}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label>หมายเหตุ</label>
+                            <textarea class="form-control"  id="Remark" name="Remark" rows="4" placeholder="หมายเหตุ" {{.r }}  >{{.m.Remark}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                {{if not .m.Active}}
+                    {{if .m.DocNo}}
+                    <div class="form-group req-box-form">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>หมายเหตุการยกเลิก</label>
+                                    <textarea class="form-control"  id="CancelRemark" name="CancelRemark" rows="4" placeholder="หมายเหตุ" {{.r }}  >{{.m.CancelRemark}}</textarea>
+                                </div>
+                            </div>
+                    </div>
+                    {{end}}
+                {{end}}
+            </div>      
+            <div class="box-footer">
+                {{if .r}} {{else}}
+                <button type="submit" onclick="Save()" class="btn btn-primary pull-right">บันทึก</button>               
+                {{end}}
+                <a href="/receive/list" class="btn btn-default pull-right" style="margin-right:5px;">ยกเลิก</a>
+            </div>
+        </div>
+        <div class="col-xs-12" id="editOveray">
+                <div class="col-md-6">
+                    <input type="text" id="item-name" name="item-name" class="form-control" autocomplete="off" placeholder="่ชื่อ">
+                    <input type="hidden" tabindex="-1" id="item-id" name="item-id"  >
+                    <input type="hidden" tabindex="-1" id="unit-id" name="unit-id"  >                
+                    <input type="hidden" tabindex="-1" id="item-balance_cost" name="item-balance_cost"  >  
+                    <input type="hidden" tabindex="-1" id="item-image_path" name="item-image_path"  >  
+                </div>
+                <div class="col-md-2">
+                    <input type="number" id="qty" name="qty" step="0.01" class="form-control" style="text-align: right;" autocomplete="off" placeholder="จำนวน">
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group ">
+                        <input type="number" id="price" name="price" step="0.01" class="form-control" style="text-align: right;" placeholder="ราคา">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success ok-edit-row">ตกลง</button>
+                            <button type="button" class="btn btn-default cancel-edit-row">ยกเลิก</button>
+                        </span>
+                    </div>
+                </div>
+            </div>        
+    </form>
+</section>

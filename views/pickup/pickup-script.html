@@ -1,0 +1,244 @@
+<script src="/static/js/datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/js/datepicker/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
+<script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
+<script>
+    $(document).ready(function () {
+        sumFoorter();
+        var $editOveray = $('#editOveray');
+        $('#ret-table').on("click", "tbody > tr", function (index) {
+            var readonly = '{{.r}}';
+            if(readonly)
+              return;
+            var bottomWidth = $(this).css('width');
+            var intWidth = parseInt(bottomWidth.replace("px", ""));
+            var bottomHeight = '40px';
+            var rowPos = $(this).position();
+            bottomTop = rowPos.top;
+            bottomLeft = rowPos.left;
+            eTop = $(this).offset().top + 7;
+            $editOveray.css({
+                position: 'absolute',
+                top: eTop,
+                width: (intWidth - 15) + 'px',
+                height: bottomHeight,
+            });
+            $("#current-row").val($(this).attr("index-val"));
+            $("#item-id").val($(this).find(".ProductId").val());
+            $("#item-name").val($(this).find(".ProductName").val());
+            $("#unit-code").val($(this).find(".ProductUnitID").val()); 
+            $("#qty").val($(this).find(".ProductQty").val());
+            $("#price").val($(this).find(".ProductPrice").val());
+            $("#average-cost").val($(this).find(".AverageCost").val());
+            $editOveray.show();
+        });
+
+        var templateRow = `<tr  style="cursor: pointer;" index-val="@">
+                                <input type="hidden" class="ProductId" name="PickUpSub[@].Product.ID" value="{0}" /> 
+                                <input type="hidden" class="ProductName" name="PickUpSub[@].Product.Name" value="{1}" />
+                                <input type="hidden" class="ProductUnitID" name="PickUpSub[@].Unit.ID" value="{2}" /> 
+                                <input type="hidden" class="ProductQty" name="PickUpSub[@].Qty" value="{3}" />
+                                <input type="hidden" class="ProductPrice" name="PickUpSub[@].Price" value="{4}" />
+                                <input type="hidden" class="AverageCost" name="PickUpSub[@].AverageCost" value="{5}" />
+                                <input type="hidden" class="ProductTotalPrice" name="PickUpSub[@].TotalPrice" value="{6}" />
+
+                                <td class="col-md-5 table-td-mid ProductNameText">{7}</td> 
+                                <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{8}</td>
+                                <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{9}</td>
+                                <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{10}</td>
+                                <td class="col-md-1 table-td-mid table-td-number"  >
+                                    <div class="btn-group">
+                                        <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
+                                            <i class="fa  fa-close"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                         </tr>`;
+
+        if ($('#RetData tr').length == 0) {
+            for (i = 0; i <= 3; i++) {
+                appendEmptyRow(i);
+            }
+        }
+
+        $(".cancel-edit-row").click(function (event) {
+            $editOveray.hide();
+        });
+
+        $(".ok-edit-row").click(function (event) {
+            var index  =  $("#current-row").val();
+            var qty = parseFloat($('#qty').val()==''? '0': $('#qty').val()) ;
+            var averageCost = parseFloat($('#average-cost').val()==''? '0': $('#average-cost').val());
+            var price = parseFloat($('#price').val()==''? '0': $('#price').val());
+            var totalPrice = parseFloat($('#qty').val()==''? '0': $('#qty').val()) * parseFloat($('#price').val()==''? '0': $('#price').val());
+
+            $('#RetData > tr').eq(index).find(".ProductId").val($('#item-id').val());
+            $('#RetData > tr').eq(index).find(".ProductName").val($('#item-name').val());
+            $('#RetData > tr').eq(index).find(".ProductUnitID").val($('#unit-id').val()); 
+
+            $('#RetData > tr').eq(index).find(".ProductQty").val(qty);
+            $('#RetData > tr').eq(index).find(".AverageCost").val(averageCost);
+            $('#RetData > tr').eq(index).find(".ProductPrice").val(price);
+            $('#RetData > tr').eq(index).find(".ProductTotalPrice").val(totalPrice);
+
+            $('#RetData > tr').eq(index).find(".ProductNameText").html($('#item-name').val());
+            $('#RetData > tr').eq(index).find(".ProductQtyText").html(addCommas(qty));
+            $('#RetData > tr').eq(index).find(".ProductPriceText").html(addCommas(price));
+            $('#RetData > tr').eq(index).find(".ProductTotalPriceText").html(addCommas(totalPrice));
+            sumFoorter();
+            $editOveray.hide();
+        }); 
+
+        $(".delete-row").click(function (event) {
+            deleteRow($(this));
+            sumFoorter();
+        });
+
+        $(".add-row").click(function (event) {
+            var rowCount = $('#RetData tr').length;
+            appendEmptyRow(rowCount);
+            $(".delete-row").click(function (event) {
+                deleteRow($(this));
+                $editOveray.hide();
+            });
+        });
+
+        $("#DocType").val('{{.m.DocType}}'); 
+        if($("#DocType").val()=='' || $("#DocType").val() == null){
+            $("#DocType").val($("#DocType option:first").val());
+        }
+
+        $('#DocDate').datepicker({
+            autoclose: true,
+            language: 'th',
+            todayBtn: true,
+            orientation: "auto",
+            todayHighlight: true,
+            format: 'dd-mm-yyyy',
+        });
+        $('#DocTime').timepicker({
+            minuteStep: 1,
+            disableFocus: true,
+            template: 'dropdown',
+            orientation: "auto",
+            showMeridian:false,
+            defaultTime: ''
+         }); 
+
+         $('#MemberName').typeahead({
+            ajax: '/service/entity/list/json/?entity=member',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            valid:'MemberID',
+            onSelect: function (data) {
+                if (data.value == 0) {
+                    return;
+                }
+                $('#MemberID').val(data.value);                 
+            }
+        });
+
+        $('#item-name').typeahead({
+            ajax: '/product/list/json',
+            display: 'Name',
+            displayField: 'Name',
+            valueField: 'ID',
+            val: 'ID',
+            valid:'item-id',
+            onSelect: function (data) {
+                if (data.value == 0) {
+                    return;
+                }
+                $('#item-id').val(data.value);  
+                $.get("/product/json/?id=" + data.value, function (product) {
+                    $('#unit-id').val(product.Data1.Unit.ID);  
+                    $('#average-cost').val(product.Data1.AverageCost);  
+                    $('#price').val(product.Data1.AverageCost);  
+                });       
+            }
+        });
+
+        $('#DiscountType').change(function(){
+            sumFoorter();
+        })
+
+        $("#DiscountWord").bind('keyup mouseup', function () {
+            sumFoorter();          
+        });
+
+        $('#DiscountWord').change(function(){
+            sumFoorter();
+        })
+
+        function appendEmptyRow(index) {
+            $('#RetData').append(
+                templateRow.replace(/@/g, index)
+                .replace(/@/g, index)
+                .replace('{0}', '')
+                .replace('{1}', '')
+                .replace('{2}', '')
+                .replace('{3}', '0.00')
+                .replace('{4}', '0.00')
+                .replace('{5}', '0.00')
+                .replace('{6}', '0.00')                 
+                .replace('{7}', '')
+                .replace('{8}', '0.00')
+                .replace('{9}', '0.00')
+                .replace('{10}', '0.00')
+            );
+        }
+
+        function deleteRow(buttonRow) {
+            buttonRow.parent().parent().parent().remove();
+            $editOveray.hide();
+            $("#RetData tr").each(function (index) {
+                $(this).attr("index-val", index);
+                $(this).find(".ProductId").attr("name", "PickUpSub[" + index + "].Product.ID");
+                $(this).find(".ProductName").attr("name", "PickUpSub[" + index + "].Product.Name");
+                $(this).find(".ProductUnitID").attr("name", "PickUpSub[" + index + "].Unit.ID");
+                $(this).find(".ProductQty").attr("name", "PickUpSub[" + index + "].Qty");
+                $(this).find(".ProductPrice").attr("name", "PickUpSub[" + index + "].Price");
+                $(this).find(".AverageCost").attr("name", "PickUpSub[" + index + "].AverageCost");
+                $(this).find(".ProductTotalPrice").attr("name", "PickUpSub[" + index + "].TotalPrice");
+            });    
+            sumFoorter();        
+        }
+        function sumFoorter(){
+            var totalAmount = 0.00;
+            var discountVal  = parseFloat($('#DiscountWord').val()==''? '0': $('#DiscountWord').val()) ;
+            var totalDiscountAmount = 0.00;
+            var totalNetAmount = 0.00;
+
+            $("#RetData tr").each(function (index) {
+                totalAmount += parseFloat($(this).find(".ProductTotalPrice").val());
+            });              
+
+            if($('#DiscountType').val() == "0"){
+                totalDiscountAmount = discountVal;
+            }else{
+                totalDiscountAmount = (discountVal / 100) * totalAmount;                 
+            }  
+            totalNetAmount = totalAmount-totalDiscountAmount;
+
+            $('#TotalAmount').val(totalAmount.toFixed(2));
+            $('#TotalAmountText').html(addCommas(totalAmount.toFixed(2)));
+            $('#TotalDiscount').val(totalDiscountAmount.toFixed(2));
+            $('#TotalDiscountText').html(addCommas(totalDiscountAmount.toFixed(2)));
+            $('#TotalNetAmount').val(totalNetAmount.toFixed(2));
+            $('#TotalNetAmountText').html(addCommas(totalNetAmount.toFixed(2)));
+        }        
+    });
+    function Save() {
+            hideTopAlert();
+            url = $('#pickup-form').attr('action');
+            $.post(url, $('#pickup-form').serialize(), function (data) {
+                if (data.RetOK) {
+                    showTopAlert(data.RetData, "success")
+                    setTimeout(function () { window.location.href = '/pickup/list' }, 600);
+                } else {
+                    showTopAlert(data.RetData, "danger")
+                }
+            });
+        }
+</script>

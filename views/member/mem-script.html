@@ -1,0 +1,25 @@
+<script>
+function Save() {
+    hideTopAlert();
+    url = $('#sub-form').attr('action');
+    $.post(url, $('#sub-form').serialize(), function (data) {
+        if (data.RetOK) {
+            showTopAlert(data.RetData, "success")
+            setTimeout(function () { window.location.href = '/member/list' }, 1000);
+        } else {
+            showTopAlert(data.RetData, "danger")
+        }
+    });
+}
+    $(document).ready(function () {
+        $("#ProvinceID").val('{{.m.Province.ID}}'); 
+        if($("#ProvinceID").val()=='' || $("#ProvinceID").val() == null){
+            $("#ProvinceID").val($("#ProvinceID option:first").val());
+        }
+        $("#MemberType").val('{{.m.MemberType}}'); 
+        if($("#MemberType").val()=='' || $("#MemberType").val() == null){
+            $("#MemberType").val($("#MemberType option:first").val());
+        }
+
+    });
+</script>

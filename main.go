@@ -2,7 +2,7 @@ package main
 
 import (
 	c "fix2man/controllers"
-
+	h "fix2man/helps"
 	"fmt"
 
 	"github.com/astaxie/beego"
@@ -61,18 +61,24 @@ func main() {
 	beego.Router("/service/user/list/json", &c.ServiceController{}, "get:GetUserListJSON")
 	beego.Router("/service/tech/list/json", &c.ServiceController{}, "get:GetTechListJSON")
 
-	beego.Router("/create-supplier", &c.SupplierController{}, "get:CreateSuppliers;post:UpdateSuppliers")
-	beego.Router("/supplier/read", &c.SupplierController{}, "get:CreateSuppliers")
-	beego.Router("/supplier/list", &c.SupplierController{}, "get:SuppliersList;post:GetSuppliersList")
-	beego.Router("/supplier/delete/?:id", &c.SupplierController{}, "delete:DeleteSuppliers")
+	beego.Router("/member/?:id", &c.MemberController{}, "get:CreateMember;post:UpdateMember;delete:DeleteMember")
+	beego.Router("/member/read/?:id", &c.MemberController{}, "get:CreateMember")
+	beego.Router("/member/list", &c.MemberController{}, "get:MemberList;post:GetMemberList")
+
+	beego.Router("/receive", &c.ReceiveController{})
+	beego.Router("/receive/read", &c.ReceiveController{})
+	beego.Router("/receive/cancel", &c.ReceiveController{}, "get:CancelReceive;post:UpdateCancelReceive")
+	beego.Router("/receive/list", &c.ReceiveController{}, "get:ReceiveList;post:GetReceiveList")
+
+	beego.Router("/pickup", &c.PickUpController{})
+	beego.Router("/pickup/read", &c.PickUpController{})
+	beego.Router("/pickup/cancel", &c.PickUpController{}, "get:CancelPickUp;post:UpdateCancelPickUp")
+	beego.Router("/pickup/list", &c.PickUpController{}, "get:PickUpList;post:GetPickUpList")
 
 	beego.Router("/create-request", &c.ReqController{})
 	beego.Router("/request/read", &c.ReqController{}, "get:ReadReq")
 	beego.Router("/request/change-status", &c.ReqController{}, "get:ChangeStatus;post:UpdateStatus")
 	beego.Router("/request/list", &c.ReqController{}, "get:ReqList;post:GetReqList")
-
-	beego.Router("/create-receive", &c.RecController{})
-	beego.Router("/receive/list", &c.RecController{}, "get:RecList;post:GetRecList")
 
 	beego.Router("/product/?:id", &c.ProductController{}, "get:CreateProduct;post:UpdateProduct;delete:DeleteProduct")
 	beego.Router("/product/read/?:id", &c.ProductController{}, "get:CreateProduct")
@@ -87,6 +93,8 @@ func main() {
 	beego.Router("/product-unit/list", &c.ProductController{}, "get:ProductUnitList;post:GetProductUnitList")
 
 	beego.AddFuncMap("emptyDate", c.EmptyDateString)
+	beego.AddFuncMap("ThCommaSep", h.ThCommaSep)
+	beego.AddFuncMap("TextThCommaSep", h.TextThCommaSep)
 
 	beego.Run()
 }
