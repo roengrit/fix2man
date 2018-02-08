@@ -35,7 +35,7 @@ const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละ�
 							<ul class="dropdown-menu" role="menu">
 							    <li><a href="/create-request/?id={id}" title="แก้ไข">แก้ไข</a></li>
 								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
-								<li><a href="#">เบิกอะไหล่</a></li>
+								<li><a href="/pickup/?doc_ref={docno}">เบิกอะไหล่</a></li>
 							</ul>
 								 `
 

@@ -85,7 +85,11 @@
                                     <span class="input-group-addon">
                                         <i class="fa  fa-file-text-o"></i>
                                     </span>
-                                    <input type="text" id="DocRefNo" name="DocRefNo" class="form-control" autocomplete="off" value="{{.m.DocRefNo}}" placeholder="เอกสารอ้างอิง" {{.r }} />
+                                    {{if .docRef}}
+                                      <input type="text" id="DocRefNo" name="DocRefNo" class="form-control" autocomplete="off" value="{{.docRef}}" placeholder="เอกสารอ้างอิง" {{.r }} />
+                                    {{else}}
+                                      <input type="text" id="DocRefNo" name="DocRefNo" class="form-control" autocomplete="off" value="{{.m.DocRefNo}}" placeholder="เอกสารอ้างอิง" {{.r }} />
+                                    {{end}}
                                 </div>
                     </div>
                     <div class="col-xs-6">

@@ -20,6 +20,7 @@ type PickUpController struct {
 //Get _
 func (c *PickUpController) Get() {
 	docID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)
+	docRef := c.Ctx.Request.URL.Query().Get("doc_ref")
 	if strings.Contains(c.Ctx.Request.URL.RequestURI(), "read") {
 		c.Data["r"] = "readonly"
 	}
@@ -34,6 +35,7 @@ func (c *PickUpController) Get() {
 		c.Data["RetCount"] = len(doc.PickUpSub)
 		c.Data["title"] = "แก้ไข เบิกสินค้า/วัตถุดิบ : " + doc.DocNo
 	}
+	c.Data["docRef"] = docRef
 	c.Data["CurrentDate"] = time.Now()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "layout.html"
