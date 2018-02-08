@@ -158,10 +158,16 @@
                         </ul>
                     </li>
                     <li class="treeview">
-                        <a href="#">
+                        <a href="/product/list">
                             <i class="fa fa-reorder"></i>
-                            <span>อุปกรณ์/อะไหล่</span>
+                            <span>สินค้า/อุปกรณ์/อะไหล่</span>
                         </a>
+                        <ul class="treeview-menu">
+                            <li class="{{.m_product_list}}">
+                                <a href="/product/list">
+                                    <i class="fa fa-circle-o"></i>สินค้า/อุปกรณ์/อะไหล่</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="treeview">
                         <a href="#">
@@ -242,11 +248,11 @@
                                     <i class="fa fa-circle-o"></i> สถานะการซ่อม</a>
                             </li>
                             <li class="{{.m_category_list}}">
-                                <a href="/normal/?entity=categorys">
+                                <a href="/product-category/list">
                                     <i class="fa fa-circle-o"></i>หมวดหมู่อุปกรณ์</a>
                             </li>
                             <li class="{{.m_unit_list}}">
-                                <a href="/normal/?entity=units">
+                                <a href="/product-unit/list">
                                     <i class="fa fa-circle-o"></i> หน่วย</a>
                             </li>
                             <li class="{{.m_branch_list}}">

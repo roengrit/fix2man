@@ -74,6 +74,18 @@ func main() {
 	beego.Router("/create-receive", &c.RecController{})
 	beego.Router("/receive/list", &c.RecController{}, "get:RecList;post:GetRecList")
 
+	beego.Router("/product/?:id", &c.ProductController{}, "get:CreateProduct;post:UpdateProduct;delete:DeleteProduct")
+	beego.Router("/product/read/?:id", &c.ProductController{}, "get:CreateProduct")
+	beego.Router("/product/list", &c.ProductController{}, "get:ProductList;post:GetProductList")
+	beego.Router("/product/list/json", &c.ProductController{}, "get:ListProductJSON")
+	beego.Router("/product/json", &c.ProductController{}, "get:GetProductJSON")
+
+	beego.Router("/product-category/?:id", &c.ProductController{}, "get:CreateProductCate;post:UpdateProductCate;delete:DeleteProductCate")
+	beego.Router("/product-category/list", &c.ProductController{}, "get:ProductCateList;post:GetProductCateList")
+
+	beego.Router("/product-unit/?:id", &c.ProductController{}, "get:CreateProductUnit;post:UpdateProductUnit;delete:DeleteProductUnit")
+	beego.Router("/product-unit/list", &c.ProductController{}, "get:ProductUnitList;post:GetProductUnitList")
+
 	beego.AddFuncMap("emptyDate", c.EmptyDateString)
 
 	beego.Run()

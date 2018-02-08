@@ -1,0 +1,178 @@
+<section class="content-header">
+    {{if .ret.RetOK }}
+        {{if .ret.RetData}}
+        <div id="top-alert">
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                {{ .ret.RetData}}
+            </div>
+        </div>
+        {{end}}
+    {{end}}
+    {{if not  .ret.RetOK}}
+        {{if .ret.RetData}}
+        <div id="top-alert"  >
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                {{ .ret.RetData}}
+            </div>
+        </div>
+        {{end}}
+    {{end}}
+    <h1 id="title-content">
+        {{.title}}
+    </h1>
+</section>
+<section class="content">
+    <form 
+     {{if .r }} {{else }} {{if .m.ID }} action="/product/?id={{.m.ID}}" {{else}} action="/product" {{end}} {{end}}
+     autocomplete="off" enctype="multipart/form-data" id="product-form" method="post">
+        {{ .xsrfdata }}
+        <input type="hidden" id="ID" name="ID" value="{{.m.ID}}" />
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+                <div class="form-group req-box-form">
+                    <div class="col-xs-12">
+                        <label for="req-name">ชื่อ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" id="Name" required name="Name" class="form-control" {{.r }} autocomplete="off" placeholder="ชื่อ...." value="{{.m.Name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-6">
+                        <label for="req-sn">หน่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <select id="UnitID" name="Unit.ID"  {{.r }} class="form-control province">
+                                    {{range $key, $val := .Unit}}
+                                        <option value="{{$val.ID}}" > {{$val.Name}} </option>
+                                    {{end}}   
+                            </select>   
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="req-sn">ประเภท</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <select id="ProductType" name="ProductType"  {{.r }} class="form-control province">
+                                        <option value="0"> ซื้อมาขายไป </option>
+                                        <option value="1"> บริการ </option>
+                                        <option value="2"> วัตถุดิบ </option>
+                                        <option value="3"> ผลิตเอง </option>
+                                        <option value="4"> วัสดุสำนักงาน </option>
+                            </select>   
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group req-box-form">
+                    <div class="col-xs-6">
+                        <label for="req-sn">หมวดสินค้า</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <select id="ProductCategoryID" name="ProductCategory.ID"  {{.r }} class="form-control province">
+                                    {{range $key, $val := .ProductCategory}}
+                                        <option value="{{$val.ID}}" > {{$val.Name}} </option>
+                                    {{end}}   
+                            </select>   
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="req-date-event">สต๊อคสินค้า</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                            <input type="number" readonly="readonly" class="form-control"    
+                            value="{{.m.BalanceQty}}"  placeholder="สต๊อคสินค้า">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group " style="padding-bottom:40px;">
+                        <div class="col-xs-6" >
+                            <div class="checkbox icheck" style="padding-left:20px;">
+                                <label>
+                                    <input type="checkbox" id="FixCost" name="FixCost" 
+                                    {{if.m.FixCost}}checked{{end}}
+                                    value="True"> ต้นทุนคงที่
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" >
+                            <div class="checkbox icheck" style="padding-left:20px;">
+                                <label>
+                                    <input type="checkbox" name="Active" 
+                                    {{if.m.Active}}checked{{end}}
+                                    value="True"> เปิดใช้งาน
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group req-box-form">
+                        <div class="col-xs-6">
+                            <label for="req-date-event">ต้นทุน</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-location-arrow"></i>
+                                </span>
+                                <input type="number" id="AverageCost" class="form-control" value="{{.m.AverageCost}}" placeholder="ต้นทุน">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <label for="req-date-event">ราคาขาย</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-location-arrow"></i>
+                                </span>
+                                <input type="number" id="SalePrice" name="SalePrice" {{.r }} class="form-control" value="{{.m.SalePrice}}" placeholder="ราคาขาย">
+                            </div>
+                        </div>
+                </div>
+                <div class="form-group req-box-form"  >
+                    <div class="col-xs-12">
+                            <label>รูปสินค้า</label>
+                            <br>
+                            <br>
+                            <img id='img-upload' title="รูปสินค้า" src="data:image/png|tiff|jpg|gif;base64,{{.m.ImageBase64}}" width="150" height="150" />
+                            <br>
+                            <br>
+                            <div class="input-group">
+                                <span class="btn btn-success btn-file">
+                                    เลือกรูป <input type="file" name="ImgProduct" id="imgInp">
+                                </span>
+                                <input type="text" class="form-control" style="display:none;" readonly>
+                            </div>
+                            <br>
+                    </div>
+                </div>        
+                <div class="form-group req-box-form"  >
+                    <div class="col-xs-12">
+                        <label for="req-date-event">หมายเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-align-left"></i>
+                            </span>
+                            <textarea class="form-control"  {{.r }} id="Remark" name="Remark" rows="3" placeholder="หมายเหตุ">{{.m.Remark}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+                {{if .r}} {{else}}
+                <button type="submit"  class="btn btn-primary pull-right">บันทึก</button>
+                <a href="/product/list" class="btn btn-default pull-right" style="margin-right:3px;">ยกเลิก</a>
+                {{end}}
+            </div>
+        </div>
+    </form>
+</section>
+ 

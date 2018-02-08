@@ -1,0 +1,14 @@
+<script>
+function Save() {
+    hideTopAlert();
+    url = $('#product-category-form').attr('action');
+    $.post(url, $('#product-category-form').serialize(), function (data) {
+        if (data.RetOK) {
+            showTopAlert(data.RetData, "success")
+            setTimeout(function () { window.location.href = '/product-category/list' }, 1000);
+        } else {
+            showTopAlert(data.RetData, "danger")
+        }
+    });
+}    
+</script>

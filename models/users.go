@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -74,14 +75,25 @@ func Login(username, password string) (ok bool, errRet string) {
 }
 
 //GetUser _
-func GetUser(username string) (ok bool, errRet string) {
+func GetUser(username string) (userRet Users, errRet error) {
 	o := orm.NewOrm()
 	user := Users{Username: username}
-	err := o.Read(&user, "Username")
-	if err == orm.ErrNoRows {
-		errRet = "ไม่พบ email นี้ในระบบ"
-	} else {
-		ok = true
+	errRet = o.Read(&user, "Username")
+	if errRet == orm.ErrNoRows {
+		errRet = errors.New("ไม่พบผู้ใช้งานนี้ในระบบ")
+	}
+	return user, errRet
+}
+
+//CheckUser _
+func CheckUser(username string) (ok bool, errRet error) {
+	o := orm.NewOrm()
+	user := Users{Username: username}
+	errRet = o.Read(&user, "Username")
+	ok = true
+	if errRet == orm.ErrNoRows {
+		errRet = errors.New("ไม่พบผู้ใช้งานนี้ในระบบ")
+		ok = false
 	}
 	return ok, errRet
 }

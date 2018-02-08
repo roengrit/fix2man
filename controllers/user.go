@@ -122,7 +122,7 @@ func (c *ForgetController) Get() {
 func (c *ForgetController) Post() {
 	usernameForm := c.GetString("username")
 	newPass := models.RandStringRunes(8)
-	if hasUser, errFindeuser := models.GetUser(usernameForm); hasUser {
+	if hasUser, errFindeuser := models.CheckUser(usernameForm); hasUser {
 		if errSendMail := h.SendMail(usernameForm, newPass); errSendMail == "" {
 			if ok, err := models.ForgetPass(usernameForm, newPass); ok {
 				c.Data["success"] = "ส่งรหัสผ่านสำเร็จ"

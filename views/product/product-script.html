@@ -1,0 +1,88 @@
+<script src="/static/js/form.js" charset="UTF-8"></script>
+<script src="/static/js/icheck/icheck.min.js" charset="UTF-8"></script>
+<script>
+function Save() {
+    hideTopAlert();
+    var options = { 
+        success:       showResponse  // post-submit callback 
+    }; 
+    $('#product-form').ajaxForm(options);
+}
+ 
+ 
+// post-submit callback 
+function showResponse(data, statusText, xhr, $form) {
+    if (data.RetOK) {
+        showTopAlert(data.RetData, "success")
+      //  setTimeout(function () { window.location.href = '/member/list' }, 1000);
+    } else {
+        showTopAlert(data.RetData, "danger")
+    }
+}
+    $(document).ready(function () {
+        
+        $("#FixCost").click(function() {
+            if($('#FixCost').is(':checked')){
+                $('#AverageCost').attr('name','AverageCost');
+                $('#AverageCost').removeAttr('readonly');
+            }else{
+                $('#AverageCost').removeAttr('name');
+                $('#AverageCost').attr('readonly','true');
+            }
+        });
+
+        if($('#FixCost').is(':checked')){
+            $('#AverageCost').attr('name','AverageCost');
+            $('#AverageCost').removeAttr('readonly');
+        }else{
+            $('#AverageCost').removeAttr('name');
+            $('#AverageCost').attr('readonly','true');
+        }
+
+        $("#ProductCategoryID").val('{{.m.ProductCategory.ID}}'); 
+        if($("#ProductCategoryID").val()=='' || $("#ProductCategoryID").val() == null){
+            $("#ProductCategoryID").val($("#ProductCategoryID option:first").val());
+        }
+        $("#ProductType").val('{{.m.ProductType}}'); 
+        if($("#ProductType").val()=='' || $("#ProductType").val() == null){
+            $("#ProductType").val($("#ProductType option:first").val());
+        }
+        $("#UnitID").val('{{.m.Unit.ID}}'); 
+        if($("#UnitID").val()=='' || $("#UnitID").val() == null){
+            $("#UnitID").val($("#UnitID option:first").val());
+        }
+
+        $(document).on('change', '.btn-file :file', function() {
+		var input = $(this),
+			label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+		input.trigger('fileselect', [label]);
+		});
+
+		$('.btn-file :file').on('fileselect', function(event, label) {
+		    
+		    var input = $(this).parents('.input-group').find(':text'),
+		        log = label;
+		    
+		    if( input.length ) {
+		        input.val(log);
+		    } else {
+		        if( log ) alert(log);
+		    }
+		});
+
+		function readURL(input) {
+		    if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+		        
+		        reader.onload = function (e) {
+		            $('#img-upload').attr('src', e.target.result);
+		        }
+		        reader.readAsDataURL(input.files[0]);
+		    }
+		}
+
+		$("#imgInp").change(function(){
+		    readURL(this);
+		}); 
+    });
+</script>
