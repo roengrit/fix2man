@@ -15,15 +15,15 @@ const HTMLReqTemplate = `<tr>
 								<div class="btn-group">
 									{action}
 								</div>
-							</td> 
+							</td>
 							<td class="is-col-toggle">{branch}</td>
 							<td class="info-col" style="cursor: pointer;">{docno} <i class="fa fa-info-circle"><i/></td>
-							<td class="is-col-toggle">{reqname}</td> 
-							<td>{reqdate}</td>                             
-							<td class="is-col-toggle">{eventdate}</td>        
-							<td class="is-col-toggle">{details}</td>                           
-							<td >{status}</td> 
-							                            
+							<td class="is-col-toggle">{reqname}</td>
+							<td>{reqdate}</td>
+							<td class="is-col-toggle">{eventdate}</td>
+							<td class="is-col-toggle">{details}</td>
+							<td >{status}</td>
+
 						</tr>`
 
 //HTMLReqActionEnable _
@@ -36,9 +36,9 @@ const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละ�
 							    <li><a href="/create-request/?id={id}" title="แก้ไข">แก้ไข</a></li>
 								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
 								<li><a href="#">รับ/แจกจ่ายงาน</a></li>
-								<li><a href="#">เบิกอะไหล่</a></li>	
+								<li><a href="#">เบิกอะไหล่</a></li>
 								<li><a href="#">เริ่มงาน</a></li>						 								
-							</ul>							 
+							</ul>
 								 `
 
 //HTMLReqNotFoundRows _

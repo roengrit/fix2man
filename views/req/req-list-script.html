@@ -8,7 +8,7 @@
         todayBtn: true,
         orientation: "bottom auto",
         todayHighlight: true  ,
-        format: 'dd-mm-yyyy',      
+        format: 'dd-mm-yyyy',
     });
     $('#txt-date-begin').datepicker('setDate', new Date(Date.parse("{{.beginDate}}"))) ;
     $('#txt-date-end').datepicker('setDate', new Date(Date.parse("{{.endDate}}"))) ;
