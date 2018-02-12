@@ -25,6 +25,7 @@
             $("#current-row").val($(this).attr("index-val"));
             $("#item-id").val($(this).find(".ProductId").val());
             $("#item-name").val($(this).find(".ProductName").val());
+            $("#item-sn").val($(this).find(".Serial").val());
             $("#unit-code").val($(this).find(".ProductUnitID").val()); 
             $("#qty").val($(this).find(".ProductQty").val());
             $("#price").val($(this).find(".ProductPrice").val());
@@ -35,16 +36,18 @@
         var templateRow = `<tr  style="cursor: pointer;" index-val="@">
                                 <input type="hidden" class="ProductId" name="PickUpSub[@].Product.ID" value="{0}" /> 
                                 <input type="hidden" class="ProductName" name="PickUpSub[@].Product.Name" value="{1}" />
-                                <input type="hidden" class="ProductUnitID" name="PickUpSub[@].Unit.ID" value="{2}" /> 
-                                <input type="hidden" class="ProductQty" name="PickUpSub[@].Qty" value="{3}" />
-                                <input type="hidden" class="ProductPrice" name="PickUpSub[@].Price" value="{4}" />
-                                <input type="hidden" class="AverageCost" name="PickUpSub[@].AverageCost" value="{5}" />
-                                <input type="hidden" class="ProductTotalPrice" name="PickUpSub[@].TotalPrice" value="{6}" />
+                                <input type="hidden" class="Serial" name="PickUpSub[@].Serial" value="{2}" />
+                                <input type="hidden" class="ProductUnitID" name="PickUpSub[@].Unit.ID" value="{3}" /> 
+                                <input type="hidden" class="ProductQty" name="PickUpSub[@].Qty" value="{4}" />
+                                <input type="hidden" class="ProductPrice" name="PickUpSub[@].Price" value="{5}" />
+                                <input type="hidden" class="AverageCost" name="PickUpSub[@].AverageCost" value="{6}" />
+                                <input type="hidden" class="ProductTotalPrice" name="PickUpSub[@].TotalPrice" value="{7}" />
 
-                                <td class="col-md-5 table-td-mid ProductNameText">{7}</td> 
-                                <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{8}</td>
-                                <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{9}</td>
-                                <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{10}</td>
+                                <td class="col-md-3 table-td-mid ProductNameText">{8}</td> 
+                                <td class="col-md-2 table-td-mid SerialText">{9}</td> 
+                                <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{10}</td>
+                                <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{11}</td>
+                                <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{12}</td>
                                 <td class="col-md-1 table-td-mid table-td-number"  >
                                     <div class="btn-group">
                                         <a class="btn btn-danger btn-flat btn-flat btn-sm delete-row">
@@ -73,6 +76,7 @@
 
             $('#RetData > tr').eq(index).find(".ProductId").val($('#item-id').val());
             $('#RetData > tr').eq(index).find(".ProductName").val($('#item-name').val());
+            $('#RetData > tr').eq(index).find(".Serial").val($('#item-sn').val());
             $('#RetData > tr').eq(index).find(".ProductUnitID").val($('#unit-id').val()); 
 
             $('#RetData > tr').eq(index).find(".ProductQty").val(qty);
@@ -81,6 +85,7 @@
             $('#RetData > tr').eq(index).find(".ProductTotalPrice").val(totalPrice);
 
             $('#RetData > tr').eq(index).find(".ProductNameText").html($('#item-name').val());
+            $('#RetData > tr').eq(index).find(".SerialText").html($('#item-sn').val());
             $('#RetData > tr').eq(index).find(".ProductQtyText").html(addCommas(qty));
             $('#RetData > tr').eq(index).find(".ProductPriceText").html(addCommas(price));
             $('#RetData > tr').eq(index).find(".ProductTotalPriceText").html(addCommas(totalPrice));
@@ -178,14 +183,16 @@
                 .replace('{0}', '')
                 .replace('{1}', '')
                 .replace('{2}', '')
-                .replace('{3}', '0.00')
+                .replace('{3}', '')
                 .replace('{4}', '0.00')
                 .replace('{5}', '0.00')
-                .replace('{6}', '0.00')                 
-                .replace('{7}', '')
-                .replace('{8}', '0.00')
-                .replace('{9}', '0.00')
+                .replace('{6}', '0.00')
+                .replace('{7}', '0.00')                 
+                .replace('{8}', '')
+                .replace('{9}', '')
                 .replace('{10}', '0.00')
+                .replace('{11}', '0.00')
+                .replace('{12}', '0.00')
             );
         }
 
@@ -196,6 +203,7 @@
                 $(this).attr("index-val", index);
                 $(this).find(".ProductId").attr("name", "PickUpSub[" + index + "].Product.ID");
                 $(this).find(".ProductName").attr("name", "PickUpSub[" + index + "].Product.Name");
+                $(this).find(".Serial").attr("name", "PickUpSub[" + index + "].Serial");
                 $(this).find(".ProductUnitID").attr("name", "PickUpSub[" + index + "].Unit.ID");
                 $(this).find(".ProductQty").attr("name", "PickUpSub[" + index + "].Qty");
                 $(this).find(".ProductPrice").attr("name", "PickUpSub[" + index + "].Price");

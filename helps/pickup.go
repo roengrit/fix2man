@@ -42,10 +42,10 @@ const HTMLPickUpActionEditOnly = `<a class="btn bg-purple" title="รายล�
 								  `
 
 //HTMLPickUpNotFoundRows _
-const HTMLPickUpNotFoundRows = `<tr> <td  colspan="4" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`
+const HTMLPickUpNotFoundRows = `<tr> <td  colspan="6" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`
 
 //HTMLPickUpError _
-const HTMLPickUpError = `<tr> <td  colspan="4" style="text-align:center;">{err}</td></tr>`
+const HTMLPickUpError = `<tr> <td  colspan="6" style="text-align:center;">{err}</td></tr>`
 
 //GenPickUpHTML _
 func GenPickUpHTML(lists []m.PickUp) string {

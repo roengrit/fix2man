@@ -23,15 +23,15 @@
 
         <div id="box-req" class="box box-primary">
             <div class="box-body">
-                <div class="form-group req-box-form" style="display:none;">
-                    <div class="col-xs-11" >
-                        <label for="req-name">ผู้จำหน่าย</label>
+                <div class="form-group req-box-form"  >
+                    <div class="col-xs-12" >
+                        <label for="req-name">ผู้จำหน่าย/ลูกค้า</label>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="fa fa-user"></i>
                             </span>
                             <input type="text" id="MemberName" name="MemberName" tabindex="0"
-                                   class="form-control"  autocomplete="off" placeholder="ผู้จำหน่าย...."
+                                   class="form-control"  autocomplete="off" placeholder="ผู้จำหน่าย/ลูกค้า...."
                                    value="{{.m.MemberName}}" {{.r }} />
                         </div>
                     </div>                    
@@ -99,9 +99,11 @@
                                 <i class="fa  fa-file-text-o"></i>
                             </span>
                             <select id="DocType" name="DocType" class="form-control" {{.r }}  autocomplete="off">
-                                <option value="0"  >ทั่วไป/สินเปลือง</option>
-                                <option value="1"  >เพื่อผลิต</option>                                 
-                                <option value="2"  >เพื่อทำลาย</option>                                 
+                                <option value="0"  >ทั่วไป</option>    
+                                <option value="1"  >ส่งคืน</option>                                 
+                                <option value="2"  >Claim</option>                                 
+                                <option value="3"  >เพื่อทำลาย</option>
+                                <option value="4"  >สูญหาย</option>                                                          
                             </select>
                         </div>
                     </div>
@@ -111,26 +113,29 @@
                         <table class="table" id="ret-table">
                             <thead>
                                 <tr>
-                                    <th class="col-md-5 col-md-5-table">ชื่อ</th>
+                                    <th class="col-md-3 col-md-3-table">ชื่อ</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:center;">SN</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">จำนวน</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">ต้นทุน:หน่วย</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">รวม</th>
                                     <th class="col-md-1 col-md-1-table" style="width:100%;"></th>
                                 </tr>
-                            </thead>                           
+                            </thead>
                             <tbody class="table-bordered table-condensed" id="RetData">
                                     {{if .RetCount}}
                                         {{range $key, $val := .m.PickUpSub}}
                                             <tr  style="cursor: pointer;" index-val="{{$key}}">
                                                     <input type="hidden" class="ProductId" name="PickUpSub[{{$key}}].Product.ID" value="{{$val.Product.ID}}" /> 
                                                     <input type="hidden" class="ProductName" name="PickUpSub[{{$key}}].Product.Name" value="{{$val.Product.Name}}" />
+                                                    <input type="hidden" class="Serial" name="PickUpSub[@].Serial" value="{{$val.Serial}}" />
                                                     <input type="hidden" class="ProductUnitID" name="PickUpSub[{{$key}}].Unit.ID" value="{{$val.Unit.ID}}" /> 
                                                     <input type="hidden" class="ProductQty" name="PickUpSub[{{$key}}].Qty" value="{{$val.Qty}}" />
                                                     <input type="hidden" class="ProductPrice" name="PickUpSub[{{$key}}].Price" value="{{$val.AverageCost}}" />
                                                     <input type="hidden" class="AverageCost" name="PickUpSub[{{$key}}].AverageCost" value="{{$val.AverageCost}}" />
                                                     <input type="hidden" class="ProductTotalPrice" name="PickUpSub[{{$key}}].TotalPrice" value="{{$val.TotalPrice}}" />
                     
-                                                    <td class="col-md-5 table-td-mid ProductNameText">{{$val.Product.Name}}</td> 
+                                                    <td class="col-md-3 table-td-mid ProductNameText">{{$val.Product.Name}}</td> 
+                                                    <td class="col-md-2 table-td-mid Serial">{{$val.Serial}}</td> 
                                                     <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{{$val.Qty | ThCommaSep }}</td>
                                                     <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{{$val.Price | ThCommaSep }}</td>
                                                     <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{{$val.TotalPrice | ThCommaSep }}</td>
@@ -228,13 +233,16 @@
             </div>
         </div>
         <div class="col-xs-12" id="editOveray">
-                <div class="col-md-6">
-                    <input type="text" id="item-name" name="item-name" class="form-control" autocomplete="off" placeholder="่ชื่อ">
-                    <input type="hidden" tabindex="-1" id="item-id" name="item-id"  >
-                    <input type="hidden" tabindex="-1" id="unit-id" name="unit-id"  >
-                    <input type="hidden" tabindex="-1" id="average-cost" name="average-cost"  >  
-                    <input type="hidden" tabindex="-1" id="item-image_path" name="item-image_path"  >  
-                </div>
+                <div class="col-md-4">
+                        <input type="text" id="item-name" name="item-name" class="form-control" autocomplete="off" placeholder="่ชื่อ">
+                        <input type="hidden" tabindex="-1" id="item-id" name="item-id"  >
+                        <input type="hidden" tabindex="-1" id="unit-id" name="unit-id"  >                
+                        <input type="hidden" tabindex="-1" id="item-balance_cost" name="item-balance_cost"  >  
+                        <input type="hidden" tabindex="-1" id="item-image_path" name="item-image_path"  >  
+                    </div>
+                    <div class="col-md-2">
+                            <input type="text" id="item-sn" name="item-sn"   class="form-control" class="form-control" autocomplete="off" placeholder="SN">
+                    </div>
                 <div class="col-md-2">
                     <input type="number" id="qty" name="qty" step="0.01" class="form-control" style="text-align: right;" autocomplete="off" placeholder="จำนวน">
                 </div>
