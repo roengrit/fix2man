@@ -16,6 +16,11 @@ type StockAdj struct {
 	Product *Product `orm:"rel(fk)"`
 }
 
+//StockOnly _
+type StockOnly struct {
+	Qty float64
+}
+
 //PreAllStockAdj _
 type PreAllStockAdj struct {
 	CreatedAt   time.Time
@@ -41,20 +46,30 @@ func GetAllTransToProcessAvg(productID int) (num int64, PreAllStockAdj []PreAllS
 						select receive.created_at ,product_id as product_i_d ,0 as balance_qty,qty,price,average_cost,receive."flag",doc_type,receive_sub.i_d,'receive_sub' as tb   
 						from receive_sub join receive on receive_sub.doc_no = receive.doc_no where receive.active and  receive_sub.active and product_id = ? 
 				union all 
-						select "order".created_at ,product_id  ,0 as balance_qty,qty,price,average_cost,"order"."flag",doc_type,order_sub.i_d,'order_sub' as tb   
-						from order_sub join "order" on order_sub.doc_no = "order".doc_no where "order".active and  order_sub.active and product_id = ?
-				union all 
 						select "pick_up".created_at ,product_id as product_i_d ,0 as balance_qty ,qty,price,average_cost,"pick_up"."flag",doc_type,pick_up_sub.i_d,'pick_up_sub' as tb   
-						from pick_up_sub join "pick_up" on pick_up_sub.doc_no = "pick_up".doc_no where "pick_up".active and  pick_up_sub.active and product_id = ?  
-				union all 
-						select "stock_count".created_at ,product_id as product_i_d ,balance_qty,qty,price,average_cost,"stock_count"."flag",doc_type,stock_count_sub.i_d,'stock_count_sub' as tb   
-						from stock_count_sub join "stock_count" on stock_count_sub.doc_no = "stock_count".doc_no where "stock_count".active and  stock_count_sub.active and stock_count.flag_temp = 0 and product_id = ? 
+						from pick_up_sub join "pick_up" on pick_up_sub.doc_no = "pick_up".doc_no where "pick_up".active and  pick_up_sub.active and product_id = ?  				 
 				) as all_table JOIN product on all_table.product_i_d = product.i_d
 				ORDER BY all_table.created_at,doc_type,all_table.i_d`
 	sql = strings.Replace(sql, "?", strconv.Itoa(productID), -1)
 	o := orm.NewOrm()
 	num, err = o.Raw(sql).QueryRows(&PreAllStockAdj)
 	return num, PreAllStockAdj, err
+}
+
+//GetAllTransToProcessSTK -
+func GetAllTransToProcessSTK(productID int) {
+	var sql = `select sum(qty) qty from (
+						select qty    
+						from receive_sub join receive on receive_sub.doc_no = receive.doc_no where receive.active and  receive_sub.active and product_id = ? 
+				union all 
+						select   qty  * -1 as qty 
+						from pick_up_sub join "pick_up" on pick_up_sub.doc_no = "pick_up".doc_no where "pick_up".active and  pick_up_sub.active and product_id = ?  				 
+				) as all_table   `
+	sql = strings.Replace(sql, "?", strconv.Itoa(productID), -1)
+	o := orm.NewOrm()
+	var res StockOnly
+	_ = o.Raw(sql).QueryRow(&res)
+	_, _ = o.Raw("update product set balance_qty = ? , average_cost = 0 where i_d = ?", res.Qty, productID).Exec()
 }
 
 //CalAllAvgTrans _
@@ -169,7 +184,7 @@ func CalAllAvg() {
 	if len(*StockAdj) > 0 {
 		return
 	}
-	qs.Filter("flag", 0).Limit(5).RelatedSel().All(StockAdj)
+	qs.Filter("flag", 0).Limit(100).RelatedSel().All(StockAdj)
 	if len(*StockAdj) >= 1 {
 		for _, val := range *StockAdj {
 			_, _ = o.Raw("update stock_adj set flag = 1 where product_id = ?", val.Product.ID).Exec()
@@ -181,6 +196,8 @@ func CalAllAvg() {
 		for _, val := range *StockAdj {
 			if val.Product.ProductType == 0 && !val.Product.Serial {
 				CalAllAvgTrans(val.Product.ID, true)
+			} else {
+				GetAllTransToProcessSTK(val.Product.ID)
 			}
 			_, _ = o.Raw("delete from stock_adj where flag = 1 and product_id = ?", val.Product.ID).Exec()
 			o.Commit()

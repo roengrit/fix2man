@@ -103,7 +103,8 @@
                                 <option value="1"  >ส่งคืน</option>                                 
                                 <option value="2"  >Claim</option>                                 
                                 <option value="3"  >เพื่อทำลาย</option>
-                                <option value="4"  >สูญหาย</option>                                                          
+                                <option value="4"  >สูญหาย</option>        
+                                <option value="5"  >ผลิต</option>                                                       
                             </select>
                         </div>
                     </div>
@@ -127,7 +128,7 @@
                                             <tr  style="cursor: pointer;" index-val="{{$key}}">
                                                     <input type="hidden" class="ProductId" name="PickUpSub[{{$key}}].Product.ID" value="{{$val.Product.ID}}" /> 
                                                     <input type="hidden" class="ProductName" name="PickUpSub[{{$key}}].Product.Name" value="{{$val.Product.Name}}" />
-                                                    <input type="hidden" class="Serial" name="PickUpSub[@].Serial" value="{{$val.Serial}}" />
+                                                    <input type="hidden" class="Serial" name="PickUpSub[{{$key}}].Serial" value="{{$val.Serial}}" />
                                                     <input type="hidden" class="ProductUnitID" name="PickUpSub[{{$key}}].Unit.ID" value="{{$val.Unit.ID}}" /> 
                                                     <input type="hidden" class="ProductQty" name="PickUpSub[{{$key}}].Qty" value="{{$val.Qty}}" />
                                                     <input type="hidden" class="ProductPrice" name="PickUpSub[{{$key}}].Price" value="{{$val.AverageCost}}" />

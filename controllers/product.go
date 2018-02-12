@@ -65,6 +65,17 @@ func (c *ProductController) GetProductJSON() {
 	c.ServeJSON()
 }
 
+//GetProductSerialAvgJSON  _
+func (c *ProductController) GetProductSerialAvgJSON() {
+	SN := c.GetString("sn")
+	ret := m.NormalModel{}
+	product := m.GetProductSerialAvg(SN)
+	ret.RetOK = true
+	ret.Data1 = product
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
 //CreateProduct _
 func (c *ProductController) CreateProduct() {
 	proID, _ := strconv.ParseInt(c.Ctx.Request.URL.Query().Get("id"), 10, 32)

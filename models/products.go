@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -55,6 +56,16 @@ type Unit struct {
 	CreatedAt time.Time `orm:"auto_now_add;type(datetime)"`
 	Editor    *Users    `orm:"null;rel(fk)"`
 	EditedAt  time.Time `orm:"null;auto_now;type(datetime)"`
+}
+
+//PriceOnly _
+type PriceOnly struct {
+	Price float64
+}
+
+//AverageCostOnly _
+type AverageCostOnly struct {
+	AverageCost float64
 }
 
 func init() {
@@ -133,6 +144,23 @@ func GetProduct(ID int) (pro *Product, errRet error) {
 	o := orm.NewOrm()
 	o.QueryTable("product").Filter("ID", ID).RelatedSel().One(Product)
 	return Product, errRet
+}
+
+//GetProductSerialAvg _
+func GetProductSerialAvg(SN string) float64 {
+
+	var sql = ` select price  as average_cost 
+					from receive_sub 
+					join receive on receive_sub.doc_no = receive.doc_no  
+					where receive.active and  receive_sub.active  and receive_sub.serial = '{1}'
+					order by receive.doc_date desc
+				 `
+	sql = strings.Replace(sql, "{1}", SN, -1)
+	o := orm.NewOrm()
+	var res AverageCostOnly
+	_ = o.Raw(sql).QueryRow(&res)
+	fmt.Println(res)
+	return res.AverageCost
 }
 
 //GetProductCate _

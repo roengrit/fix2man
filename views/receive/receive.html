@@ -119,7 +119,7 @@
                                             <tr  style="cursor: pointer;" index-val="{{$key}}">
                                                     <input type="hidden" class="ProductId" name="ReceiveSub[{{$key}}].Product.ID" value="{{$val.Product.ID}}" /> 
                                                     <input type="hidden" class="ProductName" name="ReceiveSub[{{$key}}].Product.Name" value="{{$val.Product.Name}}" />
-                                                    <input type="hidden" class="Serial" name="ReceiveSub[@].Serial" value="{{$val.Serial}}" />
+                                                    <input type="hidden" class="Serial" name="ReceiveSub[{{$key}}].Serial" value="{{$val.Serial}}" />
                                                     <input type="hidden" class="ProductUnitID" name="ReceiveSub[{{$key}}].Unit.ID" value="{{$val.Unit.ID}}" /> 
                                                     <input type="hidden" class="ProductQty" name="ReceiveSub[{{$key}}].Qty" value="{{$val.Qty}}" />
                                                     <input type="hidden" class="ProductPrice" name="ReceiveSub[{{$key}}].Price" value="{{$val.Price}}" />

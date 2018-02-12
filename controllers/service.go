@@ -4,9 +4,11 @@ import (
 	h "fix2man/helps"
 	m "fix2man/models"
 	"html/template"
+	"strconv"
 	"strings"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 //EmptyDateString _
@@ -142,6 +144,20 @@ func (c *ServiceController) GetXSRF() {
 func (c *ServiceNonAuthController) CalItemAvg() {
 	ret := m.NormalModel{}
 	m.CalAllAvg()
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+//CalItemAvgByID _
+func (c *ServiceNonAuthController) CalItemAvgByID() {
+	ret := m.NormalModel{}
+	ID, _ := strconv.ParseInt(c.GetString("id"), 10, 32)
+	if ID != 0 {
+
+		o := orm.NewOrm()
+		_, _ = o.Raw("insert into stock_adj(product_id) values(?)  ", ID).Exec()
+		m.CalAllAvg()
+	}
 	c.Data["json"] = ret
 	c.ServeJSON()
 }

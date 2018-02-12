@@ -61,6 +61,7 @@ func main() {
 	beego.Router("/service/user/list/json", &c.ServiceController{}, "get:GetUserListJSON")
 	beego.Router("/service/tech/list/json", &c.ServiceController{}, "get:GetTechListJSON")
 	beego.Router("/service/avg", &c.ServiceNonAuthController{}, "get:CalItemAvg")
+	beego.Router("/service/avg/o/?:id", &c.ServiceNonAuthController{}, "get:CalItemAvgByID")
 
 	beego.Router("/member/?:id", &c.MemberController{}, "get:CreateMember;post:UpdateMember;delete:DeleteMember")
 	beego.Router("/member/read/?:id", &c.MemberController{}, "get:CreateMember")
@@ -86,6 +87,7 @@ func main() {
 	beego.Router("/product/list", &c.ProductController{}, "get:ProductList;post:GetProductList")
 	beego.Router("/product/list/json", &c.ProductController{}, "get:ListProductJSON")
 	beego.Router("/product/json", &c.ProductController{}, "get:GetProductJSON")
+	beego.Router("/product/json/sn/avg", &c.ProductController{}, "get:GetProductSerialAvgJSON")
 
 	beego.Router("/product-category/?:id", &c.ProductController{}, "get:CreateProductCate;post:UpdateProductCate;delete:DeleteProductCate")
 	beego.Router("/product-category/list", &c.ProductController{}, "get:ProductCateList;post:GetProductCateList")

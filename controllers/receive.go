@@ -57,7 +57,7 @@ func (c *ReceiveController) Post() {
 			doc.DocDate = docDate
 		} else {
 			retJSON.RetOK = false
-			retJSON.RetData = "มีข้อมูลบางอย่างไม่ครบถ้วน"
+			retJSON.RetData = "มีข้อมูลบางอย่างไม่ครบถ้วน " + err.Error()
 		}
 		if retJSON.RetOK && doc.ID == 0 {
 			_, parsFormErr = m.CreateReceive(doc, actionUser)
@@ -81,7 +81,7 @@ func (c *ReceiveController) Post() {
 		}
 	} else {
 		retJSON.RetOK = false
-		retJSON.RetData = "มีข้อมูลบางอย่างไม่ครบถ้วน"
+		retJSON.RetData = "มีข้อมูลบางอย่างไม่ครบถ้วน " + parsFormErr.Error()
 	}
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["json"] = retJSON

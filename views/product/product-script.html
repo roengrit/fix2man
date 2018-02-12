@@ -2,8 +2,9 @@
 <script>
     var saveRet =  '{{.ret.RetOK}}'; 
     if(saveRet == 'true'){
-        $.get('/service/avg', function (data) { });
-        setTimeout(function () { window.location.href = '/product/list' }, 1000);
+        $.get('/service/avg/o/?id={{.m.ID}}' , function (data) { 
+             setTimeout(function () { window.location.href = '/product/list' }, 1000);
+        });
     }
     $(document).ready(function () {
         

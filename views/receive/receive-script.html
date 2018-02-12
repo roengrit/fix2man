@@ -236,8 +236,9 @@
             $.post(url, $('#receive-form').serialize(), function (data) {
                 if (data.RetOK) {
                     showTopAlert(data.RetData, "success")
-                    $.get('/service/avg', function (data) { });
-                    setTimeout(function () { window.location.href = '/receive/list' }, 600);
+                    $.get('/service/avg', function (data) {
+                        setTimeout(function () { window.location.href = '/receive/list' }, 600);
+                     });                    
                 } else {
                     showTopAlert(data.RetData, "danger")
                 }

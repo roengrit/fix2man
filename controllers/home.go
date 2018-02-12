@@ -11,4 +11,5 @@ func (c *AppController) Get() {
 	c.Layout = "layout.html"
 	c.TplName = "main/index.html"
 	c.Render()
+
 }

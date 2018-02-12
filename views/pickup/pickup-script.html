@@ -26,7 +26,7 @@
             $("#item-id").val($(this).find(".ProductId").val());
             $("#item-name").val($(this).find(".ProductName").val());
             $("#item-sn").val($(this).find(".Serial").val());
-            $("#unit-code").val($(this).find(".ProductUnitID").val()); 
+            $("#unit-id").val($(this).find(".ProductUnitID").val()); 
             $("#qty").val($(this).find(".ProductQty").val());
             $("#price").val($(this).find(".ProductPrice").val());
             $("#average-cost").val($(this).find(".AverageCost").val());
@@ -157,12 +157,28 @@
                 }
                 $('#item-id').val(data.value);  
                 $.get("/product/json/?id=" + data.value, function (product) {
-                    $('#unit-id').val(product.Data1.Unit.ID);  
-                    $('#average-cost').val(product.Data1.AverageCost);  
-                    $('#price').val(product.Data1.AverageCost);  
+                    $('#unit-id').val(product.Data1.Unit.ID);
+                    $('#average-cost').val(product.Data1.AverageCost);
+                    $('#price').val(product.Data1.AverageCost);
+                    // if (product.Data1.Serial) {
+                    //     $.get("/product/json/sn/avg/?id=" + data.value, function (avg) {
+                    //         $('#average-cost').val(avg.Data1);
+                    //         $('#price').val(avg.Data1); 
+                    //     });
+                    // } else {
+                    //     $('#average-cost').val(product.Data1.AverageCost);
+                    //     $('#price').val(product.Data1.AverageCost);
+                    // }
                 });       
             }
         });
+
+        $('#item-sn').focusout(function(){
+            $.get("/product/json/sn/avg/?sn=" + $(this).val(), function (avg) {
+                $('#average-cost').val(avg.Data1);
+                $('#price').val(avg.Data1);
+            });
+        })
 
         $('#DiscountType').change(function(){
             sumFoorter();
@@ -243,8 +259,9 @@
             $.post(url, $('#pickup-form').serialize(), function (data) {
                 if (data.RetOK) {
                     showTopAlert(data.RetData, "success")
-                    $.get('/service/avg', function (data) { });
-                    setTimeout(function () { window.location.href = '/pickup/list' }, 600);
+                    $.get('/service/avg', function (data) {
+                        setTimeout(function () { window.location.href = '/pickup/list' }, 600);
+                    });                   
                 } else {
                     showTopAlert(data.RetData, "danger")
                 }
