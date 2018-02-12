@@ -48,7 +48,7 @@ func GenMemHTML(lists []m.Member) string {
 		var tempText string
 		switch val.MemberType {
 		case 0:
-			tempText = "ลูกค้า/สมาชิก"
+			tempText = "ลูกค้า"
 		case 1:
 			tempText = "ร้านค้า/Supplier"
 		case 2:

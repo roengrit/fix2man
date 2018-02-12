@@ -288,7 +288,6 @@ func GetRoomByID(ID int) (dept *Rooms, errRet error) {
 //GetRoomList _
 func GetRoomList(term, branchID, BuildingID, ClassID string, limit int) (room *[]Rooms, rowCount int, errRet error) {
 	reqGet := &[]Rooms{}
-	orm.Debug = true
 	o := orm.NewOrm()
 	qs := o.QueryTable("rooms")
 	cond := orm.NewCondition()

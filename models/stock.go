@@ -221,7 +221,6 @@ func UpdateCancelStockCount(ID int, remark string, user Users) (retID int64, err
 func UpdateActiveStockCount(ID int, user Users) (retID int64, errRet error) {
 	o := orm.NewOrm()
 	o.Begin()
-	orm.Debug = true
 	_, err := o.Raw("update stock_count set active = true,flag_temp = 0,editor_id = ?,edited_at = now() where i_d = ?", user.ID, ID).Exec()
 	if err != nil {
 		o.Rollback()
