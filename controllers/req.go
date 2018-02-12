@@ -59,8 +59,11 @@ func (c *ReqController) ReadReq() {
 			c.Data["err"] = err.Error()
 		} else {
 			statusList, _ := m.GetReqDocStatusList(int(docID))
+			docrefList, _ := m.GetDocRef(ret.DocNo)
+			c.Data["user_len"] = len(ret.ActionUser)
 			c.Data["data"] = ret
 			c.Data["status"] = statusList
+			c.Data["doc_ref"] = docrefList
 		}
 	}
 	c.Layout = "layout.html"
@@ -103,6 +106,18 @@ func (c *ReqController) Post() {
 			if reqCompleteDate != (time.Time{}) {
 				reqDoc.CompleteDate = reqCompleteDate
 			}
+			if reqActionDate != (time.Time{}) && reqCompleteDate != (time.Time{}) {
+				reqActionDateTime, errAcDateTime := h.DateTimeParse(reqActionDateString, reqDoc.ActionTime)
+				reqCompleteDateTime, errCpDateTime := h.DateTimeParse(reqCompleteDateString, reqDoc.CompleteTime)
+				if errAcDateTime == nil && errCpDateTime == nil {
+					reqDoc.TimeDiff = reqCompleteDateTime.Sub(reqActionDateTime).Minutes()
+				} else {
+					reqDoc.TimeDiff = 0
+				}
+			} else {
+				reqDoc.TimeDiff = 0
+			}
+
 			errAction := errors.New("")
 			if reqDoc.ID == 0 {
 				ret.ID, reqDoc.DocNo, errAction = m.CreateReq(reqDoc, m.Users{ID: actionUser.ID})

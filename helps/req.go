@@ -17,7 +17,7 @@ const HTMLReqTemplate = `<tr>
 								</div>
 							</td>
 							<td class="is-col-toggle">{branch}</td>
-							<td class="info-col" style="cursor: pointer;">{docno} <i class="fa fa-info-circle"><i/></td>
+							<td class="info-col" style="cursor: pointer;">{docno}</td>
 							<td class="is-col-toggle">{reqname}</td>
 							<td>{reqdate}</td>
 							<td class="is-col-toggle">{eventdate}</td>
@@ -179,4 +179,13 @@ func ValidateReqData(reqDoc m.RequestDocument,
 	// actionDate time.Time,
 	// completeDate time.Time,
 	return
+}
+
+//DateTimeParse _
+func DateTimeParse(date string, timeStr string) (time.Time, error) {
+	sp := strings.Split(date, "-")
+	//retDate, errDate := time.Parse("2006-02-01 H:i:s", sp[2]+"-"+sp[0]+"-"+sp[1]+" "+timeStr)
+	retDate, errDate := time.Parse(
+		time.RFC3339, sp[2]+"-"+sp[0]+"-"+sp[1]+"T"+timeStr+":00+00:00")
+	return retDate, errDate
 }

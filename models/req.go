@@ -13,6 +13,7 @@ import (
 type RequestDocument struct {
 	ID           int
 	DocNo        string `orm:"size(20)"`
+	DocType      int
 	DocDate      time.Time
 	ReqName      string     `orm:"size(255)"`
 	User         *Users     `orm:"null;rel(fk)"`
@@ -40,6 +41,9 @@ type RequestDocument struct {
 
 	EstimatePrice float64
 	OtherPrice    float64
+	TotalAmount   float64
+
+	TimeDiff float64
 
 	Details  string `orm:"size(500)"`
 	Remark   string `orm:"size(300)"`
@@ -80,6 +84,7 @@ type RequestStatus struct {
 //RequestUserAction _
 type RequestUserAction struct {
 	ID              int
+	Cost            float64          `orm:"digits(12);decimals(2)"`
 	RequestDocument *RequestDocument `orm:"rel(one)"`
 	ActionUser      *Users           `orm:"rel(one)"`
 	CreatedAt       time.Time        `orm:"auto_now_add"`
@@ -93,6 +98,15 @@ type Status struct {
 	Lock      bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+//DocRef _
+type DocRef struct {
+	ID          int
+	Name        string `orm:"size(225)"`
+	DocDate     time.Time
+	DocNo       string
+	TotalAmount float64
 }
 
 func init() {
@@ -139,6 +153,8 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 		for _, val := range req.ActionUser {
 			val.RequestDocument = &RequestDocument{ID: int(id)}
 			if val.ActionUser.ID != 0 {
+				valUser, _ := GetUserByUserID(val.ActionUser.ID)
+				val.Cost = valUser.CostPerTechnical
 				userActions = append(userActions, val)
 			}
 		}
@@ -146,11 +162,12 @@ func CreateReq(req RequestDocument, user Users) (retID int64, retDocNo string, e
 		if len(userActions) > 0 {
 			_, err = o.InsertMulti(len(userActions), userActions)
 		}
-		o.Commit()
-		if err == nil {
-			retID = id
-		} else {
+		if err != nil {
+			errRet = err
 			err = o.Rollback()
+		} else {
+			o.Commit()
+			UpdateReqTotalAmount(req.DocNo)
 		}
 		errRet = err
 	}
@@ -171,7 +188,7 @@ func UpdateReq(req RequestDocument, user Users) (errRet error) {
 		doc.EventTime = req.EventTime
 		doc.ReqDate = req.ReqDate
 		doc.ReqTime = req.ReqTime
-
+		doc.TimeDiff = req.TimeDiff
 		doc.AppointmentDate = req.AppointmentDate
 		doc.AppointmentTime = req.AppointmentTime
 		doc.GoalDate = req.GoalDate
@@ -201,16 +218,20 @@ func UpdateReq(req RequestDocument, user Users) (errRet error) {
 				for _, val := range req.ActionUser {
 					val.RequestDocument = &doc
 					if val.ActionUser.ID != 0 {
+						valUser, _ := GetUserByUserID(val.ActionUser.ID)
+						val.Cost = valUser.CostPerTechnical
 						userActions = append(userActions, val)
 					}
 				}
 				if len(userActions) > 0 {
 					_, err = o.InsertMulti(len(userActions), userActions)
 				}
-				o.Commit()
 				if err != nil {
 					errRet = err
 					err = o.Rollback()
+				} else {
+					o.Commit()
+					UpdateReqTotalAmount(doc.DocNo)
 				}
 			} else {
 				errRet = err
@@ -219,6 +240,27 @@ func UpdateReq(req RequestDocument, user Users) (errRet error) {
 		}
 	}
 	return errRet
+}
+
+//UpdateReqTotalAmount _
+func UpdateReqTotalAmount(docNo string) {
+	o := orm.NewOrm()
+	req := &RequestDocument{}
+	o.QueryTable("request_document").Filter("DocNo", docNo).RelatedSel().One(req)
+	if req.ID == 0 {
+		return
+	}
+	reqActionUser, _ := GetReqUserActionByDocID(strconv.Itoa(req.ID))
+	reqDocRef, _ := GetDocRef(docNo)
+	var Total float64
+	Total = req.OtherPrice
+	for _, val := range *reqActionUser {
+		Total = Total + (val.Cost * req.TimeDiff)
+	}
+	for _, val := range reqDocRef {
+		Total = Total + val.TotalAmount
+	}
+	o.Raw("update request_document  set total_amount = ? where i_d = ?", Total, req.ID).Exec()
 }
 
 //GetReqDocID _
@@ -290,6 +332,23 @@ func CreateReqStatus(reqStatus RequestStatus) (retID int64, errRet error) {
 		retID = id
 	}
 	return retID, err
+}
+
+//GetDocRef _
+func GetDocRef(docNo string) (docList []DocRef, errRet error) {
+	o := orm.NewOrm()
+	sql := `SELECT
+				pick_up.i_d,
+				doc_no,
+				doc_date,
+				total_amount,
+				users.name
+			FROM
+				pick_up
+				JOIN users ON pick_up.creator_id = users.i_d
+			WHERE 	pick_up.active and pick_up.doc_ref_no = ?`
+	_, err := o.Raw(sql, docNo).QueryRows(&docList)
+	return docList, err
 }
 
 //GetReqDocList _

@@ -3,7 +3,6 @@ package helps
 import (
 	"bytes"
 	m "fix2man/models"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -174,10 +173,8 @@ func IsMobile(useragent string) bool {
 		"smartphone",
 		"cellphone",
 		"Generic Mobile"}
-	fmt.Println(useragent)
 	for _, device := range mobiles {
 		if strings.Index(useragent, device) > -1 {
-			fmt.Println(true)
 			return true
 		}
 	}

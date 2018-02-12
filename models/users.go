@@ -112,6 +112,18 @@ func GetUserByID(ID string) (user *Users, errRet string) {
 	return userGet, errRet
 }
 
+//GetUserByUserID _
+func GetUserByUserID(ID int) (user *Users, errRet string) {
+	o := orm.NewOrm()
+	userGet := &Users{}
+	o.QueryTable("users").Filter("ID", ID).RelatedSel().One(userGet)
+	if nil != userGet {
+		userGet.Password = ""
+		userGet.Roles = nil
+	}
+	return userGet, errRet
+}
+
 //GetUserByUserName _
 func GetUserByUserName(username string) (user *Users, errRet string) {
 	userGet := &Users{}

@@ -134,13 +134,31 @@
                                 <a href="/request/list">
                                     <i class="fa fa-circle-o"></i> รายการแจ้งงาน</a>
                             </li>
-
                         </ul>
                     </li>
                     <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-calendar-check-o"></i>
+                                <span>บำรุงรักษาเชิงป้องกัน</span>
+                                <span class="pull-right-container">
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                    <li class="{{.m_create_request}}">
+                                        <a href="/create-request">
+                                            <i class="fa fa-circle-o"></i> ใบสั่งงาน</a>
+                                    </li>
+                                    <li class="{{.m_request_list}}">
+                                        <a href="/request/list">
+                                            <i class="fa fa-circle-o"></i> รายการใบสั่งงาน</a>
+                                    </li>
+                                </ul>
+                        </li>
+                    <li class="treeview">
                         <a href="#">
-                            <i class="fa fa-calendar-check-o"></i>
-                            <span>PM/ติดตั้ง/PJ</span>
+                            <i class="fa fa-folder-o"></i>
+                            <span>โครงการ</span>
                         </a>
                     </li>
                     <li class="treeview {{.m_supplier}}">
@@ -168,7 +186,7 @@
                                     <i class="fa fa-circle-o"></i>สินค้า/อุปกรณ์/อะไหล่</a>
                             </li>
                             <li class="{{.m_product_list}}">
-                                    <a href="/product/serail">
+                                    <a href="/product/serial">
                                         <i class="fa fa-circle-o"></i>ทะเบียน Serial Number</a>
                                 </li>
                         </ul>
@@ -176,20 +194,21 @@
                     <li class="treeview">
                         <a href="#">
                             <i class="fa fa-random"></i>
-                            <span>เบิก/รับ</span>
+                            <span>รับ/เบิก</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
+                                <li>
+                                        <a href="/receive/list">
+                                            <i class="fa fa-circle-o"></i> รับ</a>
+                                    </li>
                             <li>
                                 <a href="/pickup/list">
                                     <i class="fa fa-circle-o"></i>เบิก</a>
                             </li>
-                            <li>
-                                <a href="/receive/list">
-                                    <i class="fa fa-circle-o"></i> รับ</a>
-                            </li>
+                           
                         </ul>
                     </li>
                     <li class="treeview">
@@ -245,7 +264,7 @@
                         <ul class="treeview-menu">
                             <li class="{{.m_status_list}}">
                                 <a href="/normal/?entity=status">
-                                    <i class="fa fa-circle-o"></i> สถานะการซ่อม</a>
+                                    <i class="fa fa-circle-o"></i> สถานะการงาน</a>
                             </li>
                             <li class="{{.m_category_list}}">
                                 <a href="/product-category/list">

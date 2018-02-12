@@ -88,6 +88,9 @@ func CreateReceive(receive Receive, user Users) (retID int64, errRet error) {
 	if err == nil {
 		retID = id
 		o.Commit()
+		if len(receive.DocRefNo) > 0 {
+			UpdateReqTotalAmount(receive.DocRefNo)
+		}
 	} else {
 		o.Rollback()
 	}
@@ -132,6 +135,9 @@ func UpdateReceive(receive Receive, user Users) (retID int64, errRet error) {
 	if err == nil {
 		retID = id
 		o.Commit()
+		if len(receive.DocRefNo) > 0 {
+			UpdateReqTotalAmount(receive.DocRefNo)
+		}
 	} else {
 		o.Rollback()
 	}

@@ -88,6 +88,9 @@ func CreatePickUp(PickUp PickUp, user Users) (retID int64, errRet error) {
 	if err == nil {
 		retID = id
 		o.Commit()
+		if len(PickUp.DocRefNo) > 0 {
+			UpdateReqTotalAmount(PickUp.DocRefNo)
+		}
 	} else {
 		o.Rollback()
 	}
@@ -132,6 +135,9 @@ func UpdatePickUp(PickUp PickUp, user Users) (retID int64, errRet error) {
 	if err == nil {
 		retID = id
 		o.Commit()
+		if len(PickUp.DocRefNo) > 0 {
+			UpdateReqTotalAmount(PickUp.DocRefNo)
+		}
 	} else {
 		o.Rollback()
 	}

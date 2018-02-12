@@ -60,7 +60,13 @@
                                 </td>
                          </tr>`;
         function totalText(){
-            $("#total").html("รวมทั้งหมด "+  $("#ret-data tr").length +" คน");   
+            var Total = 0;
+            $("#ret-data tr").each(function (index) {
+                if($(this).find(".item-user-id").val()!=""){
+                    Total+=1;
+                }                 
+            }); 
+            $("#total").html("รวมทั้งหมด "+  Total +" คน");   
         }
 
         {{if .user_len}}
@@ -141,6 +147,7 @@
                 $('#ret-data > tr').eq(index).find(".item-user-name").val($('#item-user-edit').val());
                 $('#ret-data > tr').eq(index).find(".item-user-text").html($('#item-user-edit').val());
                 $editOveray.hide();
+                totalText();
             }
         });
 

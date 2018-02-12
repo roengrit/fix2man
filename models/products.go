@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -159,7 +158,6 @@ func GetProductSerialAvg(SN string) float64 {
 	o := orm.NewOrm()
 	var res AverageCostOnly
 	_ = o.Raw(sql).QueryRow(&res)
-	fmt.Println(res)
 	return res.AverageCost
 }
 

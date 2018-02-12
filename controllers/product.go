@@ -3,7 +3,6 @@ package controllers
 import (
 	h "fix2man/helps"
 	m "fix2man/models"
-	"fmt"
 	"html/template"
 	"path/filepath"
 	"strconv"
@@ -27,7 +26,6 @@ func (c *ProductController) ListProductJSON() {
 	var err error
 	var rowCount int64
 	var lists []m.Product
-	fmt.Println(raw)
 	if raw == 0 {
 		rowCount, lists, err = m.GetProductList(15, term)
 	} else {
