@@ -26,6 +26,7 @@ type Product struct {
 	Remark          string `orm:"size(100)"`
 	FixCost         bool
 	Active          bool
+	Serial          bool
 	Creator         *Users    `orm:"rel(fk)"`
 	CreatedAt       time.Time `orm:"auto_now_add;type(datetime)"`
 	Editor          *Users    `orm:"null;rel(fk)"`

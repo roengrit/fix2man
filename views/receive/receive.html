@@ -105,7 +105,8 @@
                         <table class="table" id="ret-table">
                             <thead>
                                 <tr>
-                                    <th class="col-md-5 col-md-5-table">ชื่อ</th>
+                                    <th class="col-md-3 col-md-3-table">ชื่อ</th>
+                                    <th class="col-md-2 col-md-2-table" style="text-align:center;">SN</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">จำนวน</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">ราคา:หน่วย</th>
                                     <th class="col-md-2 col-md-2-table" style="text-align:right;">รวม</th>
@@ -118,12 +119,14 @@
                                             <tr  style="cursor: pointer;" index-val="{{$key}}">
                                                     <input type="hidden" class="ProductId" name="ReceiveSub[{{$key}}].Product.ID" value="{{$val.Product.ID}}" /> 
                                                     <input type="hidden" class="ProductName" name="ReceiveSub[{{$key}}].Product.Name" value="{{$val.Product.Name}}" />
+                                                    <input type="hidden" class="Serial" name="ReceiveSub[@].Serial" value="{{$val.Serial}}" />
                                                     <input type="hidden" class="ProductUnitID" name="ReceiveSub[{{$key}}].Unit.ID" value="{{$val.Unit.ID}}" /> 
                                                     <input type="hidden" class="ProductQty" name="ReceiveSub[{{$key}}].Qty" value="{{$val.Qty}}" />
                                                     <input type="hidden" class="ProductPrice" name="ReceiveSub[{{$key}}].Price" value="{{$val.Price}}" />
                                                     <input type="hidden" class="ProductTotalPrice" name="ReceiveSub[{{$key}}].TotalPrice" value="{{$val.TotalPrice}}" />
                     
-                                                    <td class="col-md-5 table-td-mid ProductNameText">{{$val.Product.Name}}</td> 
+                                                    <td class="col-md-3 table-td-mid ProductNameText">{{$val.Product.Name}}</td> 
+                                                    <td class="col-md-2 table-td-mid ProductNameText">{{$val.Serial}}</td> 
                                                     <td class="col-md-2 table-td-mid table-td-number ProductQtyText">{{$val.Qty | ThCommaSep }}</td>
                                                     <td class="col-md-2 table-td-mid table-td-number ProductPriceText">{{$val.Price | ThCommaSep }}</td>
                                                     <td class="col-md-2 table-td-mid table-td-number ProductTotalPriceText"  >{{$val.TotalPrice | ThCommaSep }}</td>
@@ -221,12 +224,15 @@
             </div>
         </div>
         <div class="col-xs-12" id="editOveray">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input type="text" id="item-name" name="item-name" class="form-control" autocomplete="off" placeholder="่ชื่อ">
                     <input type="hidden" tabindex="-1" id="item-id" name="item-id"  >
                     <input type="hidden" tabindex="-1" id="unit-id" name="unit-id"  >                
                     <input type="hidden" tabindex="-1" id="item-balance_cost" name="item-balance_cost"  >  
                     <input type="hidden" tabindex="-1" id="item-image_path" name="item-image_path"  >  
+                </div>
+                <div class="col-md-2">
+                        <input type="text" id="item-sn" name="item-sn"   class="form-control" class="form-control" autocomplete="off" placeholder="SN">
                 </div>
                 <div class="col-md-2">
                     <input type="number" id="qty" name="qty" step="0.01" class="form-control" style="text-align: right;" autocomplete="off" placeholder="จำนวน">

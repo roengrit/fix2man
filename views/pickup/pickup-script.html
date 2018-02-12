@@ -235,6 +235,7 @@
             $.post(url, $('#pickup-form').serialize(), function (data) {
                 if (data.RetOK) {
                     showTopAlert(data.RetData, "success")
+                    $.get('/service/avg', function (data) { });
                     setTimeout(function () { window.location.href = '/pickup/list' }, 600);
                 } else {
                     showTopAlert(data.RetData, "danger")

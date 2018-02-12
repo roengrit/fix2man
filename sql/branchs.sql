@@ -1,2 +1,0 @@
-INSERT INTO "branchs"("i_d", "code", "name", "created_at", "updated_at", "lock", "token_line", "cost_avg_per_technical") VALUES (1, '0001', 'อุบล', '2017-12-31 20:22:36.688374+07', '2017-12-31 20:22:36.688374+07', 'f', '', 0);
-INSERT INTO "branchs"("i_d", "code", "name", "created_at", "updated_at", "lock", "token_line", "cost_avg_per_technical") VALUES (2, '0002', 'ศรีเกษ', '2017-12-31 20:22:46.577589+07', '2017-12-31 20:22:46.577589+07', 'f', '', 0);

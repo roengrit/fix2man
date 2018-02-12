@@ -42,10 +42,10 @@ const HTMLReceiveActionEditOnly = `<a class="btn bg-purple" title="รายล�
 								  `
 
 //HTMLReceiveNotFoundRows _
-const HTMLReceiveNotFoundRows = `<tr> <td  colspan="5" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`
+const HTMLReceiveNotFoundRows = `<tr> <td  colspan="6" style="text-align:center;">*** ไม่พบข้อมูล ***</td></tr>`
 
 //HTMLReceiveError _
-const HTMLReceiveError = `<tr> <td  colspan="5" style="text-align:center;">{err}</td></tr>`
+const HTMLReceiveError = `<tr> <td  colspan="6" style="text-align:center;">{err}</td></tr>`
 
 //GenReceiveHTML _
 func GenReceiveHTML(lists []m.Receive) string {

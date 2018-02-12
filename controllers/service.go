@@ -5,8 +5,11 @@ import (
 	m "fix2man/models"
 	"html/template"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
+//EmptyDateString _
 func EmptyDateString(in string) (out string) {
 	if in == "01-01-0001" {
 		out = ""
@@ -19,6 +22,11 @@ func EmptyDateString(in string) (out string) {
 //ServiceController _
 type ServiceController struct {
 	BaseController
+}
+
+//ServiceNonAuthController _
+type ServiceNonAuthController struct {
+	beego.Controller
 }
 
 //ListEntityJSON  _
@@ -127,5 +135,13 @@ func (c *ServiceController) GetUserJSON() {
 func (c *ServiceController) GetXSRF() {
 	c.Data["json"] = c.XSRFToken()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.ServeJSON()
+}
+
+//CalItemAvg  _
+func (c *ServiceNonAuthController) CalItemAvg() {
+	ret := m.NormalModel{}
+	m.CalAllAvg()
+	c.Data["json"] = ret
 	c.ServeJSON()
 }

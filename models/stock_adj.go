@@ -179,7 +179,9 @@ func CalAllAvg() {
 	qs.Filter("flag", 1).RelatedSel().All(StockAdj)
 	if len(*StockAdj) >= 1 {
 		for _, val := range *StockAdj {
-			CalAllAvgTrans(val.Product.ID, true)
+			if val.Product.ProductType == 0 && !val.Product.Serial {
+				CalAllAvgTrans(val.Product.ID, true)
+			}
 			_, _ = o.Raw("delete from stock_adj where flag = 1 and product_id = ?", val.Product.ID).Exec()
 			o.Commit()
 		}

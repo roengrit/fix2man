@@ -1,24 +1,10 @@
-<script src="/static/js/form.js" charset="UTF-8"></script>
 <script src="/static/js/icheck/icheck.min.js" charset="UTF-8"></script>
 <script>
-function Save() {
-    hideTopAlert();
-    var options = { 
-        success:       showResponse  // post-submit callback 
-    }; 
-    $('#product-form').ajaxForm(options);
-}
- 
- 
-// post-submit callback 
-function showResponse(data, statusText, xhr, $form) {
-    if (data.RetOK) {
-        showTopAlert(data.RetData, "success")
-      //  setTimeout(function () { window.location.href = '/member/list' }, 1000);
-    } else {
-        showTopAlert(data.RetData, "danger")
+    var saveRet =  '{{.ret.RetOK}}'; 
+    if(saveRet == 'true'){
+        $.get('/service/avg', function (data) { });
+        setTimeout(function () { window.location.href = '/product/list' }, 1000);
     }
-}
     $(document).ready(function () {
         
         $("#FixCost").click(function() {

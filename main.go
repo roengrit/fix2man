@@ -60,6 +60,7 @@ func main() {
 	beego.Router("/service/user/json", &c.ServiceController{}, "get:GetUserJSON")
 	beego.Router("/service/user/list/json", &c.ServiceController{}, "get:GetUserListJSON")
 	beego.Router("/service/tech/list/json", &c.ServiceController{}, "get:GetTechListJSON")
+	beego.Router("/service/avg", &c.ServiceNonAuthController{}, "get:CalItemAvg")
 
 	beego.Router("/member/?:id", &c.MemberController{}, "get:CreateMember;post:UpdateMember;delete:DeleteMember")
 	beego.Router("/member/read/?:id", &c.MemberController{}, "get:CreateMember")
