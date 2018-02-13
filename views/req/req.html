@@ -20,7 +20,7 @@
 
         <div id="box-req" class="box box-primary">
             <div class="box-body">
-                    <h4 class="box-title  req-box-title ">รายละเอียดผู้แจ้ง/สั่งงาน <a href="javascript:void(0)" target-toggle="req" class="title-toggle" style="font-size:12px;">
+                    <h4 class="box-title  req-box-title ">ผู้แจ้ง/สั่งงาน <a href="javascript:void(0)" target-toggle="req" class="title-toggle" style="font-size:12px;">
                             <i class="fa fa-eye-slash"></i></a></h4>
                 <div class="form-group req-box-form req"  style="display:none;margin-left:20px;">
                     <div class="col-xs-6">
@@ -63,6 +63,11 @@
                         </div>
                     </div>
                 </div>
+
+            </div>
+        </div>
+        <div id="box-req" class="box box-primary">
+                <div class="box-body">
                 <h4 class="req-box-title">ตำแหน่ง/ที่ตั้ง <a href="javascript:void(0)" target-toggle="location" class="title-toggle" style="font-size:12px;">
                     <i class="fa fa-eye-slash"></i></a></h4>
                 <div class="form-group req-box-form location"   style="display:none;margin-left:20px;">
@@ -99,6 +104,10 @@
 
                     </div>
                 </div>
+                </div>
+        </div>
+        <div id="box-req" class="box box-primary">
+                <div class="box-body">
                 <h4 class="req-box-title">รายละเอียด <a href="javascript:void(0)" target-toggle="details" class="title-toggle" style="font-size:12px;"><i class="fa fa-eye-slash"></i></a></h4>
                 <div class="form-group req-box-form details"   style="display:none;margin-left:20px;">
                     <div class="col-xs-3">
@@ -186,6 +195,10 @@
                         </div>
                     </div>
                 </div>
+                </div>
+        </div>
+        <div id="box-req" class="box box-primary">
+                <div class="box-body">
                 <h4 class="req-box-title">การดำเนินการ <a href="javascript:void(0)" target-toggle="operate" class="title-toggle" style="font-size:12px;">
                         <i class="fa fa-eye-slash"></i></a></h4>
                 <div class="form-group req-box-form operate"   style="display:none;margin-left:20px;">
@@ -243,7 +256,7 @@
                     </div>
                 </div>
                 <div class="form-group req-box-form operate"   style="display:none;margin-left:20px;">
-                    <div class="col-xs-12">
+                    <div class="col-xs-12">                        
                         <table class="table" id="ret-table">
                             <thead>
                                 <tr>
@@ -285,7 +298,7 @@
                             </tfoot>
                         </table>
                     </div>
-                </div>
+                </div>                
                 <div class="form-group req-box-form operate"   style="display:none;margin-left:20px;">
                     <div class="col-xs-12" >
                         <label for="req-date-event">ประเมินมูลค่าการดำเนินการ</label>
@@ -301,7 +314,6 @@
                             {{end}}
 
                             {{.r}}>
-
                         </div>
                     </div>
                 </div>
@@ -358,33 +370,126 @@
                                 {{.r}} placeholder="...."> {{end}}
                         </div>
                     </div>
+                </div>              
+            </div>
+        </div>
+         {{if.data.DocNo}}
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+        
+                <h4 class="req-box-title">การเบิกวัสดุ/อุปกรณ์
+                    <a href="javascript:void(0)" target-toggle="mm" class="title-toggle" style="font-size:12px;">
+                        <i class="fa fa-eye-slash"></i>
+                    </a>
+                </h4>
+                <div class="form-group req-box-form mm" style="display:none;margin-left:20px;">
+                    <div class="col-xs-12">
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3-table">เลขที่</th>
+                                    <th class="col-md-3-table">วันที่</th>
+                                    <th class="col-md-3-table" style="width: 340px!important;text-align:right;">มูลค่า</th>
+                                    <th class="col-md-3-table">ผู้บันทึก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{if .doc_ref}} {{range $key, $val := .doc_ref}}
+                                <tr>
+                                    <td> <a href="/pickup/?id={{$val.ID}}" target="_blank"> {{$val.DocNo}} </a> </td>
+                                    <td> {{date $val.DocDate "d-m-Y H:i:s"}} </td>
+                                    <td style="width: 340px!important;text-align:right;"> {{$val.TotalAmount | ThCommaSep}} </td>
+                                    <td> {{$val.Name}} </td>
+                                </tr>
+                                {{end}}
+                                <tr>
+                                    <td colspan="4">
+                                        <a href="/pickup/?doc_ref={{.data.DocNo}}" target="_blank" class="btn btn-success ">เบิกวัสดุอุปกรณ์</a>
+                                    </td>
+                                </tr>
+                                {{else}}
+                                <tr>
+                                    <td colspan="4"> </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <a href="/pickup/?doc_ref={{.data.DocNo}}" target="_blank" class="btn btn-success ">เบิกวัสดุอุปกรณ์</a>
+                                    </td>
+                                </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="form-group req-box-form operate"   style="display:none;margin-left:20px;">
-                        <div class="col-xs-3" style="margin-top:20px;" >
-                                <label for="req-date-event">ค่าใช้จ่ายอื่นๆ</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-dollar"></i>
-                                    </span>
-                                    
-                                    <input type="text" id="req-other-price"   name="OtherPrice" class="form-control" 
-                                    {{if .data.OtherPrice }}
-                                      value='{{.data.OtherPrice  | ThCommaSep}}'
-                                    {{end}}>
-                                </div>
-                            </div>
-                            <div class="col-xs-9" style="margin-top:20px;" >
-                                    <label for="req-date-event">หมายเหตุ</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-file-text-o"></i>
-                                        </span>
-                                        <input type="text" id="req-remark"   name="Remark" class="form-control" value='{{.data.Remark }}'>
-                                    </div>
-                                </div>
-                             
+        
+            </div>
+        </div>
+        {{end}}
+        <div id="box-req" class="box box-primary">
+            <div class="box-body">
+                <h4 class="req-box-title">สถานะการดำเนินการ
+                    <a href="javascript:void(0)" target-toggle="status" class="title-toggle" style="font-size:12px;">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </h4>
+                <div class="form-group req-box-form status" style="display:none;">
+                    <div class="col-xs-12">
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3-table">สถานะ</th>
+                                    <th class="col-md-3-table">หมายเหตุ</th>
+                                    <th class="col-md-3-table" style="width: 140px!important;">วันที่</th>
+                                    <th class="col-md-3-table" style="width: 200px!important;">ผู้บันทึก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{range $key, $val := .status}}
+                                <tr>
+                                    <td> {{$val.Status.Name}} </td>
+                                    <td> {{$val.Remark}} </td>
+                                    <td> {{date $val.CreatedAt "d-m-Y H:i:s"}} </td>
+                                    <td> {{$val.CreateUser.Name}} </td>
+                                </tr>
+                                {{end}}
+                                <tr>
+                                        <td colspan="4">
+                                            <a href="javascript:void(0)" onclick="changeStatus('{{.data.ID}}')" target="_blank" class="btn btn-success ">เปลี่ยนสถานะ</a>
+                                        </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="form-group req-box-form operate"   style="display:none;margin-left:20px;">
+            </div>
+        </div>
+        <div id="box-req" class="box box-primary">
+                <div class="box-body">
+                <h4 class="req-box-title">ค่าใช้จ่ายในการดำเนินการ <a href="javascript:void(0)" target-toggle="expend" class="title-toggle" style="font-size:12px;">
+                        <i class="fa fa-eye-slash"></i></a></h4>
+                <div class="form-group req-box-form expend" style="display:none;margin-left:20px;">
+                    <div class="col-xs-3" style="margin-top:20px;">
+                        <label for="req-date-event">ค่าใช้จ่ายอื่นๆ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-dollar"></i>
+                            </span>
+                            <input type="text" id="req-other-price" name="OtherPrice" class="form-control" {{if .data.OtherPrice }} value='{{.data.OtherPrice  | ThCommaSep}}'
+                                {{end}}>
+                        </div>
+                    </div>
+                    <div class="col-xs-9" style="margin-top:20px;">
+                        <label for="req-date-event">หมายเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-file-text-o"></i>
+                            </span>
+                            <input type="text" id="req-remark" name="Remark" class="form-control" value='{{.data.Remark }}'>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="form-group req-box-form expend"   style="display:none;margin-left:20px;">
                     <div class="col-xs-4" style="margin-top:20px;">
                         <label for="req-date-event">ค่าแรงรวม</label>
                         <div class="input-group">
@@ -434,6 +539,7 @@
                 {{end}}
             </div>
         </div>
+       
         <div class="col-xs-11" id="editOveray"  style="margin-left:20px;">
             <div class="col-md-8">
                 <input type="text" id="item-user-edit" name="item-user-edit" class="form-control has-query" autocomplete="off" placeholder="ผู้ดำเนินการ">

@@ -30,8 +30,12 @@ func (c *ReqController) Get() {
 			c.Data["err"] = err.Error()
 		} else {
 			c.Data["title"] = "แก้ไขใบแจ้งงาน"
-			c.Data["data"] = ret
+			statusList, _ := m.GetReqDocStatusList(int(ret.ID))
+			docrefList, _ := m.GetDocRef(ret.DocNo)
 			c.Data["user_len"] = len(ret.ActionUser)
+			c.Data["data"] = ret
+			c.Data["status"] = statusList
+			c.Data["doc_ref"] = docrefList
 		}
 	}
 	if h.CheckPermissAllow(1001, c.Ctx.Request) {

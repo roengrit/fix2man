@@ -24,7 +24,7 @@ const HTMLRecTemplate = `<tr>
 						</tr>`
 
 //HTMLRecActionEnable _
-const HTMLRecActionEnable = `<a   class="btn bg-purple" title="รายละเอียด" target="_blank" href="/request/read/?id={id}&r=1"><i class="fa fa-file-text-o"></i></a>
+const HTMLRecActionEnable = ` 
 							 <a   class="btn btn-danger " title="แก้ไข"  href="/create-request/?id={id}"><i class="fa fa-edit"></i></a>						
 							 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								<span class="caret"></span>

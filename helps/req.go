@@ -27,13 +27,12 @@ const HTMLReqTemplate = `<tr>
 						</tr>`
 
 //HTMLReqActionEnable _
-const HTMLReqActionEnable = `<a   class="btn bg-purple" title="รายละเอียด" target="_blank" href="/request/read/?id={id}&r=1"><i class="fa fa-file-text-o"></i></a>
+const HTMLReqActionEnable = `<a class="btn bg-purple" title="รายละเอียด" href="/create-request/?id={id}"><i class="fa fa-edit"></i></a>
 							 <button type="button" class="btn bg-purple dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
-							    <li><a href="/create-request/?id={id}" title="แก้ไข">แก้ไข</a></li>
 								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
 								<li><a href="/pickup/?doc_ref={docno}">เบิกอะไหล่</a></li>
 							</ul>

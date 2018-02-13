@@ -361,4 +361,11 @@
             }
         });
     }
+    function changeStatus(id){
+         hideTopAlert();
+         $.get( "/request/change-status/?id=" + id , function( data ) {
+            $('#small-global-modal-content').html(data.RetData);
+            showGlobalSmallModal();            
+          });
+    }
 </script>
