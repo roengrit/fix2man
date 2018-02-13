@@ -347,12 +347,17 @@
     function Save() {
         hideTopAlert();
         url = $('#req-form').attr('action');
+        $("#req-estimate-price").val( $("#req-estimate-price").val().replace(/,/g, ''));
+        $("#req-other-price").val( $("#req-other-price").val().replace(/,/g, ''));
+
         $.post(url, $('#req-form').serialize(), function (data) {
             if (data.RetOK) {
                 showTopAlert(data.RetData, "success")
                 setTimeout(function () { window.location.href = '/request/list/' }, 1000);
             } else {
                 showTopAlert(data.RetData, "danger")
+                $("#req-estimate-price").val(addCommas($("#req-estimate-price").val()));
+                $("#req-other-price").val(addCommas($("#req-other-price").val()));
             }
         });
     }

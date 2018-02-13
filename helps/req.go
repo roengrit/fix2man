@@ -184,8 +184,11 @@ func ValidateReqData(reqDoc m.RequestDocument,
 //DateTimeParse _
 func DateTimeParse(date string, timeStr string) (time.Time, error) {
 	sp := strings.Split(date, "-")
-	//retDate, errDate := time.Parse("2006-02-01 H:i:s", sp[2]+"-"+sp[0]+"-"+sp[1]+" "+timeStr)
 	retDate, errDate := time.Parse(
 		time.RFC3339, sp[2]+"-"+sp[0]+"-"+sp[1]+"T"+timeStr+":00+00:00")
+	if strings.Contains(errDate.Error(), "month out of range") {
+		retDate, errDate := time.Parse(time.RFC3339, sp[2]+"-"+sp[1]+"-"+sp[0]+"T"+timeStr+":00+00:00")
+		return retDate, errDate
+	}
 	return retDate, errDate
 }

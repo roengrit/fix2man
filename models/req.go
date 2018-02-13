@@ -41,6 +41,8 @@ type RequestDocument struct {
 
 	EstimatePrice float64
 	OtherPrice    float64
+	TotalWork     float64
+	TotalMaterial float64
 	TotalAmount   float64
 
 	TimeDiff float64
@@ -252,15 +254,17 @@ func UpdateReqTotalAmount(docNo string) {
 	}
 	reqActionUser, _ := GetReqUserActionByDocID(strconv.Itoa(req.ID))
 	reqDocRef, _ := GetDocRef(docNo)
-	var Total float64
+	var Total, TotalWork, TotalMaterial float64
 	Total = req.OtherPrice
 	for _, val := range *reqActionUser {
 		Total = Total + (val.Cost * req.TimeDiff)
+		TotalWork = TotalWork + (val.Cost * req.TimeDiff)
 	}
 	for _, val := range reqDocRef {
 		Total = Total + val.TotalAmount
+		TotalMaterial = TotalMaterial + val.TotalAmount
 	}
-	o.Raw("update request_document  set total_amount = ? where i_d = ?", Total, req.ID).Exec()
+	o.Raw("update request_document  set total_amount = ? , total_work = ? , total_material = ?  where i_d = ?", Total, TotalWork, TotalMaterial, req.ID).Exec()
 }
 
 //GetReqDocID _
