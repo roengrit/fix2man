@@ -10,20 +10,26 @@ import (
 )
 
 //HTMLReqTemplate _
-const HTMLReqTemplate = `<tr>
-							<td>
-								<div class="btn-group">
+const HTMLReqTemplate = `<tr >
+							<td style="width: 80px!important;text-align:center!important;">
+								<div style="width: 80px!important;text-align:center!important;" class="btn-group">
 									{action}
 								</div>
 							</td>
 							<td class="is-col-toggle">{branch}</td>
-							<td class="info-col" style="cursor: pointer;">{docno}</td>
-							<td class="is-col-toggle">{reqname}</td>
+							<td 
+							branch='{branch}' 
+							reqdate='{reqdate}' 
+							eventdate='{eventdate}' 
+							reqname='{reqname}' 
+							remark='{details}'
+							status='{status}' 
+
+							onclick='reqDetails(this)' class="info-col" style="cursor: pointer;">{docno} <i class="fa fa-info-circle"></i></td>
 							<td>{reqdate}</td>
 							<td class="is-col-toggle">{eventdate}</td>
 							<td class="is-col-toggle">{details}</td>
 							<td >{status}</td>
-
 						</tr>`
 
 //HTMLReqActionEnable _
@@ -34,7 +40,7 @@ const HTMLReqActionEnable = `<a class="btn bg-purple" title="รายละเ�
 							</button>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
-								<li><a href="/pickup/?doc_ref={docno}">เบิกอะไหล่</a></li>
+								<li><a target="_blank" href="/pickup/?doc_ref={docno}">เบิกอะไหล่</a></li>
 							</ul>
 								 `
 
@@ -185,9 +191,11 @@ func DateTimeParse(date string, timeStr string) (time.Time, error) {
 	sp := strings.Split(date, "-")
 	retDate, errDate := time.Parse(
 		time.RFC3339, sp[2]+"-"+sp[0]+"-"+sp[1]+"T"+timeStr+":00+00:00")
-	if strings.Contains(errDate.Error(), "month out of range") {
-		retDate, errDate := time.Parse(time.RFC3339, sp[2]+"-"+sp[1]+"-"+sp[0]+"T"+timeStr+":00+00:00")
-		return retDate, errDate
+	if errDate != nil {
+		if strings.Contains(errDate.Error(), "month out of range") {
+			retDate, errDate := time.Parse(time.RFC3339, sp[2]+"-"+sp[1]+"-"+sp[0]+"T"+timeStr+":00+00:00")
+			return retDate, errDate
+		}
 	}
 	return retDate, errDate
 }

@@ -2,9 +2,10 @@
 <script src="/static/js/datepicker/locales/bootstrap-datepicker.th.min.js" charset="UTF-8"></script>
 <script src="/static/js/bootstrap-typeahead.js" charset="UTF-8"></script>
 <script>
+    currentView();
     $(function () {
-
-        $(".title-toggle").click(function(){
+        
+        $(".title-req,.title-location,.title-details,.title-operate,.title-mm,.title-status,.title-expend").click(function(){
             $(this).find("i").toggleClass("fa-eye fa-eye-slash");
             $("."+$(this).attr("target-toggle")).toggle("display");
         });
@@ -69,22 +70,24 @@
             $("#total").html("รวมทั้งหมด "+  Total +" คน");   
         }
 
-        {{if .user_len}}
-        totalText();
-        {{else}}
-        if ($("#action-number").val() != "" && $("#action-number").val() != "0") {
-            for (i = 0; i < parseInt($("#action-number").val()); i++) {
-                appendRow(i);
-            }
-            totalText();  
+         var userCount = '{{.user_len}}';
+        if (userCount) {
+            totalText();
         }
-        if ($("#action-number").val() == "" || $("#action-number").val() == "0") {
-            for (i = 0; i <= 3; i++) {
-                appendRow(i);
+        else {
+            if ($("#action-number").val() != "" && $("#action-number").val() != "0") {
+                for (i = 0; i < parseInt($("#action-number").val()); i++) {
+                    appendRow(i);
+                }
+                totalText();
             }
-            totalText(); 
+            if ($("#action-number").val() == "" || $("#action-number").val() == "0") {
+                for (i = 0; i <= 3; i++) {
+                    appendRow(i);
+                }
+                totalText();
+            }
         }
-        {{end}}
         
         $(".delete-row").click(function (event) {
             deleteRow($(this));
@@ -306,7 +309,13 @@
             } else {
                 $('#req-tel').addClass('check-text');
             }
-        });          
+        });     
+        
+        $('.title-req,.title-location,.title-details,.title-operate,.title-mm,.title-status,.title-expend').click(function () {
+            if (typeof (Storage) !== "undefined") {
+                localStorage.setItem("current_view", $(this).attr("class").split("-")[1])
+            }
+        });
     });
     function Clear() {
         $('#req-doc-id').val('');
@@ -361,11 +370,37 @@
             }
         });
     }
+    function SaveContinue() {
+        hideTopAlert();
+        url = $('#req-form').attr('action');
+        $("#req-estimate-price").val( $("#req-estimate-price").val().replace(/,/g, ''));
+        $("#req-other-price").val( $("#req-other-price").val().replace(/,/g, ''));
+
+        $.post(url, $('#req-form').serialize(), function (data) {
+            if (data.RetOK) {
+                showTopAlert(data.RetData, "success") 
+                window.location.reload();                 
+            } else {
+                showTopAlert(data.RetData, "danger")
+                $("#req-estimate-price").val(addCommas($("#req-estimate-price").val()));
+                $("#req-other-price").val(addCommas($("#req-other-price").val()));
+            }
+        });
+    }
     function changeStatus(id){
          hideTopAlert();
-         $.get( "/request/change-status/?id=" + id , function( data ) {
+         $.get( "/request/change-status/?id=" + id + "&reload=1" , function( data ) {
             $('#small-global-modal-content').html(data.RetData);
             showGlobalSmallModal();            
           });
     }
+    function currentView(){
+        if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("current_view") != "undefined") {
+                $('.' + localStorage.getItem("current_view")).show();
+                $('.title-' + localStorage.getItem("current_view")).show();
+            }
+        } 
+    }
+
 </script>

@@ -15,10 +15,21 @@
 });
 function changeStatus(id){
          hideTopAlert();
-         $.get( "/request/change-status/?id=" + id , function( data ) {
+         $.get( "/request/change-status/?id=" + id  + "&reload=0", function( data ) {
             $('#small-global-modal-content').html(data.RetData);
             showGlobalSmallModal();
           });
+}
+function reqDetails(el){
+    $("#small-details").modal("show");
+    $("#small-details-content-body").html(
+        `<p> <b> สาขา : </b>` + $(el).attr('branch') + `</p>` +
+        `<p> <b>วันที่แจ้ง : </b>` + $(el).attr('reqdate') + `</p>` +
+        `<p> <b>วันที่เสีย : </b>` + $(el).attr('eventdate') + `</p>` +
+        `<p> <b> ผู้แจ้ง  : </b>` + $(el).attr('reqname') + `</p>` +
+        `<p> <b>รายละเอียด/ปัญหา/อาการเสีย : </b> <br/> ` + $(el).attr('remark') + `</p>` +
+        `<p> <b> สถานะ : </b> ` + $(el).attr('status') + `</p>` 
+    )
 }
 loadNormalTable();
  </script>

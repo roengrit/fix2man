@@ -209,6 +209,7 @@ func (c *ReqController) ChangeStatus() {
 	lastStatus, _ := m.GetReqDocLastStatus(int(ID))
 	dataTemplate := m.NormalModel{}
 	dataTemplate.ID = ID
+	dataTemplate.FlagAction = c.Ctx.Request.URL.Query().Get("reload")
 	dataTemplate.ListData = m.GetAllStatusExcludeID(lastStatus.Status.ID)
 	dataTemplate.XSRF = c.XSRFToken()
 	t, err := template.ParseFiles("views/req/req-change-status.html")

@@ -20,6 +20,7 @@
             id="change-status-alert">{{.Alert}}
         </div>
         <input type="hidden" id="req-id" name="req-id" value="{{.ID}}">
+        <input type="hidden" id="req-reload" name="req-reload" value="{{.FlagAction}}">
         <div class="box-body">
             <div class="form-group">
                         <label   class="col-sm-2 control-label">สถานะ</label>
@@ -70,7 +71,11 @@
             $.post(url,$('#change-status-form').serialize(), function( data ) {
                 $('#remark').removeClass('load-text');
                 if(data.RetOK){
-                   loadNormalTable();               
+                    if ($('#req-reload').val() == '1') {
+                        window.location.reload();
+                    } else {
+                        loadNormalTable();
+                    }
                    hideGlobalSmalModal();
                    showTopAlert(data.RetData,"success")
                 }else{
