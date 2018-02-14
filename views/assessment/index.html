@@ -20,7 +20,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <style>
+    <style >
         /* reset */
 
         * {
@@ -314,16 +314,45 @@
             border-bottom-style: solid;
         }
 
-        @media print {
-        
+        /* @media print {
         html { background: none; padding: 0; }
         body { box-shadow: none; margin: 0; }
         * { -webkit-print-color-adjust: exact; }
-    }
-
-    @page { margin: 0; }
-
-       
+        } */
+        @media print {
+            th.colHeader {
+            background: #EEE !important;
+            border-color: #BBB !important;
+                        -webkit-print-color-adjust: exact; 
+            }
+            td.colHeader {
+            background: #EEE !important;
+            border-color: #BBB !important;
+                        -webkit-print-color-adjust: exact; 
+            }
+            }
+        @media print {.colHeader th {
+            background: #EEE !important;
+            border-color: #BBB !important;
+            }
+            .colHeader td {
+            background: #EEE !important;
+            border-color: #BBB !important;
+            }
+            }
+            @page {
+                size: A5;
+                margin: 0;
+             }
+             @media print {
+                html, body {
+                    height: 210mm;
+                    width: 148.5mm;
+                    margin: 0;
+             }
+             html { background: none; padding: 0; }
+        body { box-shadow: none; margin: 0; }
+}
     </style>
 </head>
 
@@ -336,8 +365,8 @@
     <article>
         <table class="meta" style="border-collapse: separate;
         border-spacing: 2px;">
-            <tr class="header">
-                <th >
+            <tr >
+                <th class="colHeader">
                     <span>ผู้แจ้ง</span>
                 </th>
                 <td>
@@ -345,7 +374,8 @@
                 </td>
             </tr>
             <tr>
-                <th>
+                    <th class="colHeader">
+
                     <span>สาขา</span>
                 </th>
                 <td>
@@ -353,7 +383,8 @@
                 </td>
             </tr>
             <tr>
-                <th>
+                    <th class="colHeader">
+
                     <span>แผนก</span>
                 </th>
                 <td>
@@ -362,7 +393,8 @@
             </tr>
 
             <tr>
-                <th>
+                    <th class="colHeader">
+
                     <span>วันที่แจ้ง</span>
                 </th>
                 <td>
@@ -371,7 +403,8 @@
             </tr>
 
             <tr>
-                <th>
+                    <th class="colHeader">
+
                     <span>รายละเอียด</span>
                 </th>
                 <td>
@@ -380,7 +413,8 @@
                 </td>
             </tr>
             <tr>
-                <th>
+                    <th class="colHeader">
+
                     <span>ผู้ดำเนินการ</span>
                 </th>
                 <td>
@@ -393,19 +427,19 @@
         <table class="inventory">
             <thead  >
                 <tr>
-                    <td>
-                        <span>ลำดับ</span>
+                    <td   class="colHeader">
+                        <span>#</span>
                     </td>
-                    <td>
+                    <td class="colHeader"> 
                         <span>รายละเอียด</span>
                     </td>
-                    <td>
-                        <span>ปานกลาง</span>
+                    <td class="colHeader"> 
+                        <span>พอใช้</span>
                     </td>
-                    <td>
+                    <td class="colHeader"> 
                         <span>ดี</span>
                     </td>
-                    <td>
+                    <td class="colHeader"> 
                         <span>ดีมาก</span>
                     </td>
                 </tr>
@@ -556,15 +590,18 @@
         <table class="meta" style="border-collapse: separate;
         border-spacing: 2px;">
             <tr>
-                <th>
+                <th class="colHeader"> 
                     <span>คำแนะนำ</span>
                 </th>
-                <td>
-                    <textarea rows="3" cols="80"></textarea>
+                <td id="remark">
+                    <textarea id="remark-text" rows="3" cols="80"></textarea>
+                </td>
+                <td id="remark-print">
+                         
                 </td>
             </tr>
-            <tr id="sign-pad-x">
-                <th>
+            <tr > 
+                <th class="colHeader"> 
                     <span>ลายเซ็น</span>
                 </th>
                 <td>
@@ -1159,7 +1196,19 @@
     <script src="/static/js/fastclick.js"></script>
     <script src="/static/js/timepicker/js/bootstrap-timepicker.js"></script>
     <script src="/static/js/adminlte.min.js"></script> {{.scripts}}
-  
+  <script>
+ $('#remark-print').hide();
+  window.onbeforeprint = function() {
+   $('#remark-print').show();
+   $('#remark-print').html($('#remark-text').val());
+   $('#remark').hide();
+  };
+  window.onafterprint = function(){
+    $('#remark-print').hide();
+    $('#remark-print').html($('#remark-text').val());
+    $('#remark').show();
+}
+  </script>
 </body>
 
 </html>
