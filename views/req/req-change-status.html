@@ -73,7 +73,7 @@
                 if(data.RetOK){
                     if ($('#req-reload').val() == '1') {
                         window.location.reload();
-                    } else {
+                    } else if ($('#req-reload').val() == '0') {
                         loadNormalTable();
                     }
                    hideGlobalSmalModal();

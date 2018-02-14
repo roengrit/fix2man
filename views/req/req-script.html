@@ -313,7 +313,11 @@
         
         $('.title-req,.title-location,.title-details,.title-operate,.title-mm,.title-status,.title-expend').click(function () {
             if (typeof (Storage) !== "undefined") {
-                localStorage.setItem("current_view", $(this).attr("class").split("-")[1])
+                if (localStorage.getItem("current_view") == $(this).attr("class").split("-")[1]) {
+                    localStorage.removeItem("current_view");
+                } else {
+                    localStorage.setItem("current_view", $(this).attr("class").split("-")[1])
+                }
             }
         });
     });
@@ -389,17 +393,20 @@
     }
     function changeStatus(id){
          hideTopAlert();
-         $.get( "/request/change-status/?id=" + id + "&reload=1" , function( data ) {
+         $.get( "/request/change-status/?id=" + id + "&reload=2" , function( data ) {
             $('#small-global-modal-content').html(data.RetData);
             showGlobalSmallModal();            
           });
     }
     function currentView(){
         if (typeof(Storage) !== "undefined") {
-            if (localStorage.getItem("current_view") != "undefined") {
-                $('.' + localStorage.getItem("current_view")).show();
-                $('.title-' + localStorage.getItem("current_view")).show();
-            }
+            try {
+                    if (localStorage.getItem("current_view") != "undefined") {
+                    $('.' + localStorage.getItem("current_view")).show();
+                    $('.title-' + localStorage.getItem("current_view")).show();
+                }
+            }catch(ex){}
+            
         } 
     }
 

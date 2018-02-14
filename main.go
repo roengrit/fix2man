@@ -95,6 +95,8 @@ func main() {
 	beego.Router("/product-unit/?:id", &c.ProductController{}, "get:CreateProductUnit;post:UpdateProductUnit;delete:DeleteProductUnit")
 	beego.Router("/product-unit/list", &c.ProductController{}, "get:ProductUnitList;post:GetProductUnitList")
 
+	beego.Router("/assess", &c.AssessController{})
+
 	beego.AddFuncMap("emptyDate", c.EmptyDateString)
 	beego.AddFuncMap("ThCommaSep", h.ThCommaSep)
 	beego.AddFuncMap("TextThCommaSep", h.TextThCommaSep)
