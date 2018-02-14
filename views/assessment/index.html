@@ -1066,7 +1066,7 @@
                                 //self.FireEvent("signature_pad:data_url", self.script, data_url);
                                 self.hide(e);
                                 self.pad_img.src = data_url;
-                                console.log(data_url);
+                                $('#SignImage').val(data_url);                                 
                               };
                             
                               SignaturePad.prototype.show = function(e){
@@ -1181,7 +1181,15 @@
                                 </script>
                 </td>
             </tr>
-            
+            <tr id="save-button">
+                    <td  > 
+                        <input type="hidden" name="SignImage" id="SignImage" >
+                    </td>
+                    <td  >
+                            <button class="btn btn-sm btn-success">บันทึก</span>
+                            <button onclick="window.print()" style="margin-left:2px;" class="btn btn-sm btn-primary">พิมพ์</span>
+                    </td>
+                </tr>
         </table>
 
     </article>
@@ -1202,11 +1210,13 @@
    $('#remark-print').show();
    $('#remark-print').html($('#remark-text').val());
    $('#remark').hide();
+   $('#save-button').hide();
   };
   window.onafterprint = function(){
     $('#remark-print').hide();
     $('#remark-print').html($('#remark-text').val());
     $('#remark').show();
+    $('#save-button').show();
 }
   </script>
 </body>
