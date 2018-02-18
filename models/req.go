@@ -26,17 +26,17 @@ type RequestDocument struct {
 	Location     string     `orm:"size(225)"`
 	SerailNumber string     `orm:"size(50)"`
 
-	EventDate       time.Time `form:"-"orm:"null"`
+	EventDate       time.Time `form:"-" orm:"null"`
 	EventTime       string    `orm:"null"`
-	ReqDate         time.Time `form:"-"orm:"null"`
+	ReqDate         time.Time `form:"-" orm:"null"`
 	ReqTime         string    `orm:"null"`
-	AppointmentDate time.Time `form:"-"orm:"null"`
+	AppointmentDate time.Time `form:"-" orm:"null"`
 	AppointmentTime string    `orm:"null"`
-	GoalDate        time.Time `form:"-"orm:"null"`
+	GoalDate        time.Time `form:"-" orm:"null"`
 	GoalTime        string    `orm:"null"`
-	ActionDate      time.Time `form:"-"orm:"null"`
+	ActionDate      time.Time `form:"-" orm:"null"`
 	ActionTime      string    `orm:"null"`
-	CompleteDate    time.Time `form:"-"orm:"null"`
+	CompleteDate    time.Time `form:"-" orm:"null"`
 	CompleteTime    string    `orm:"null"`
 
 	EstimatePrice float64
@@ -280,6 +280,26 @@ func GetReqDocID(ID string) (req *RequestDocument, errRet error) {
 		reqGet.CreateUser = nil
 		reqGet.UpdateUser = nil
 		actionUser, _ := GetReqUserActionByDocID(ID)
+		reqGet.ActionUser = *actionUser
+	}
+	if reqGet.ID == 0 {
+		return nil, errors.New("ไม่พบข้อมูล")
+	}
+	return reqGet, errRet
+}
+
+//GetReqDocByDocNo _
+func GetReqDocByDocNo(DocNo string) (req *RequestDocument, errRet error) {
+	o := orm.NewOrm()
+	reqGet := &RequestDocument{}
+	o.QueryTable("request_document").Filter("doc_no", DocNo).RelatedSel().One(reqGet)
+	if nil != reqGet {
+		if nil != reqGet.User {
+			reqGet.User.Password = ""
+		}
+		reqGet.CreateUser = nil
+		reqGet.UpdateUser = nil
+		actionUser, _ := GetReqUserActionByDocID(strconv.Itoa(reqGet.ID))
 		reqGet.ActionUser = *actionUser
 	}
 	if reqGet.ID == 0 {

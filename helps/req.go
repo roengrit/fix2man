@@ -41,6 +41,8 @@ const HTMLReqActionEnable = `<a class="btn bg-purple" title="รายละเ�
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#" onclick="changeStatus({id})" title="เปลี่ยนสถานะ">เปลี่ยนสถานะ</a></li>
 								<li><a target="_blank" href="/pickup/?doc_ref={docno}">เบิกอะไหล่</a></li>
+								<li><a target="_blank" href="/assess/?doc_ref={docno}">ประเมิน</a></li>
+								<li><a  href="#" onclick="loadPrint('{docno}')">พิมพ์</a></li>
 							</ul>
 								 `
 

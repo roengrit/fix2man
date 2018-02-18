@@ -31,5 +31,11 @@ function reqDetails(el){
         `<p> <b> สถานะ : </b> ` + $(el).attr('status') + `</p>` 
     )
 }
+function loadPrint(doc_no) {
+    var $iframe = $('#frame-print');
+    if ($iframe.length ) {
+        $iframe.attr('src', "/assess/?doc_ref="+doc_no+"&print=1");   
+    }
+}  
 loadNormalTable();
  </script>

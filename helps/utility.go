@@ -29,6 +29,12 @@ func ThCommaSep(in float64) (out string) {
 	return
 }
 
+//RowOrderInc _
+func RowOrderInc(in int) (out string) {
+	out = strconv.Itoa(in + 1)
+	return
+}
+
 //TextThCommaSep _
 func TextThCommaSep(in string) (out string) {
 	val, _ := strconv.ParseFloat(in, 64)
