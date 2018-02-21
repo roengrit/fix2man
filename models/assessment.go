@@ -42,6 +42,22 @@ func init() {
 	) // Need to register model in init
 }
 
+//GetTopicHeader _
+func GetTopicHeader(DocNo string) (req *TopicAssess) {
+	o := orm.NewOrm()
+	reqGet := &TopicAssess{}
+	o.Raw(`
+		SELECT
+		remark,
+		doc_no,
+		image,
+		i_d
+	FROM
+	    topic_assess
+	WHERE doc_no = '` + DocNo + `'`).QueryRow(reqGet)
+	return reqGet
+}
+
 //GetAllTopic _
 func GetAllTopic(DocNo string) (req *[]TopicAssessSub) {
 	o := orm.NewOrm()
